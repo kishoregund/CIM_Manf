@@ -1,0 +1,486 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+
+      <div class="page-title">
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+
+          <div class="d-flex" style="align-items: center;">
+            <h3>Service Report</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)  && !isCompleted">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+
+            <div class="dropdown"
+              *ngIf="((hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !isCompleted && custsign != null && custsign!= blankSignaturePad) || engsign != null && engsign != blankSignaturePad">
+              <button class="btn btn-nav-link" (click)="ToggleDropdown('dropdownMenuButton1')" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v" style="color: #5ba146;"></i>
+              </button>
+              <ul class="dropdown-menu" id="dropdownMenuButton1">
+
+                <li><a class="dropdown-item" (click)="GeneratePDF(false)"
+                    *ngIf="(hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !isCompleted && custsign != null && custsign != blankSignaturePad">
+                    Generate Service Report</a></li>
+
+                <li><a class="dropdown-item" (click)="GeneratePDF(true)"
+                    *ngIf="engsign != null && engsign != blankSignaturePad">Preview</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="ServiceReportform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="serreqno">Service Report No.</label>
+              <input [ngClass]="{ 'is-invalid': submitted && f.serviceReportNo .errors }" class="form-control"
+                formControlName="serviceReportNo" readonly type="text" />
+              <div *ngIf="submitted && f.serviceReportNo.errors" class="invalid-feedback">
+                <div *ngIf="f.serviceReportNo.errors.required">SrNo is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="serreqno">Service Request No.</label>
+              <input [ngClass]="{ 'is-invalid': submitted && f.serviceRequestNo .errors }" class="form-control"
+                formControlName="serviceRequestNo" readonly type="text" />
+              <div *ngIf="submitted && f.serviceRequestNo.errors" class="invalid-feedback">
+                <div *ngIf="f.serviceRequestNo.errors.required">Service Request No. is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="customer">Customer</label>
+              <input type="text" formControlName="customer" class="form-control" readonly />
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="srOf">OF</label>
+              <input type="text" formControlName="srOf" readonly class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.srOf.errors }" />
+              <div *ngIf="submitted && f.srOf.errors" class="invalid-feedback">
+                <div *ngIf="f.srOf.errors.required">OF is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="department">Department</label>
+              <select formControlName="department" class="form-select"
+                [ngClass]="{ 'is-invalid': submitted && f.department.errors }">
+                <option value="">Select</option>
+                <option *ngFor="let d of departmentList" value={{d.listTypeItemId}}>
+                  {{d.itemName}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.department.errors" class="invalid-feedback">
+                <div *ngIf="f.department.errors.required">Department is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="country">Country</label>
+              <input type="text" formControlName="country" readonly class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.country.errors }" />
+              <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+                <div *ngIf="f.country.errors.required">Country is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="town">Town</label>
+              <input type="text" formControlName="town" readonly class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.town.errors }" />
+              <div *ngIf="submitted && f.town.errors" class="invalid-feedback">
+                <div *ngIf="f.town.errors.required">town is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="respInstrumentId">Resp. for Instrument</label>
+              <select formControlName="respInstrumentId" class="form-select"
+                [ngClass]="{ 'is-invalid': submitted && f.respInstrumentId.errors }">
+                <option value="">--Select--</option>
+                <option *ngFor="let c of allcontactlist" value={{c.id}}>
+                  {{c.firstName}}{{c.lastName}}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.respInstrumentId.errors" class="invalid-feedback">
+                <div *ngIf="f.respInstrumentId.errors.required">Resp. for Instrument is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="labChief">Lab Chief<span class="text-danger">*</span></label>
+              <input type="text" formControlName="labChief" class="form-control"
+                [ngClass]="{ 'is-invalid': f.labChief.touched && f.labChief.errors }" />
+              <div *ngIf="f.labChief.touched && f.labChief.errors" class="invalid-feedback">
+                <div *ngIf="f.labChief.errors?.required">Lab Chief is required</div>
+
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="computerArlsn">Computer ARL S/N<span class="text-danger">*</span></label>
+              <input type="text" formControlName="computerArlsn" class="form-control"
+                [ngClass]="{ 'is-invalid': f.computerArlsn.touched && f.computerArlsn.errors }" />
+              <div *ngIf="f.computerArlsn.touched && f.computerArlsn.errors" class="invalid-feedback">
+                <div *ngIf="f.computerArlsn.errors.required">Computer ARL is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="instrument">Instrument</label>
+              <input type="text" formControlName="instrumentId" disabled hidden class="form-control" />
+              <input id="typeahead-format" type="text" formControlName="instrument" disabled class="form-control" />
+              <div *ngIf="submitted && f.instrument.errors" class="invalid-feedback">
+                <div *ngIf="f.instrument.errors.required">Instrument is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="software">Software<span class="text-danger">*</span></label>
+              <input type="text" formControlName="software" class="form-control"
+                [ngClass]="{ 'is-invalid': f.software.touched && f.software.errors }" />
+              <div *ngIf="f.software.touched && f.software.errors" class="invalid-feedback">
+                <div *ngIf="f.software.errors.required">Software is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="brandId">Brand Name<span class="text-danger">*</span></label>
+              <select formControlName="brandId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.brandId.touched && f.brandId.errors }">
+                <option value="">Select</option>
+                <option *ngFor="let d of brandlist" value={{d.id}}>
+                  {{d.brandName}}
+                </option>
+              </select>
+              <div *ngIf="f.brandId.touched && f.brandId.errors" class="invalid-feedback">
+                <div *ngIf="f.brandId.errors.required">Brand Name is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="firmaware">Firmware<span class="text-danger">*</span></label>
+              <input type="text" formControlName="firmaware" class="form-control"
+                [ngClass]="{ 'is-invalid': f.firmaware.touched && f.firmaware.errors }" />
+              <div *ngIf="f.firmaware.touched && f.firmaware.errors" class="invalid-feedback">
+                <div *ngIf="f.firmaware.errors.required">Firmware is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-sm-12">
+              <label for="problem">Problem</label>
+              <textarea formControlName="problem" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.problem.errors }"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 col-sm-3">
+              <label for="installation">
+                <input type="checkbox" formControlName="installation"
+                  [ngClass]="{ 'is-invalid': submitted && f.installation.errors }" />
+                Installation
+              </label>
+              <div *ngIf="submitted && f.installation.errors" class="invalid-feedback">
+                <div *ngIf="f.installation.errors?.required">Installation is required</div>
+              </div>
+            </div>
+
+            <div class="col-sm-3">
+              <label for="analyticalAssit">
+                <input type="checkbox" formControlName="analyticalAssit"
+                  [ngClass]="{ 'is-invalid': submitted && f.analyticalAssit.errors }" />
+                Analytical Assistance
+              </label>
+              <div *ngIf="submitted && f.analyticalAssit.errors" class="invalid-feedback">
+                <div *ngIf="f.analyticalAssit.errors.required">analyticalAssistance is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="prevMaintenance">
+                <input type="checkbox" formControlName="prevMaintenance"
+                  [ngClass]="{ 'is-invalid': submitted && f.prevMaintenance.errors }" />
+                Prev. Maintenance
+              </label>
+              <div *ngIf="submitted && f.prevMaintenance.errors" class="invalid-feedback">
+                <div *ngIf="f.prevMaintenance.errors.required">prevMaintenance is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <label for="corrMaintenance">
+                <input type="checkbox" formControlName="rework"
+                  [ngClass]="{ 'is-invalid': submitted && f.corrMaintenance.errors }" />
+                Rework
+              </label>
+            </div>
+            <div class="col-sm-3">
+              <label for="corrMaintenance">
+                <input type="checkbox" formControlName="corrMaintenance"
+                  [ngClass]="{ 'is-invalid': submitted && f.corrMaintenance.errors }" />
+                Corr. Maintenance
+              </label>
+              <div *ngIf="submitted && f.corrMaintenance.errors" class="invalid-feedback">
+                <div *ngIf="f.corrMaintenance.errors.required">Corr. Maintenance is required</div>
+              </div>
+            </div>
+
+          </div>
+
+          <br />
+          <div class="" style="display: flex;justify-content: space-between">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="workdone-tab" data-bs-target="#workdone" data-bs-toggle="tab" role="tab"
+                  aria-controls="workdone" aria-selected="true">Work Done</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="worktime-tab" data-bs-toggle="tab" role="tab" aria-controls="home"
+                  data-bs-target="#worktime" aria-selected="false">Work Time</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-bs-target="#spCon" data-bs-toggle="tab" role="tab"
+                  aria-controls="profile" aria-selected="false">Spare Part Consumed</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" role="tab"
+                  aria-controls="contact" aria-selected="false">Spare Part Recommanded</a>
+              </li>
+            </ul>
+
+            <!-- <a class="nav-link" *ngIf="ServiceReportform.get('prevMaintenance').value == true"
+              style="text-decoration: underline;cursor: pointer;" (click)="openPrev(ServiceReportId)">Preventive
+              Maintenance Checklist</a> -->
+
+          </div>
+
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="workdone" role="tabpanel" aria-labelledby="workdone-tab">
+
+              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode && isEng" class="btn"
+                style="margin: 10px;" (click)="open(ServiceReportId)">
+                <i class="fas fa-plus" title="Add"></i>
+              </button>
+
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnworkdefs" [rowData]="workdonelist"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="worktime" role="tabpanel" aria-labelledby="worktime-tab">
+
+              <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode && isEng" class="btn"
+                style="margin: 10px;" (click)="opentime(ServiceReportId)">
+                <i class="fas fa-plus" title="Add"></i>
+              </button>
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onworktimeRowClicked($event)"
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="workTime" rowSelection="single"
+                  pagination="true" paginationPageSize=10></ag-grid-angular>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="spCon" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="row my-3">
+                <div class="col-sm-4">
+                  <label>Select Sparepart</label>
+                  <input id="typeahead-format" [disabled]="this.isCompleted && !isEditMode" type="text"
+                    formControlName="consumed" class="form-control" [ngbTypeahead]="searchpartcon"
+                    [resultFormatter]="formatterpartcon" [inputFormatter]="formatterpartcon" />
+                </div>
+                <div class="col-sm-4">
+                  <label for=""></label>
+                  <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-primary"
+                    style="margin-top: 31px;" (click)="addPartcons()">Add</button>
+                </div>
+              </div>
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClickedCon($event)"
+                  (cellValueChanged)="onRowClickedCon($event)" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  [columnDefs]="spcolumnDefs" [rowData]="spconsumedlist" rowSelection="single" pagination="true"
+                  paginationPageSize=10></ag-grid-angular>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+              <div class="row my-3">
+                <div class="col-sm-4">
+                  <label>Select Sparepart</label>
+                  <input id="typeahead-format" [disabled]="this.isCompleted && !isEditMode" type="text"
+                    formControlName="recondad" class="form-control" [ngbTypeahead]="searchpart"
+                    [resultFormatter]="formatterpart" [inputFormatter]="formatterpart" />
+                </div>
+                <div class="col-sm-4">
+                  <label for=""></label>
+                  <button type="button" [disabled]="this.isCompleted && !isEditMode" class="btn btn-primary"
+                    style="margin-top: 31px;" (click)="addPartrecmm()">Add</button>
+                </div>
+              </div>
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClickedPre($event)"
+                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  (cellValueChanged)="onCellValueChangedPre($event)" [columnDefs]="spRecomandDefs"
+                  [rowData]="sparePartRecommended" rowSelection="single" pagination="true" paginationPageSize=10>
+                </ag-grid-angular>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 col-sm-3">
+              <label for="workCompleted">
+                Work Completed
+              </label>
+              <select class="form-select" (change)="onWorkCompletedChange($event.target.value)" formControlName="workCompletedStr">
+                <option value="0">Yes</option>
+                <option value="1">No</option>
+              </select>
+              <div *ngIf="submitted && f.workCompletedStr.errors" class="invalid-feedback">
+                <div *ngIf="f.workCompletedStr.errors?.required">WorkCompleted is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="workFinishedstr">
+                Work Finished
+              </label>
+              <select class="form-select" (change)="onWorkFinishedChange($event.target.value)"
+                formControlName="workFinishedStr">
+                <option value="0">Yes</option>
+                <option value="1">No</option>
+              </select>
+              <div *ngIf="submitted && f.workFinishedStr.errors" class="invalid-feedback">
+                <div *ngIf="f.workFinishedStr.errors?.required">Work Finished is required</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label for="interruptedStr">
+                Interrupted
+              </label>
+              <select class="form-select" [disabled]="!isEditMode" (change)="onInteruptedChange($event.target.value)"
+                formControlName="interruptedStr">
+                <option value="0">Yes</option>
+                <option value="1">No</option>
+              </select>
+              <div *ngIf="submitted && f.interruptedStr.errors" class="invalid-feedback">
+                <div *ngIf="f.interruptedStr.errors?.required">Interrupted is required</div>
+              </div>
+            </div>
+            <div class="col-sm-3" *ngIf="interrupted">
+              <label for="reason">Reason<span class="text-danger">*</span></label>
+              <input type="text" [disabled]="!isEditMode" formControlName="reason" class="form-control"
+                [ngClass]="{ 'is-invalid': f.reason.touched && f.reason.errors }" />
+              <div *ngIf="f.reason.touched && f.reason.errors" class="invalid-feedback">
+                <div *ngIf="f.reason.errors.required">Reason is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="nextVisitScheduled">Next Visit</label>
+              <input type="text" formControlName="nextVisitScheduled" bsDatepicker class="form-control" />
+            </div>
+
+            <div class="col-sm-3">
+              <label for="nextVisitScheduled">Engineer Comment<span class="text-danger">*</span></label>
+              <textarea type="text" formControlName="engineerComments" class="form-control"
+                [ngClass]="{ 'is-invalid': f.engineerComments.touched && f.engineerComments.errors }"></textarea>
+              <div *ngIf="f.engineerComments.touched && f.engineerComments.errors" class="invalid-feedback">
+                <div *ngIf="f.engineerComments.errors.required">Engineer Comment is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="signCustName">Customer Name<span class="text-danger">*</span></label>
+              <input type="text" formControlName="signCustName" class="form-control"
+                [ngClass]="{ 'is-invalid': f.signCustName.touched && f.signCustName.errors }" />
+              <div *ngIf="f.signCustName.touched && f.signCustName.errors" class="invalid-feedback">
+                <div *ngIf="f.signCustName.errors.required">Customer Name is required</div>
+              </div>
+            </div>
+            <div class="col-sm-9" *ngIf="!this.isCompleted && isEditMode && !this.isEng && !custsign && finished">
+              <label for="customerSing">Customer Signature Pad</label>
+              <div style="border:medium">
+                <signature-pad #sigpad1 [options]="signaturePadOptions" style="border-bottom:dashed"
+                  (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+              </div>
+              <div *ngIf="submitted && f.customerSing.errors" class="invalid-feedback">
+                <div *ngIf="f.customerSing.errors.required">Customer Signature is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="signEngName">Engineer Name<span class="text-danger">*</span></label>
+              <input type="text" formControlName="signEngName" class="form-control"
+                [ngClass]="{ 'is-invalid': f.signEngName.touched && f.signEngName.errors }" />
+              <div *ngIf="f.signEngName.touched && f.signEngName.errors" class="invalid-feedback">
+                <div *ngIf="f.signEngName.errors.required">Engineer Name is required</div>
+              </div>
+            </div>
+            <div class="col-sm-9" *ngIf="!this.isCompleted && isEditMode && !this.isCust && !engsign && finished">
+              <label for="engineerSing">Engineer Signature Pad</label>
+              <div style="border:medium">
+                <signature-pad #sigpad2 [options]="signaturePadOptions" style="border-bottom:dashed"
+                  (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete2()"></signature-pad>
+              </div>
+              <div *ngIf="submitted && f.engineerSing.errors" class="invalid-feedback">
+                <div *ngIf="f.engineerSing.errors.required">Engineer Signature is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6" *ngIf="custsign">
+              <label for="signEngName">Customer Signature</label>
+              <img [src]="custsign" [alt]="custsign" style="width: 100%;height: 100px; padding:10px;">
+            </div>
+            <div class="col-sm-6" *ngIf="engsign">
+              <label for="engineerSing">Engineer Signature</label>
+              <img [src]="engsign" [alt]="engsign" style="width: 100%;height: 100px; padding:10px;">
+            </div>
+          </div>
+          <h3 class="mt-4">Attachments</h3>
+          <hr>
+          <div class="row" style="margin:15px;">
+
+            <div class="col-md-3">
+              <input type="file" id="myFile" *ngIf="isEditMode" #file placeholder="Choose file"
+                (change)="getfil(file.files); listfile(file.files) ;" accept=".pdf" id="pdfUpload" multiple
+                type='file' />
+            </div>
+            <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
+              <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                <h5>Selected Files:</h5>
+                <hr />
+              </section>
+            </div>
+
+          </div>
+
+          <div class="row" *ngIf="ServiceReportId != null">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
+                (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)" [columnDefs]="pdfcolumnDefs"
+                [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+            </div>
+          </div>
+          <hr>
+          <p style="color:red;">*Please Save to see Preview or to Generate Service Report</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

@@ -1,0 +1,472 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+
+      <div class="page-title">
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          <div class="d-flex" style="align-items: center;">
+            <h3>Installed Instrument</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="custInstrumentform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="custSiteId">Customer Site<span class="text-danger">*</span></label>
+              <select formControlName="custSiteId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.custSiteId.touched && f.custSiteId.errors }" #ddlcust
+                (change)="onSiteChange(ddlcust.value)">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let config of customersite" value={{config.id}}>
+                  {{config.custRegName}}
+                </option>
+              </select>
+              <div *ngIf="f.custSiteId.touched && f.custSiteId.errors" class="invalid-feedback">
+                <div *ngIf="f.custSiteId.errors.required">Customer Site is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="instrument">Instrument<span class="text-danger">*</span></label>
+              <select id="instrument" formControlName="instrumentId"
+                [ngClass]="{ 'is-invalid': f.instrumentId.touched && f.instrumentId.errors }" class="form-select">
+                <option *ngFor="let item of instrumentList" [value]="item.id">
+                  {{item.insTypeName + ' - ' + item.serialNos}}
+                </option>
+              </select>
+              <div *ngIf="f.instrumentId.touched && f.instrumentId.errors" class="invalid-feedback">
+                <div *ngIf="f.instrumentId.errors.required">Instrument is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="insmfgdt">Instrument Manufacturing Date<span class="text-danger">*</span></label>
+              <input formControlName="insMfgDt" class="form-control" bsDatepicker />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="shipDt">Shipment Date</label>
+              <!--<input type="text" formControlName="shipDt" class="form-control" [ngClass]="{ 'is-invalid': f.custid.touched && f.shipDt.errors shipDt}" />-->
+              <input formControlName="shipDt" class="form-control" bsDatepicker
+                [ngClass]="{ 'is-invalid': f.shipDt.touched && (f.shipDt.errors || shipmentDateGreaterThanPurchaseDate || shipmentDateGreaterThanManudate) }">
+              <div *ngIf="f.shipDt.touched && f.shipDt.errors" class="invalid-feedback">
+                <div *ngIf="f.shipDt.errors.required">Shipment Date is required</div>
+              </div>
+              <div class="text-danger" *ngIf="shipmentDateGreaterThanPurchaseDate">
+                The Shipment Date cannot be before than Purchase Date
+              </div>
+              <div class="text-danger" *ngIf="shipmentDateGreaterThanManudate">
+                The Shipment Date cannot be before than Manufacturing Date
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="installBy">Installed By Distributor<span class="text-danger">*</span></label>
+              <select formControlName="installBy" #installedBy class="form-select"
+                [ngClass]="{ 'is-invalid': f.installBy.touched && f.installBy.errors }">
+                <option *ngFor="let config of distibutorList" value={{config.id}}>
+                  {{config.distName}}
+                </option>
+                <option value="0">Others</option>
+              </select>
+              <div *ngIf="f.installBy.touched && f.installBy.errors" class="invalid-feedback">
+                <div *ngIf="f.installBy.errors.required">Installed By Distributor is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="f.installBy.value == 0">
+              <label for="installByOther">Other<span *ngIf="f.installBy.value == 0" class="text-danger">*</span></label>
+              <input type="text" formControlName="installByOther" class="form-control"
+                [ngClass]="{ 'is-invalid': f.installByOther.touched && f.installByOther.errors }" />
+              <div *ngIf="f.installByOther.touched && f.installByOther.errors" class="invalid-feedback">
+                <div *ngIf="f.installByOther.errors.required">Other name is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="f.installBy.value != 0">
+              <label for="engName">Engineer Name<span class="text-danger">*</span></label>
+              <select formControlName="engName" #installedBy class="form-select"
+                [ngClass]="{ 'is-invalid': f.engName.touched && f.engName.errors }">
+                <option *ngFor="let c of engList" value={{c.id}}>
+                  {{c.firstName}} {{c.lastName}}
+                </option>
+              </select>
+              <div *ngIf="f.engName.touched && f.engName.errors" class="invalid-feedback">
+                <div *ngIf="f.engName.errors.required">Engineer Name is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="f.installBy.value == 0">
+              <label for="engNameOther">Engineer Name</label>
+              <input type="text" formControlName="engNameOther" class="form-control"
+                [ngClass]="{ 'is-invalid': f.engNameOther.touched && f.engNameOther.errors }" />
+              <div *ngIf="f.engNameOther.touched && f.engNameOther.errors" class="invalid-feedback">
+                <div *ngIf="f.engNameOther.errors.required">Engineer Name is required</div>
+              </div>
+            </div>
+            <!-- </div>
+          <div class="row">          -->
+            <div class="col-md-4 col-sm-4">
+              <label for="engContact">Engineer Contact No</label>
+              <input type="tel" formControlName="engContact" maxlength="15" class="form-control"
+                [ngClass]="{ 'is-invalid': f.engContact.touched && f.engContact.errors }" />
+              <div *ngIf="f.engContact.touched && f.engContact.errors" class="invalid-feedback">
+                <div *ngIf="f.engContact.errors.required">Engineer Contact No is required</div>
+                <div *ngIf="f.engContact.errors.pattern">Engineer Contact No is invalid</div>
+                <div *ngIf="f.engContact.errors?.maxlength">Max length is 15</div>
+                <div *ngIf="f.engContact.errors?.minlength">Min length is 10</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="operatorId">Operator Name<span class="text-danger">*</span></label>
+              <select formControlName="operatorId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.operatorId.touched && f.operatorId.errors }">
+                <option *ngFor="let config of contactList" value={{config.id}}>
+                  {{config.firstName}} {{config.lastName}}
+                </option>
+              </select>
+              <div *ngIf="f.operatorId.touched && f.operatorId.errors" class="invalid-feedback">
+                <div *ngIf="f.operatorId.errors.required">Operator Name is required</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="instruEngineerId">Instrumentation Engineer<span class="text-danger">*</span></label>
+              <select formControlName="instruEngineerId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.instruEngineerId.touched && f.instruEngineerId.errors }">
+                <option *ngFor="let config of contactList" value={{config.id}}>
+                  {{config.firstName}} {{config.lastName}}
+                </option>
+              </select>
+              <div *ngIf="f.instruEngineerId.touched && f.instruEngineerId.errors" class="invalid-feedback">
+                <div *ngIf="f.instruEngineerId.errors.required">Instrumentation Engineer is required</div>
+              </div>
+            </div>
+          <!-- </div>          
+              <div class="row"> -->
+                <div class="col-md-4 col-sm-4">
+                  <label for="engEmail">Engineer Email</label>
+                  <input type="text" formControlName="engEmail" class="form-control" 
+                  [ngClass]="{ 'is-invalid': f.engEmail.touched && f.engEmail.errors }"/>
+                  <div *ngIf="f.engEmail.touched && f.engEmail.errors" class="invalid-feedback">
+                    <div *ngIf="f.engEmail.errors.required">Engineer Email is required</div>
+                    <div *ngIf="f.engEmail.errors.pattern">Engineer Email is invalid</div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <label for=""></label>
+                  <div class="checkbox">
+                    <label for="warranty">
+                      <input type="checkbox" formControlName="warranty" class="" />
+                      Warranty
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4" *ngIf="hasWarrenty">
+                  <label for="wrntyStDt">Warranty Start Date</label>
+                  <input formControlName="wrntyStDt"
+                    [ngClass]="{ 'is-invalid': f.wrntyStDt.touched && (custInstrumentform.controls['wrntyStDt'].errors || warrantyStartDateGreaterThanInstallationDate)}"
+                    bsDatepicker class="form-control" />
+                  <div class="text-danger" *ngIf="warrantyStartDateGreaterThanInstallationDate">
+                    Start Date should not be before Installation Date
+                  </div>
+                  <div class="invalid-feedback">
+                    <div *ngIf="custInstrumentform.controls['wrntyStDt'].errors?.required">Warranty Start Date is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4" *ngIf="hasWarrenty">
+                  <label for="wrntyEnDt">Warranty End Date</label>
+                  <input formControlName="wrntyEnDt" 
+                    [ngClass]="{ 'is-invalid': f.wrntyEnDt.touched && custInstrumentform.controls['wrntyEnDt'].errors}"
+                    bsDatepicker class="form-control" />
+                  <div *ngIf="custInstrumentform.controls['wrntyEnDt'].errors" class="invalid-feedback">
+                    <div *ngIf="custInstrumentform.controls['wrntyEnDt'].errors?.required">Warranty End Date is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <label for="installDt">Instrument Installation<span class="text-danger">*</span></label>
+                  <input formControlName="installDt" bsDatepicker class="form-control"
+                    [ngClass]="{ 'is-invalid': f.installDt.touched && f.installDt.errors }" />
+                  <div class="text-danger">
+                    <div class="" *ngIf="instrumentInsDateGreaterThanManufacturingDate">
+                      Instrument Installation Date cannot be before Manufacturing Date
+                    </div>
+                    <div class="" *ngIf="instrumentInsDateGreaterThanPurchaseDate">
+                      Instrument Installation Date cannot be before Purchase Date
+                    </div>
+                    <div class="" *ngIf="instrumentInsDateGreaterThanShipmentDate">
+                      Instrument Installation Date cannot be before Shipment Date
+                    </div>
+                  </div>
+                  <div *ngIf="f.installDt.touched && f.installDt.errors" class="invalid-feedback">
+                    <div *ngIf="f.installDt.errors.required">Instrument Installation is required</div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <label for="dateOfPurchase">Date Of Purchase</label>
+                  <input formControlName="dateOfPurchase" bsDatepicker class="form-control" />
+                  <div class="text-danger" *ngIf="purchaseDateGreaterThanManudate">
+                    The purchase date cannot be before manufactured date
+                  </div>
+                </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Cost<span class="text-danger">*</span></label><br>
+              <select formControlName="currencyId"
+                [ngClass]="{ 'is-invalid': f.currencyId.touched && f.currencyId.errors }"
+                style="width: 30%;display: inline-block;" class="form-select">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+
+              <input formControlName="cost" type="number" pattern="^[0-9]*(\.[0-9]{0,2})?$"
+                onKeyPress="if(this.value.length==15) return false;"
+                [ngClass]="{ 'is-invalid': f.cost.touched && f.cost.errors }"
+                style="width: 68%;display: inline-block;margin-left: 5px;" class="form-control" />
+              <div *ngIf="f.cost.errors?.pattern" class="invalid-feedback">Cost with 2 decimals is allowed</div>
+              <div *ngIf="(f.currencyId.touched || f.cost.touched) && (f.currencyId.errors || f.cost.errors)"
+                class="invalid-feedback">
+                <div *ngIf="f.currencyId.errors?.required || f.cost.errors?.required">Cost is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Exchange Rate</label><br>
+              <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
+                class="form-select">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="baseCurrencyAmt" #baseAmt type="number" pattern="^[0-9]*(\.[0-9]{0,2})?$"
+                onKeyPress="if(this.value.length==15) return false;" class="form-control"
+                [ngClass]="{ 'is-invalid': f.baseCurrencyAmt.touched && f.baseCurrencyAmt.errors }"
+                style="width: 68%;display: inline-block;margin-left: 5px;" />
+              <div *ngIf="f.baseCurrencyAmt.errors?.pattern" class="invalid-feedback">Exchange Value with 2 decimals is
+                allowed</div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Cost in USD</label><br>
+              <input [value]="(f.baseCurrencyAmt.value * f.cost.value).toFixed(2)" disabled type="number" min="0"
+                pattern="^[0-9]*\.[0-9]{2}$" onKeyPress="if(this.value.length==15) return false;"
+                class="form-control" />
+            </div>
+          </div>
+          <!-- <div class="row">
+            <div class="col-md-4 col-sm-4"  *ngIf="this.role == this.enviroment.distRoleCode">
+              <label for="currencyid">Business Unit<span class="text-danger">*</span></label>
+              <select formControlName="businessUnitId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.businessUnitId.touched && f.businessUnitId.errors }">
+                <option *ngFor="let c of businessUnitList" value={{c.id}}>
+                  {{c.businessUnitName}}
+                </option>
+              </select>
+              <div *ngIf="f.businessUnitId.touched && f.businessUnitId.errors" class="invalid-feedback">
+                <div *ngIf="f.businessUnitId.errors.required">Business Unit is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4" *ngIf="this.role == this.enviroment.distRoleCode">
+              <label for="brandId">Brand<span class="text-danger">*</span></label>
+              <select formControlName="brandId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.brandId.touched && f.brandId.errors }">
+                <option *ngFor="let c of brandList" value={{c.id}}>
+                  {{c.brandName}}
+                </option>
+              </select>
+              <div *ngIf="f.brandId.touched && f.brandId.errors" class="invalid-feedback">
+                <div *ngIf="f.brandId.errors.required">Brand is required</div>
+              </div>
+            </div>
+
+             <div class="col-md-4 col-sm-4" >
+              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
+              <input type='file' [disabled]="!isEditMode && !isNewMode" id="imageUpload" accept=".png, .jpg, .jpeg"
+                #fileInput (change)="uploadFile(fileInput.files,id)" />
+              <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
+                (click)="removeUploadedFile()"></label>
+            </div> 
+          </div> -->
+     
+      <div class="row">
+        <div class="page-title">
+          <div class="title_left">
+            <h3 style="padding:15px 0 5px 0">Spare Parts List</h3>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr />
+
+        <!-- <div *ngIf="!isAccessories" class="row">
+            <div class="col-sm-4">
+              <label for="configtypeid">Config Type</label>
+              <select [disabled]="!isEditMode && !isNewMode" class="form-select" #mySelect
+                formControlName="configtypeid" (change)="onConfigChange(mySelect.value)"
+                [ngClass]="{ 'is-invalid': f.configtypeid.touched && f.configtypeid.errors }">
+                <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
+                  {{congfig.itemname}}
+                </option>
+              </select>
+              <div *ngIf="f.configtypeid.touched && f.configtypeid.errors" class="invalid-feedback">
+                <div *ngIf="f.configtypeid.errors.required">Config Type is required</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="configvalueid">Config Value</label>
+              <select class="form-select" formControlName="configvalueid" [disabled]="!isEditMode && !isNewMode"
+                #myConfigVal>
+                <option value="0"></option>
+                <option *ngFor="let congfig of configValueList" value={{congfig.id}}>
+                  {{congfig.configValue}}
+                </option>
+              </select>
+            </div>
+            <div class="col-sm-4">
+              <label for=""></label>
+              <button type="button" class="btn btn-primary mt-4" [disabled]="!isEditMode && !isNewMode"
+                (click)="onDropdownChange(mySelect.value,myConfigVal.value)">Add</button>
+            </div>
+          </div>
+          <div *ngIf="isAccessories" class="row">
+            <div class="col-md-12">
+              <button (click)="openAccessoryModel()" [disabled]="!isEditMode && !isNewMode" class="btn btn-primary"
+                style="margin: 10px;" type="button">
+                <i class="fas fa-plus" title="Add" style="color: white !important;"></i>
+              </button>
+            </div>
+          </div> -->
+
+        <br />
+        <ul class="nav nav-tabs" id="myTab" role="tablist">         
+          <li class="nav-item">
+            <a class="nav-link active" id="recommended-tab" (click)="ChangeTab('recommended')" data-bs-toggle="tab"
+              role="tab" data-bs-target="#recommended" style="cursor: pointer;" aria-selected="true">Recommended</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" (click)="ChangeTab('consumable')" data-bs-toggle="tab" role="tab"
+              data-bs-target="#profile" style="cursor: pointer;" aria-selected="false">Consumables</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" (click)="ChangeTab('full')" data-bs-toggle="tab" role="tab"
+              data-bs-target="#contact" style="cursor: pointer;" aria-selected="false">Full Spare</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="otherspare-tab" (click)="ChangeTab('other')" data-bs-toggle="tab" role="tab"
+              data-bs-target="#otherspare" style="cursor: pointer;" aria-selected="false">Other Spare</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="accessories-tab" (click)="ChangeTab('accessory')" data-bs-toggle="tab" role="tab"
+              data-bs-target="#accessories" style="cursor: pointer;" aria-selected="false">Accessories</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">        
+          <div class="tab-pane fade show active" id="recommended" role="tabpanel" aria-labelledby="recommended-tab">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="recomandedFilter"
+                rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="consumfilter"
+                rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                (cellValueChanged)="onCellValueChanged($event)" [columnDefs]="columnDefs" [rowData]="fullsparefilter"
+                rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="otherspare" role="tabpanel" aria-labelledby="otherspare-tab">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                (cellValueChanged)="onCellValueChanged($event)" [columnDefs]="columnDefs" [rowData]="othersparefilter"
+                rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="accessories" role="tabpanel" aria-labelledby="accessories-tab">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 500px;" 
+                class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs"
+                [rowData]="accessoriesData" rowSelection="single" pagination="true"
+                paginationPageSize=10></ag-grid-angular>
+            </div>
+          </div>
+        </div>
+        <!--          <div class="row">-->
+        <!--            <div class="col-md-4 col-sm-4">-->
+        <!--              <label for="pdf" style="margin-right:15px;margin-top:15px;">Document</label>-->
+        <!--              <input type='file' id="pdfUpload" multiple accept=".pdf" #filePdfInput (change)="uploadPdfFile($event)" />-->
+        <!--            </div>-->
+        <!--            <div class="col-md-4 col-sm-4" *ngIf="PdffileData" style="margin-top:4%;">-->
+        <!--              <label></label>-->
+        <!--              <button type="button" class="btn btn-link" (click)="download()">{{ PdffileData.fileName }}</button>-->
+        <!--              &lt;!&ndash;<a href="pdfBase64" download="PdffileData.fileName">{{ PdffileData.fileName }}</a>&ndash;&gt;-->
+        <!--            </div>-->
+        <!--          </div>-->
+      </div>
+        <div class="page-title">
+          <div class="title_left">
+            <h3 style="padding:15px 0 5px 0">Attachments</h3>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr />
+
+        <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+          <div class="col-md-3">
+            <input type="file" id="myFile" [disabled]="!isEditMode && !isNewMode" #file placeholder="Choose file"
+              (change)="getfil(file.files); listfile(file.files) ;" multiple
+              accept="text/plain, application/pdf, image/*">
+          </div>
+          <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
+            <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+              <h5>Selected Files:</h5>
+              <hr />
+            </section>
+
+          </div>
+        </div>
+
+        <div class="row" *ngIf="PdffileData">
+          <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+            <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
+              (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)" [columnDefs]="pdfcolumnDefs"
+              [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+          </div>
+        </div>
+        <hr />
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

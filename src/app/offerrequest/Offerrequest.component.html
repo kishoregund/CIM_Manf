@@ -1,0 +1,467 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+
+
+      <div class="page-title">
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          <div class="d-flex" style="align-items: center;">
+            <h3>Spare Quote Details</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <a class="nav-link" (click)="EditMode()"
+              *ngIf="hasUpdateAccess && !isEditMode && !isNewMode &&  !isCompleted">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode) && !isCompleted">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode) && !isCompleted">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="clearfix"></div>
+      <hr />
+      <div class="col-md-12 col-sm-12">
+        <form [formGroup]="form">
+          <div class="row">
+            <div class="col-md-4 col-sm-4" [style.display]="hasId ? 'block' : 'none'">
+              <label for="offReqNo">Spare Parts Quote No.<span class="text-danger">*</span></label>
+              <input id="offReqNo" readonly type="text" formControlName="offReqNo" class="form-control" />
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="Customer">Customer<span class="text-danger">*</span></label>
+              <select id="Customer" type="text" (change)="CustomerChange()" formControlName="customerId"
+                class="form-select" [ngClass]="{' is-invalid': f.customerId.touched && f.customerId.errors}">
+                <option *ngFor="let i of customerList" value="{{ i.id }}">
+                  {{ i.custName }}
+                </option>
+              </select>
+              <div Style="display: block" *ngIf="f.customerId.touched && f.customerId.errors" class="invalid-feedback">
+                <div *ngIf="f.customerId.errors.required">
+                  Customer is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="CustomerSite">Customer Site<span class="text-danger">*</span></label>
+              <select id="CustomerSite" type="text" formControlName="customerSiteId" class="form-select"
+                [ngClass]="{' is-invalid': f.customerSiteId.touched && f.customerSiteId.errors}">
+                <option *ngFor="let i of siteList" value="{{ i.id }}">
+                  {{ i.custRegName }}
+                </option>
+              </select>
+              <div Style="display: block" *ngIf="f.customerSiteId.touched && f.customerSiteId.errors"
+                class="invalid-feedback">
+                <div *ngIf="f.customerSiteId.errors.required">
+                  Customer Site is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="distributor">Distributor<span class="text-danger">*</span></label>
+              <select id="distributor" type="text" disabled formControlName="distributorId" class="form-select"
+                [ngClass]="{' is-invalid': f.distributorId.touched && f.distributorId.errors}">
+                <option *ngFor="let i of distributorList" value="{{ i.id }}">
+                  {{ i.distName }}
+                </option>
+              </select>
+              <div Style="display: block" *ngIf="f.distributorId.touched && f.distributorId.errors"
+                class="invalid-feedback">
+                <div *ngIf="f.distributorId.errors.required">
+                  distributor is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" hidden>
+              <label for="totalAmount">Total Amount</label>
+              <br />
+              <select id="currency" style="display: inline-block; width: 100px" formControlName="currencyId"
+                class="form-select" [ngClass]="{ ' is-invalid': f.currencyId.touched && f.currencyId.errors }">
+                <option *ngFor="let i of currencyList" value="{{ i.id }}">
+                  {{ i.code }}
+                </option>
+              </select>
+
+              <input id="totalAmount" type="number" min="0" formControlName="totalAmount" class="form-control"
+                style="display: inline-block; width: 270px; margin-left: 5px"
+                [ngClass]="{' is-invalid': f.totalAmount.touched && f.totalAmount.errors}" />
+              <div Style="display: block" *ngIf="f.totalAmount.touched && f.totalAmount.errors"
+                class="invalid-feedback">
+                <div *ngIf="f.totalAmount.errors.required">
+                  Total Amount is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" hidden>
+              <label for="status">Status</label>
+              <input id="status" type="text" formControlName="status" class="form-control"
+                [ngClass]="{ ' is -invalid': f.status.touched && f.status.errors }" />
+              <div Style="display: block" *ngIf="f.status.touched && f.status.errors" class="invalid-feedback">
+                <div *ngIf="f.status.errors.required">Status is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="poDate">RFQ Date</label>
+              <input id="poDate" type="text" disabled bsDatepicker formControlName="poDate" class="form-control"
+                [ngClass]="{ ' is -invalid': f.poDate.touched && f.poDate.errors }" />
+              <div Style="display: block" *ngIf="f.poDate.touched && f.poDate.errors" class="invalid-feedback">
+                <div *ngIf="f.poDate.errors.required">RFQ Date is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="isDist">
+              <label for="PaymentTerms">Payment Terms</label>
+              <ng-select [settings]="dropdownSettings" [multiple]="true" [data]="payTypes"
+                formControlName="paymentTerms">
+                <ng-option *ngFor="let i of payTypes" value="{{i.listTypeItemId}}">{{i.itemName}}</ng-option>
+              </ng-select>
+              <div Style="display: block" *ngIf="f.paymentTerms.touched && f.paymentTerms.errors"
+                class="invalid-feedback">
+                <div *ngIf="f.paymentTerms.errors.required">
+                  Payment Terms is required
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-sm-4">
+              <label for="mainCurrencyId">Currency<span class="text-danger">*</span></label>
+              <select id="mainCurrencyId" formControlName="mainCurrencyId" class="form-select"
+                [ngClass]="{'is-invalid': f.mainCurrencyId.touched && f.mainCurrencyId.errors }">
+                <option *ngFor="let i of currencyList" value="{{ i.id }}">{{ i.code }}</option>
+              </select>
+              <div *ngIf="f.mainCurrencyId.touched && f.mainCurrencyId.errors" class="invalid-feedback">
+                <div *ngIf="f.mainCurrencyId.errors.required">Currency is required</div>
+              </div>
+            </div>
+
+
+            <div class="col-sm-4">
+              <label for="instrumentsList">Instruments<span class="text-danger">*</span></label>
+              <ng-select formControlName="instrumentsList" [multiple]="true" id="instrumentsList" [virtualScroll]="true"
+                [ngClass]="{'is-invalid':f.instrumentsList.touched && f.instrumentsList.errors }">
+                <ng-option *ngFor="let i of instrumentslst" value="{{i.id}}">{{i.insTypeName}} - {{i.serialNos}}
+                </ng-option>
+              </ng-select>
+
+              <div *ngIf="f.instrumentsList.touched && f.instrumentsList.errors" class="invalid-feedback">
+                <div *ngIf="f.instrumentsList.errors.required">Instruments is required</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding: 15px 0 5px 0">Add Spare Parts</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr />
+
+          <div class="row" style="margin-top: 50px">
+            <div class="col-md-9">
+              <label for="browser">Search SpareParts By Part No. </label>
+              <input [disabled]="isCompleted || (!isEditMode && !isNewMode)" (input)="
+                  SparePartsSearch($event.target.value?.split('==>')[0]?.trim())
+                " #sparePartsSearch list="browsers" name="browser" id="browser" class="form-control" />
+              <datalist id="browsers">
+                <option *ngFor="let i of sparePartsAutoComplete" value="{{ i.partNo }} ==> {{ i.itemDescription }}">
+                </option>
+              </datalist>
+
+              <p style="color: red">
+                *If you dont find spare part above please add Description below
+              </p>
+            </div>
+
+            <div class="col-md-3" style="margin-top: 30px">
+              <button class="btn btn-primary" [disabled]="isCompleted || (!isEditMode && !isNewMode)" (click)="
+                  AddSpareParts(sparePartsSearch.value?.split('==>')[0]?.trim())
+                " type="button" class="btn btn-primary">
+                Add SpareParts
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <ag-grid-angular style="width: 100%; margin-top: 2.5%; height: 250px" class="ag-theme-alpine"
+              (cellValueChanged)="onCellValueChanged($event)" (cellClicked)="RemoveSpareParts($event)"
+              (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="sparePartsList"
+              rowSelection="single" pagination="true" paginationPageSize="10">
+            </ag-grid-angular>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <label for="otherSpareDesc">Description</label>
+              <textarea id="otherSpareDesc" type="text" formControlName="otherSpareDesc"
+                class="form-control"></textarea>
+            </div>
+          </div>
+
+          <div class="row mt-2" *ngIf="hasId">
+            <div class="col-md-4">
+              <label>Air Freight charges</label>
+              <br>
+              <input class="payAmt form-control" type="number" min="0" formControlName="airFreightChargesAmt" />
+            </div>
+
+            <div class="col-md-4">
+              <label>PVOC / Inspection Charges </label>
+              <br>
+              <input class="payAmt form-control" type="number" min="0" formControlName="inspectionChargesAmt" />
+            </div>
+
+            <div class="col-md-4">
+              <label>LC Administrative Charges</label>
+              <br>
+              <input class="payAmt form-control" type="number" min="0" formControlName="lcAdministrativeChargesAmt" />
+            </div>
+
+            <div class="col-md-4">
+              <label>Total</label>
+              <br>
+              <input class="payAmt form-control" type="number" min="0" formControlName="totalAmt" />
+            </div>
+
+            <div class="col-md-4">
+              <label>Exchange Rate</label>
+              <br>
+              <select type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                formControlName="baseCurrencyId" class="form-select">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}</option>
+              </select>
+              <input style="width:67%;display: inline-block;text-align: right;" class="payAmt form-control"
+                type="number" min="0" formControlName="basePCurrencyAmt" />
+            </div>
+            <div class="col-md-4">
+              <label>Cost in USD</label>
+              <input class="form-control" type="number" min="0" disabled [value]="(costUsd)" />
+            </div>
+          </div>
+          <br />
+
+          <div class="offerRequestProccess" *ngIf="hasId">
+            <div class="page-title">
+              <div class="title_left">
+                <div class="row">
+                  <div class="col-md-10">
+                    <h3 style="padding: 15px 0 5px 0">Spare Parts Quote Stages</h3>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+            <p style="color: red;">*Upload File Size should not exceed 10MB.</p>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode">Action</th>
+                  <th>Stage</th>
+                  <th>Comments</th>
+                  <th>Date</th>
+                  <th>Download File <i class="mx-2 fas fa-download"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of rowData;let first = first;let last = last;">
+                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode" class="d-flex w-100">
+                    <div class="d-flex w-50 flex-column">
+                      <button type="button" class="btn" [disabled]="first" (click)="StageMoveUp(item.stageIndex)">
+                        <i class="fas fa-arrow-up"></i>
+                      </button>
+                      <button type="button" class="btn" [disabled]="last" (click)="StageMoveDown(item.stageIndex)">
+                        <i class="fas fa-arrow-down"></i>
+                      </button>
+                    </div>
+                    <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
+                      class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
+                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                    </button>
+                  </td>
+
+                  <td>{{item.stageName}}</td>
+
+                  <td>
+                    {{item.paymentType}} <br *ngIf="item.paymentType"><br *ngIf="item.paymentType">
+                    <span *ngIf="item.payAmt">
+                      {{item.payAmtCurrency}} {{item.payAmt}} <span *ngIf="item.baseCurrencyAmt != 1">==>
+                        {{environment.baseCurrencyCode}} {{item.baseCurrencyAmt
+                        * item.payAmt}} </span><br /><br />
+                    </span>
+                    {{item.comments}}
+                  </td>
+
+                  <td>{{item.createdOn}}</td>
+                  <td>
+                    <app-ProcessFileRenderer [parameters]="item"></app-ProcessFileRenderer>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot *ngIf="hasUpdateAccess && !isCompleted && isEditMode"
+                style=" background: whitesmoke; border: 0.5px solid rgb(202 170 170);">
+                <tr>
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      <button type="button" *ngIf="hasUpdateAccess" [disabled]="submitted" (click)="submitStageData()"
+                        style="background-color: transparent; color: #5ba146; border: none;">
+                        <i class="fas fa-save" style="font-size: 20px;"></i>
+                      </button>
+                    </div>
+                  </td>
+
+                  <td style="width: 250px;">
+                    <select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
+                      class="form-select" [ngClass]="{'is-invalid':f.stageName.touched && f.stageName.errors }">
+                      <option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemName}}
+                      </option>
+                    </select>
+
+                    <div *ngIf="f.stageName.touched && f.stageName.errors" class="invalid-feedback">
+                      <div *ngIf="f.stageName.errors.required">Stage Name is required</div>
+                    </div>
+                  </td>
+                  <td>
+
+                    <div *ngIf="isPaymentTerms">
+
+                      <label>Payment Type</label>
+                      <select class="pay_terms form-select" formControlName="payterms" id="payment_type">
+                        <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
+                          {{ i.itemName }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div *ngIf="isPaymentAmt">
+                      <label>Payment Amount</label><br>
+                      <select id="currency" type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                        formControlName="payAmtCurrencyId" class="form-select"
+                        [ngClass]="{ ' is -invalid': f.currency.touched && f.currency.errors}">
+                        <option *ngFor="let i of currencyList" value="{{i.id}}">
+                          {{i.code}}
+                        </option>
+                      </select>
+                      <input class="payAmt form-control" type="number" min="0" formControlName="payAmt" id="payAmt" />
+                    </div>
+
+
+                    <div *ngIf="isPaymentAmt">
+                      <label for="dateOfPurchase">Base Currency</label><br>
+                      <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
+                        class="form-select">
+                        <option *ngFor="let item of currencyList" value="{{item.id}}">{{item.code}}</option>
+                      </select>
+                      <input formControlName="baseCurrencyAmt" #baseAmt type="number" min="0" class="form-control"
+                        style="width: 68%;display: inline-block;margin-left: 5px;text-align: right;" />
+                    </div>
+
+                    <label for="stageComments" *ngIf="isPaymentTerms || isPaymentAmt">Comments</label>
+                    <textarea formControlName="stageComments" class="form-control"
+                      [ngClass]="{'is-invalid':f.stageComments.touched && f.stageComments.errors }"></textarea>
+
+                    <div *ngIf="f.stageComments.touched && f.stageComments.errors" class="invalid-feedback">
+                      <div *ngIf="f.stageComments.errors.required">Stage Comments is required</div>
+                    </div>
+                  </td>
+
+                  <td></td>
+                  <td>
+                    <input multiple #stageFiles id="fileList" class="stageFilesList_class" type="file"
+                      accept=".pdf, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/pdf"
+                      (change)="
+                      getfil(stageFiles.files);
+                      listfile(stageFiles.files,'stageFilesList')" />
+
+                    <div>
+                      <input type="checkbox" [disabled]="isCompleted" (click)="DisableChoseFile('stageFilesList_class')"
+                        id="stageFilesList_Attachment" />
+                      <span> No Attachment</span>
+                    </div>
+
+                    <div id="stageFilesList" class="hidden" style="display: none; overflow-wrap: break-word;"></div>
+                  </td>
+                </tr>
+              </tfoot>
+
+            </table>
+
+          </div>
+
+          <div class="attachment my-4">
+            <div class="page-title">
+              <div class="title_left">
+                <h3 style="padding: 15px 0 5px 0">Attachments</h3>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+            <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin: 15px">
+              <div class="col-md-3">
+                <input type="file" id="myFile" [disabled]="isCompleted || (!isEditMode && !isNewMode)" #file
+                  placeholder="Choose file" (change)="getfil(file.files, true); listfile(file.files)" multiple
+                  accept="text/plain, application/pdf, image/*" />
+              </div>
+              <div id="selectedfiles" class="hidden col-md-4"
+                style="max-height: 200px; overflow-y: auto; display: none">
+                <!-- <section style="
+                    margin: 30px 0 0 50px;
+                    max-width: 600px;
+                    min-width: 300px;
+                  ">
+                  <h5>Selected Files:</h5>
+                  <hr />
+                </section> -->
+              </div>
+            </div>
+
+            <ag-grid-angular *ngIf="hasId" style="width: 100%; height: 250px" class="my-4 ag-theme-alpine"
+              (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments" [rowData]="attachments"
+              rowSelection="single" pagination="true" paginationPageSize="10">
+            </ag-grid-angular>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>
+
+<style>
+  th>button {
+    padding: 6px 9px;
+  }
+
+  thead {
+    background-color: #5ba146;
+    color: white;
+  }
+
+  tbody {
+    border: 0.5px solid rgb(202 170 170);
+  }
+
+  td>textarea {
+    width: 300px;
+  }
+</style>

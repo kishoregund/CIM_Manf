@@ -1,0 +1,15 @@
+<div class="wrapper" style="height: 618px;">
+  <app-loader *ngIf="showSpinner"
+    style="position: absolute;top: 40%;left: 50%;transform: translate(50%, 50%);z-index: 60;"></app-loader>
+
+  <app-nav-sidemenu *ngIf="showNavs || !isNewSetUp"></app-nav-sidemenu>
+
+  <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content" [ngClass]="{'mt-4': !(showNavs || !isNewSetUp) }">
+      <app-nav-menu [isClosed]="isClosed" *ngIf="showNavs || !isNewSetUp" (showNotifications)="Notifications($event)">
+      </app-nav-menu>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
+<div class="overlay toggle-icon"></div>

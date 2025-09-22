@@ -1,0 +1,301 @@
+<layout>
+    <div class="right_col" role="main">
+        <div class="container">
+
+            <div class="page-title">
+                <div class="title_left" style="display: flex; justify-content: space-between;">
+                    <div class="d-flex" style="align-items: center;">
+                        <h3>Advance Request Form</h3>
+                    </div>
+
+                    <div class="controls" style="display: flex;">
+                        <a (click)="Back()" class="nav-link">
+                            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+                        </a>
+                        <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+                            <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+                            <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="onSubmit()"
+                            *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+                            <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+                            <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+            <div class="col-md-12 col-sm-12 mb-3 ">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="row">
+
+                        <div class="col-sm-4" hidden>
+                            <label>Distributor <span class="text-danger">*</span> </label>
+                            <select formControlName="distributorId" class="form-select"
+                                (input)="getengineers($event.target.value)"
+                                [ngClass]="{'is-invalid':f.distributorId.touched && f.distributorId.errors }">
+                                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distName}}</option>
+                            </select>
+
+                            <div *ngIf="f.distributorId.touched && f.distributorId.errors" class="invalid-feedback">
+                                <div *ngIf="f.distributorId.errors.required">Distributor is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Full Name of Employee<span class="text-danger">*</span> </label>
+                            <select formControlName="engineerId" class="form-select"
+                                (change)="getservicerequest(distId ,$event.target.value);"
+                                [ngClass]="{'is-invalid':f.engineerId.touched && f.engineerId.errors }">
+                                <option *ngFor="let i of engineer" value="{{i.id}}">{{i.firstName + " " + i.lastName}}</option>
+                            </select>
+
+                            <div *ngIf="f.engineerId.touched && f.engineerId.errors" class="invalid-feedback">
+                                <div *ngIf="f.engineerId.errors.required">Engineer Name is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label for="serviceRequestId">Service Request No. in CIM (If applicable)<span
+                                    class="text-danger">*</span> </label>
+                            <select formControlName="serviceRequestId" class="form-select"
+                                (change)="onServiceRequestChange()"
+                                [ngClass]="{'is-invalid':f.serviceRequestId.touched && f.serviceRequestId.errors }">
+                                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serReqNo}}</option>
+                            </select>
+                            <div Style="display: block" *ngIf="f.serviceRequestId.touched && f.serviceRequestId.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.serviceRequestId.errors.required">
+                                    Service Request is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3" hidden>
+                            <label>Customer<span class="text-danger">*</span> </label>
+                            <select disabled formControlName="customerId" class="form-select"
+                                [ngClass]="{ 'is-invalid': f.customerId.touched && f.customerId.errors}">
+
+                                <option *ngFor="let i of customerList" value="{{i.id}}">{{i.custName}}</option>
+                            </select>
+
+                            <div *ngIf="f.customerId.touched && f.customerId.errors" class="invalid-feedback">
+                                <div *ngIf="f.customerId.errors.required">Customer is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Employee's Office Location<span class="text-danger">*</span> </label>
+                            <select id="country" formControlName="officeLocationId" class="form-select"
+                                [ngClass]="{ 'is-invalid': f.officeLocationId.touched && f.officeLocationId.errors}">
+                                <option *ngFor="let i of country" value="{{i.id}}">{{i.name}}
+                                </option>
+                            </select>
+                            <div *ngIf="f.officeLocationId.touched && f.officeLocationId.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.officeLocationId.errors.required">Office Location is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Advance Amount in USD / Local Currency<span class="text-danger">*</span> </label>
+                            <br>
+                            <select id="currency" style="display:inline-block; width:15%;"
+                                formControlName="advanceCurrency" class="form-select"
+                                [ngClass]="{ 'is-invalid': f.advanceCurrency.touched && f.advanceCurrency.errors}">
+                                <option *ngFor="let i of currencyList" value="{{i.id}}">{{i.code}}
+                                </option>
+                            </select>
+
+                            <input id="totalamount" type="number" formControlName="advanceAmount" class="form-control"
+                                style="display:inline-block; width:84%; margin-left: 5px;"
+                                [ngClass]="{ 'is-invalid': f.advanceAmount.touched && f.advanceAmount.errors}" />
+
+                            <div *ngIf="f.advanceAmount.touched && f.advanceAmount.errors" class="invalid-feedback">
+                                <div *ngIf="f.advanceAmount.errors.required">Advance Amount is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Wheather its billable to client or not?<span class="text-danger">*</span> </label>
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="isBillable" type="radio"
+                                    name="isBillable" id="isBillable-true" value="1">
+                                <label class="form-check-label" for="isBillable-true">Yes </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="isBillable" type="radio"
+                                    name="isBillable" id="isBillable-false" value="0">
+                                <label class="form-check-label" for="isBillable-false">No</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Client Name, Location to be visited and period of visit<span
+                                    class="text-danger">*</span> </label>
+                            <input formControlName="clientNameLocation" type="text" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.clientNameLocation.touched && f.clientNameLocation.errors}" />
+
+                            <div *ngIf="f.clientNameLocation.touched && f.clientNameLocation.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.clientNameLocation.errors.required">Client Location is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <p style="font-weight: bold;"> I HEREBY CONFIRM THAT ALL BILLS AND DETAILS OF EXPENSES WILL
+                                BE PROVIDED AFTER
+                                COMPLETION OF TRIP/TRAINING. IF THE SAME IS NOT RECEIVED WITHIN 5 WORKING DAYS AFTER THE
+                                TRIP/TRAINING/OFFICE RESUMPTION, IT WILL BE DEDUCTED FROM MY SALARY/(IES). I UNDERSTAND
+                                THAT NO FURTHER ADVANCE WILL BE PROVIDED IF ALL DOCUMENTS ARE NOT SUBMITTED AGAINST
+                                ADVANCE </p>
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="underTaking" type="radio" value="1"
+                                    id="undertaking-true">
+                                <label class="form-check-label" for="undertaking-true">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="underTaking" type="radio" value="0"
+                                    id="undertaking-false">
+                                <label class="form-check-label" for="undertaking-false">No</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            <label>Approved by reporting manager (Name)<span class="text-danger">*</span> </label>
+                            <input formControlName="reportingManager" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.reportingManager.touched && f.reportingManager.errors}" />
+
+                            <div *ngIf="f.reportingManager.touched && f.reportingManager.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.reportingManager.errors.required">Manager Name is required</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <br />
+                            <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+                                <div class="col-md-12">
+                                    <label>Budgeted expenses in excel (as per company format) </label>
+                                    <br>
+                                    <input type="file" id="myFile" [disabled]="!isEditMode" #file
+                                        placeholder="Choose file" (change)="getfil(file.files); listfile(file.files) ;"
+                                        multiple accept="text/plain, application/pdf, image/*">
+                                </div>
+                                <div id="selectedfiles" class="hidden col-md-4"
+                                    style="max-height:200px; overflow-y:auto;display: none;">
+                                    <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                                        <h5>Selected Files:</h5>
+                                        <hr />
+                                    </section>
+
+                                </div>
+                            </div>
+
+                            <div class="attachment my-4" *ngIf="id!=null">
+                                <div class="page-title">
+                                    <div class="title_left">
+                                        <h3>Attachment List</h3>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+                                    (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments"
+                                    [rowData]="attachments" rowSelection="single" pagination="true"
+                                    paginationPageSize=10>
+                                </ag-grid-angular>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="my-3" formGroupName="bankDetails">
+
+                        <div class="page-title">
+                            <div class="title_left">
+                                <h3>Bank Details</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Bank Name<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.bankName.touched && b.bankName.errors }"
+                                    formControlName="bankName" type="text" class="form-control" />
+
+                                <div *ngIf="b.bankName.touched && b.bankName.errors" class="invalid-feedback">
+                                    <div *ngIf="b.bankName.errors.required">Bank Name is required</div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Branch<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.branch.touched && b.branch.errors }"
+                                    formControlName="branch" type="text" class="form-control" />
+
+                                <div *ngIf="b.branch.touched && b.branch.errors" class="invalid-feedback">
+                                    <div *ngIf="b.branch.errors.required">branch is required</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Name in Branch<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.nameInBank.touched && b.nameInBank.errors }"
+                                    formControlName="nameInBank" type="text" class="form-control" />
+
+                                <div *ngIf="b.nameInBank.touched && b.nameInBank.errors" class="invalid-feedback">
+                                    <div *ngIf="b.nameInBank.errors.required">Name In Bank is required</div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Banks Swift code<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.bankSwiftCode.touched && b.bankSwiftCode.errors }"
+                                    formControlName="bankSwiftCode" type="text" class="form-control" />
+
+                                <div *ngIf="b.bankSwiftCode.touched && b.bankSwiftCode.errors" class="invalid-feedback">
+                                    <div *ngIf="b.bankSwiftCode.errors.required">Bank Swift Code is required</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>Bank Account No.<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.bankAccountNo.touched && b.bankAccountNo.errors }"
+                                    formControlName="bankAccountNo" type="text" class="form-control" />
+
+                                <div *ngIf="b.bankAccountNo.touched && b.bankAccountNo.errors" class="invalid-feedback">
+                                    <div *ngIf="b.bankAccountNo.errors.required">Bank Account No. is required</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label>IBAN No.<span class="text-danger">*</span> </label>
+                                <input [ngClass]="{'is-invalid':b.ibanNo.touched && b.ibanNo.errors }"
+                                    formControlName="ibanNo" type="text" class="form-control" />
+
+                                <div *ngIf="b.ibanNo.touched && b.ibanNo.errors" class="invalid-feedback">
+                                    <div *ngIf="b.ibanNo.errors.required">IBAN No. is required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</layout>

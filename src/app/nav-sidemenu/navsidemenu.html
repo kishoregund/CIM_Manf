@@ -1,0 +1,340 @@
+<div class="wrapper">
+  <div class="sidebar-wrapper" data-simplebar="init">
+    <div class="simplebar-wrapper" style="margin: 0px;">
+      <div class="simplebar-height-auto-observer-wrapper">
+        <div class="simplebar-height-auto-observer"></div>
+      </div>
+      <div class="simplebar-mask">
+        <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+          <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
+            <div class="simplebar-content mm-active" style="padding: 0px;">
+              <div class="sidebar-header">
+                <div>
+                  <img src="../../assets/img/cimlogo.png" class="logo-icon" alt="logo icon">
+                </div>
+              </div>
+              <!--navigation-->
+              <ul class="metismenu mm-show" id="menu">
+                <!-- <li class="">
+                  <a (click)="navigate('/')" aria-expanded="false">
+                    <div class="parent-icon">
+                      <img src="../../assets/img/home-icon.png" />
+                    </div>
+                    <div class="menu-title">Home</div>
+                  </a>
+                </li> -->
+              
+                <li class="" *ngIf="isRoot">
+                  <a class="has-arrow" aria-expanded="false">
+                    <div class="parent-icon">
+                      <i class="fab fa-creative-commons"></i>
+                    </div>
+                    <div class="menu-title">Tenants</div>
+                  </a>
+                  <ul class="mm-collapse" style="height: 2px;">
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/tenantlist')" *ngIf="isRoot">
+                        <i class="bx bx-right-arrow-alt"></i>Tenants
+                      </a>
+                    </li>                    
+                  </ul>
+                </li>
+
+
+
+
+
+                <li class="" *ngIf="hasAdministrator">
+                  <a class="has-arrow" aria-expanded="false">
+                    <div class="parent-icon">
+                      <i class="fab fa-creative-commons"></i>
+                    </div>
+                    <div class="menu-title">Administrator</div>
+                  </a>
+                  <ul class="mm-collapse" style="height: 2px;">
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/masterlist')" *ngIf="hasMaster">
+                        <i class="bx bx-right-arrow-alt"></i>Master List
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/businessunitlist')" *ngIf="isAdmin && !isSuperAdmin">
+                        <i class="bx bx-right-arrow-alt"></i>Business Unit
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/brandlist')" *ngIf="isAdmin && !isSuperAdmin">
+                        <i class="bx bx-right-arrow-alt"></i> Brand
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/companylist')" *ngIf="isSuperAdmin">
+                        <i class="bx bx-right-arrow-alt"></i> Company
+                      </a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/rolelist')" *ngIf="hasProfile && !isCustomer">
+                        <i class="bx bx-right-arrow-alt"></i>Role</a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/userprofilelist')" *ngIf="hasUserProfile">
+                        <i class="bx bx-right-arrow-alt"></i>User Profile
+                      </a>
+                    </li>
+
+                  </ul>
+                </li>
+                <li class="" *ngIf="hasMasters">
+                  <a class="has-arrow" aria-expanded="false">
+                    <div class="parent-icon">
+                      <img src="../../assets/img/masters-icon.png" />
+                    </div>
+                    <div class="menu-title">Masters</div>
+                  </a>
+                  <ul class="mm-collapse" style="height: 2px;">
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/countrylist')" *ngIf="hasCountry">
+                        <i class="bx bx-right-arrow-alt"></i>Country</a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/currencylist')" *ngIf="hasCurrency">
+                        <i class="bx bx-right-arrow-alt"></i>Currency
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/customerlist')" *ngIf="hasCustomer">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Customer
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/distributorlist')" *ngIf="hasDistributor">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Distributor
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/manufacturerlist')" *ngIf="hasDistributor">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Manufacturer
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/instrumentlist')" *ngIf="hasInstrument">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Instrument
+                      </a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/sparepartlist')" *ngIf="hasSparePart">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Spare Parts
+                      </a>
+                    </li>
+
+                  </ul>
+                </li>
+                <li class="" *ngIf="hasTransactions">
+                  <a class="has-arrow" aria-expanded="false">
+                    <div class="parent-icon">
+                      <img src="../../assets/img/transaction-icon.png" />
+                    </div>
+                    <div class="menu-title">Transactions</div>
+                  </a>
+                  <ul class="mm-collapse" style="height: 2px;">
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/customerinstrumentlist')" *ngIf="hasCustomerInstrument">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Installed Instruments
+                      </a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/amclist')" *ngIf="hasAmc">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        AMC
+                      </a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/offerrequestlist')" *ngIf="hasOfferRequest">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Spare Part Quotation
+                      </a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/servicerequestlist')" *ngIf="hasServiceRequest">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Service Request
+                      </a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/servicereportlist')" *ngIf="hasServiceReport">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Service Report
+                      </a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/customerspinventorylist')"
+                        *ngIf="hasCustomerSparePartsInventory">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Spare <br /> Parts Inventory
+                      </a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/sparepartsrecommended')"
+                        *ngIf="hasSparePartRecommended">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Spare Parts <br /> Recommended</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/travelexpenselist')" *ngIf="hasTravelExpenses">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Travel Expenses</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/customersatisfactionsurveylist')"
+                        *ngIf="hascustomersatisfactionsurveylist">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Survey</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/advancerequestformlist')" *ngIf="hasAdvanceRequest">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Advance Request Form</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/travelinvoicelist')" *ngIf="hasTravelInvoice">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Travel Invoices</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/schedule')" *ngIf="hasschedule">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Schedule</a>
+                    </li>
+
+                  </ul>
+                </li>
+                <li class="" *ngIf="hasUtilities">
+                  <a class="has-arrow" aria-expanded="false">
+                    <div class="parent-icon">
+                      <img src="../../assets/img/utilities-icon.png" />
+                    </div>
+                    <div class="menu-title">Utilites</div>
+                  </a>
+                  <ul class="mm-collapse" style="height: 2px;">
+                    <!-- <li>
+                      <a class="collapse-item" (click)="navigate('/search')" *ngIf="hasSearch">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Search</a>
+                    </li> -->
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/pastservicereportlist')"
+                        *ngIf="haspastservicereport">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Past Service Report</a>
+                    </li>
+
+                    <!-- <li>
+                      <a class="collapse-item" (click)="navigate('/exportsparepart')" *ngIf="hasexport">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Export template</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/audittrail')" *ngIf="hasAuditTrail">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Audit Trail</a>
+                    </li>
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/sraudittrail')" *ngIf="hasAuditTrail">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        SR Audit Trail</a>
+                    </li> -->
+                  </ul>
+                </li>
+                <li class="" *ngIf="hasReports">
+                  <a class="has-arrow" aria-expanded="false">
+                    <div class="parent-icon">
+                      <i class="fas fa-book"></i>
+                    </div>
+                    <div class="menu-title">Reports</div>
+                  </a>
+                  <ul class="mm-collapse" style="height: 2px;">
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/servicerequestreport')" *ngIf="serviceRequestReport">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Service Request Report</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/servicecompletionreport')"
+                        *ngIf="hasServiceCompletionReport">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Service Completion <br> Report</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/pendingquotationrequest')"
+                        *ngIf="pendingQuoteRequestReport">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Pending Quotation <br> Request</a>
+                    </li>
+
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/servicecontractrevenuereport')"
+                        *ngIf="serviceContractRevenueReport">
+                        <i class="bx bx-right-arrow-alt"></i>
+                        Service Contract Revenue<br>Report</a>
+                    </li>
+
+                  </ul>
+                </li>
+
+              </ul>
+              <!--end navigation-->
+              <!-- <div style="margin-top: 200px;">
+                <div >
+                  <a href="https://api.whatsapp.com/send?phone=919920085196" target="_blank">
+                    <img src="../../assets/img/whatsapplogo1.png" style="height: 50px;width: 50px;padding: 15px 0 0 15px;" alt="whatsapp support">
+                  </a>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="simplebar-placeholder" style="width: auto; height: 1313px;">
+      </div>
+    </div>
+    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+      <div class="simplebar-scrollbar" style="width: 0px; display: none; transform: translate3d(0px, 0px, 0px);"></div>
+    </div>
+    <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+      <div class="simplebar-scrollbar" style="height: 423px; transform: translate3d(0px, 0px, 0px); display: block;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    cursor: pointer;
+  }
+</style>

@@ -1,0 +1,60 @@
+<!--<div class="right_col" role="main">
+  <div class="container">
+
+  </div>
+</div>-->
+<script src="node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"></script>
+<div class="model" id="model" role="dialog">
+  <div class="model-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #589b44; color: #fff">
+        <h4 class="modal-title" id="modal-basic-title">Add Enginneer Comment</h4>
+        <button type="button" class="btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
+        </button>
+      </div>
+      <div class="py-3 px-3-pb-3">
+        <form [formGroup]="engineerCommentForm" (ngSubmit)="onValueSubmit()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12 form-group">
+                <label for="nextDate">Next Date<span class="text-danger">*</span></label>
+                <input bsDatepicker formControlName="nextDate" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.nextDate.touched  && f.nextDate.errors }">
+                <div *ngIf="f.nextDate.touched && f.nextDate.errors" class="invalid-feedback">
+                  <div *ngIf="f.nextDate.errors.required">Next Date is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <label for="comments">Comments<span class="text-danger">*</span></label>
+                <textarea type="text" formControlName="comments" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.comments.touched  && f.comments.errors }">
+                 </textarea>
+                <div *ngIf="f.comments.touched && f.comments.errors" class="invalid-feedback">
+                  <div *ngIf="f.comments.errors.required">Comments is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12" style="margin-left: 16px;">
+              <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

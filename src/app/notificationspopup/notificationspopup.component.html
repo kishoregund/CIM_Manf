@@ -1,0 +1,38 @@
+<!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
+
+<div class="sidenav">
+    <div class="header">
+        <h5 style="display: inline-block;margin: 4%;width: 65%;">Notifications</h5>
+
+        <i (click)="ClearNotifications()" class="fas fa-trash" style="color: white;margin-right: 25px;"
+            title="Clear All"></i>
+
+        <button role="button" aria-label="close modal"
+            style="background: transparent;border: none;padding: 0; font-size: 30px;" (click)="close()">
+            &times;</button>
+    </div>
+
+    <div *ngFor="let notification of notificationList" class="container mt-2">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{notification.remarks}}
+            <button type="button" class="close btn" (click)="deleteNotification(notification.id)" data-dismiss="alert"
+                aria-label="Close">
+                <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <div class="container mt-1" *ngIf="notificationList.length == 0">
+        <p>No Notifications!</p>
+    </div>
+</div>
+
+<style>
+    .header {
+        z-index: 3;
+        position: fixed;
+        width: 20.6%;
+        top: 0px;
+    }
+</style>

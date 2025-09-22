@@ -1,0 +1,506 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+
+      <div class="page-title">
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          <div class="d-flex" style="align-items: center;">
+            <h3>AMC Details</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+      <hr />
+      <div class="col-md-12 col-sm-12">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="billto">Bill To<span class="text-danger">*</span></label>
+              <select id="billto" formControlName="billTo" class="form-select"
+                (change)="GetSites($event.target['value'])"
+                [ngClass]="{ ' is -invalid': f.billTo.touched && f.billTo.errors}">
+                <option *ngFor="let i of customersList" value="{{i.id}}">
+                  {{i.custName}}
+                </option>
+              </select>
+
+              <div style="display: block" *ngIf="f.billTo.touched && f.billTo.errors" class="invalid-feedback">
+                <div *ngIf="f.billTo.errors.required">Billto is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="CustSite">Customer Site<span class="text-danger">*</span></label>
+              <select id="CustSite" formControlName="custSite" class="form-select"
+                [ngClass]="{ ' is -invalid': f.custSite.touched && f.custSite.errors}">
+                <option *ngFor="let i of custSiteList" value="{{i.id}}">
+                  {{i.custRegName}}
+                </option>
+              </select>
+              <div style="display: block" *ngIf="f.custSite.touched && f.custSite.errors" class="invalid-feedback">
+                <div *ngIf="f.custSite.errors.required">
+                  Customer Site is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="serviceQuote">Service Quote<span class="text-danger">*</span></label>
+              <input id="serviceQuote" type="text" formControlName="serviceQuote" class="form-control"
+                [ngClass]="{ ' is -invalid': f.serviceQuote.touched && f.serviceQuote.errors}" />
+              <div style="display: block" *ngIf="f.serviceQuote.touched && f.serviceQuote.errors"
+                class="invalid-feedback">
+                <div *ngIf="f.serviceQuote.errors.required">
+                  Service Quote is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="sqDate">SQ Date<span class="text-danger">*</span></label>
+              <input id="sqDate" bsDatepicker type="text" formControlName="sqDate" class="form-control"
+                [ngClass]="{ ' is -invalid': f.sqDate.touched && f.sqDate.errors}" />
+              <div style="display: block" *ngIf="f.sqDate.touched && f.sqDate.errors" class="invalid-feedback">
+                <div *ngIf="f.sqDate.errors.required">SQ Date is required</div>
+              </div>
+              <div class="text-danger" *ngIf="sqDateError">
+                SQ Date cannot be a future date.
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="sDate">Start Date<span class="text-danger">*</span></label>
+              <input id="sDate" bsDatepicker type="text" formControlName="sDate" class="form-control"
+                [ngClass]="{ ' is -invalid': f.sDate.touched && f.sDate.errors}" />
+              <div style="display: block" *ngIf="f.sDate.touched && f.sDate.errors" class="invalid-feedback">
+                <div *ngIf="f.sDate.errors.required">
+                  Start Date is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="eDate">End Date<span class="text-danger">*</span></label>
+              <input id="eDate" bsDatepicker type="text" formControlName="eDate" class="form-control"
+                [ngClass]="{ ' is -invalid': f.eDate.touched && f.eDate.errors}" />
+              <div style="display: block" *ngIf="f.eDate.touched && f.eDate.errors" class="invalid-feedback">
+                <div *ngIf="f.eDate.errors.required">End Date is required</div>
+              </div>
+              <div class="text-danger" *ngIf="seDateError">
+                End Date cannot be before the Start Date.
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="project">Project<span class="text-danger">*</span></label>
+              <input id="project" type="text" formControlName="project" class="form-control"
+                [ngClass]="{ ' is -invalid': f.project.touched && f.project.errors}" />
+              <div style="display: block" *ngIf="f.project.touched && f.project.errors" class="invalid-feedback">
+                <div *ngIf="f.project.errors.required">Project is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="IsDistributorView">
+              <label for="PaymentTerms">Payment Terms<span class="text-danger">*</span></label>              
+              <select id="paymentTerms" formControlName="paymentTerms" class="form-select"
+                [ngClass]="{ ' is -invalid': f.paymentTerms.touched && f.paymentTerms.errors}">
+                <option *ngFor="let d of payTypes" value="{{d.listTypeItemId}}">
+                  {{d.itemName}}
+                </option>
+              </select>
+              <div  style="display: block" *ngIf="f.paymentTerms.touched && f.paymentTerms.errors" class="invalid-feedback">
+                <div *ngIf="f.paymentTerms.errors.required">
+                  Payment Terms is required
+                </div>
+              </div>                        
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="brandId">Brand<span class="text-danger">*</span></label>
+              <select id="brandId" type="text" formControlName="brandId" class="form-select"
+                [ngClass]="{'is -invalid': f.brandId.touched && f.brandId.errors}">
+                <option *ngFor="let d of supplierList" value="{{d.id}}">
+                  {{d.brandName}}
+                </option>
+              </select>
+              <div style="display: block" *ngIf="f.brandId.touched && f.brandId.errors" class="invalid-feedback">
+                <div *ngIf="f.brandId.errors.required">Brand is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="zerorate">AMC Value<span class="text-danger">*</span></label>
+              <br />
+              <select id="currencyId" type="text" style="display: inline-block; width: 30%" formControlName="currencyId"
+                class="form-select" [ngClass]="{ ' is -invalid': f.currencyId.touched && f.currencyId.errors}">
+                <option *ngFor="let i of currencyList" value="{{i.id}}">
+                  {{i.code}}
+                </option>
+              </select>
+
+              <input id="zerorate" type="number" pattern="^[0-9]*(\.[0-9]{0,2})?$" onKeyPress="if(this.value.length==15) return false;" 
+              formControlName="zerorate" class="form-control" style="display: inline-block; width: 220px; margin-left: 5px"
+                [ngClass]="{ 'is-invalid': f.zerorate.touched && f.zerorate.errors}" />
+              <div style="display: block" *ngIf="f.zerorate.touched && f.zerorate.errors" class="invalid-feedback">
+                <div *ngIf="f.zerorate.errors?.pattern" class="invalid-feedback">AMC Value with 2 decimals is allowed</div>
+                <div *ngIf="f.zerorate.errors.required">
+                  AMC Value is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Exchange Rate<span class="text-danger">*</span></label><br>
+              <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
+                class="form-select">
+                <option *ngFor="let item of currencyList" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="baseCurrencyAmt" #baseAmt type="number" pattern="^[0-9]*(\.[0-9]{0,2})?$" onKeyPress="if(this.value.length==15) return false;" 
+               class="form-control"  style="width: 68%;display: inline-block;margin-left: 5px;" 
+               [ngClass]="{ 'is-invalid': f.baseCurrencyAmt.touched && f.baseCurrencyAmt.errors}"/>
+               <div *ngIf="f.baseCurrencyAmt.errors?.pattern" class="invalid-feedback">Exchage rate with 2 decimals is allowed</div>               
+            </div>
+
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="conversionAmount">AMC Value (USD)</label><br>              
+              <input formControlName="conversionAmount" id="conversionAmount" type="number" class="form-control"
+                style="width: 68%;display: inline-block;margin-left: 5px;" />
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="tnc">Comments</label>
+              <textarea id="tnc" type="text" formControlName="tnc" class="form-control" ></textarea>              
+            </div>
+
+            <div class="col-md-4 col-sm-4 mt-3" >
+              <label for="isactive">
+                <input id="ismultiplebreakdown" type="checkbox" formControlName="isMultipleBreakdown" checked="isMultipleBreakdown">
+                Multiple Breakdowns
+              </label>
+            </div>
+            <div class="col-md-4 col-sm-4 mt-3" *ngIf="hasId">
+              <label for="isactive">
+                <input id="isactive" type="checkbox" formControlName="isActive">
+                Active AMC
+              </label>
+            </div>
+          </div>
+          <br />
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding: 15px 0 5px 0">Add Instrument</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr />
+          <div class="row" *ngIf="!isCompleted && (isEditMode || isNewMode)">
+            <div class="col-md-9">
+              <label>Search Instruments By Serial No.</label>
+              <select #instrumentSearch class="form-select">
+                <option></option>
+                <option *ngFor="let i of instrumentAutoComplete" [value]="i.instrumentId">{{i.instrumentSerNoType}}</option>
+              </select>
+            </div>
+
+            <div class="col-md-3" style="margin-top: 25px">
+              <button class="btn btn-primary" (click)="AddInstrument(instrumentSearch.value)" type="button"
+                class="btn btn-primary">
+                Add Instrument
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <ag-grid-angular style="width: 100%; margin-top: 2.5%; height: 250px" class="ag-theme-alpine"
+              (cellValueChanged)="onCellValueChanged($event)" (cellClicked)="RemoveInnstrument($event)"
+              (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="instrumentList"
+              rowSelection="single" pagination="true" paginationPageSize="10">
+            </ag-grid-angular>
+          </div>
+
+          
+
+          <div formGroupName="amcItemsForm" class="offerRequestProccess"  *ngIf="hasId" >
+            <div class="page-title">
+              <div class="title_left">
+                <div class="row">
+                  <div class="col-md-10">
+                    <h3 style="padding: 15px 0 5px 0">AMC Items</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+            <table class="table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>SQ No.</th>
+                  <th>Service Type</th>
+                  <th>Est. Start Date</th>
+                  <th>Est. End Date</th>
+                  <th>Status</th>
+                  <th>Service Request</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of amcItems;">
+                  <td class="d-flex w-100" style="height:45px;"> 
+                    <div *ngIf="IsDistributorView && (hasDeleteAccess || hasUpdateAccess) && !isCompleted && isEditMode">
+                      <button type="button" *ngIf="hasDeleteAccess && !(item.serviceRequestId)" (click)="DeleteItem(item)"
+                        class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
+                        <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                      </button>
+                  </div>                   
+                  </td>
+                  <td>{{item.sqNo}}</td>
+                  <td>{{getServiceType(item.serviceType)}}</td>
+                  <td>{{item.estStartDate}}</td>
+                  <td>{{item.estEndDate}}</td>
+                  <td>{{item.statusName}}</td>
+                  <!-- <td>{{getStatus(item.status)}}</td> -->
+                  <td>{{item.serReqNo}}</td>
+                  <!-- <td> {{item.serviceRequestNo}}</td> -->
+                </tr>
+              </tbody>
+              <tfoot
+                *ngIf="IsDistributorView && ((hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)) && !isCompleted"
+                style="
+                  background: whitesmoke;
+                  border: 0.5px solid rgb(202 170 170);">
+                <tr>                  
+                  <td>
+                    <div class="d-flex justify-content-center" *ngIf="IsDistributorView && (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)">
+                      <button type="button" *ngIf=" (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)"
+                        (click)="onItemAdd()" style="background-color: transparent; color: #5ba146; border: none;">
+                        <i class="fas fa-save" style="font-size: 20px;"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td></td>
+                  <td style="width: 250px">
+                    <select type="text" formControlName="serviceType" class="form-select"
+                      [ngClass]="{ 'is-invalid': item.serviceType.touched && item.serviceType.errors}">
+                      <option *ngFor="let i of serviceType" value="{{i.listTypeItemId}}">
+                        {{i.itemName}}
+                      </option>
+                    </select>
+                    <div style="display: block" *ngIf="item.serviceType.touched && item.serviceType.errors"
+                      class="invalid-feedback">
+                      <div *ngIf="item.serviceType.errors.required">
+                        Service Type is required
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <input type="text" bsDatepicker class="form-control" formControlName="estStartDate" />
+                  </td>
+
+                  <td>
+                    <input type="text" bsDatepicker class="form-control" formControlName="estEndDate" />
+                  </td>
+
+                  <td style="width: 250px;">
+                    <select class="form-select" formControlName="status">
+                      <option *ngFor="let i of itemStatus" value="{{ i.listTypeItemId }}">
+                        {{ i.itemName }}
+                      </option>
+                    </select>
+                  </td>
+
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+
+          <div class="offerRequestProccess" *ngIf="hasId">
+            <div class="page-title">
+              <div class="title_left">
+                <div class="row">
+                  <div class="col-md-10">
+                    <h3 style="padding: 15px 0 5px 0">AMC Stages</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+            <p style="color: red">*Upload File Size should not exceed 10MB.</p>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th *ngIf="(hasDeleteAccess || hasUpdateAccess)&& !isCompleted && isEditMode">Action</th>
+                  <th>Stage</th>
+                  <th>Comments</th>
+                  <th>Date</th>
+                  <th>Download File <i class="mx-2 fas fa-download"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of rowData;let first = first;let last = last;">
+                  <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode" class="d-flex w-100">
+                    <div class="d-flex w-50 flex-column">
+                      <button type="button" class="btn" [disabled]="first" (click)="StageMoveUp(item.stageIndex)">
+                        <i class="fas fa-arrow-up"></i>
+                      </button>
+                      <button type="button" class="btn" [disabled]="last" (click)="StageMoveDown(item.stageIndex)">
+                        <i class="fas fa-arrow-down"></i>
+                      </button>
+                    </div>
+                    <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
+                      class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
+                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                    </button>
+                  </td>
+
+
+                  <td>{{item.stageName}}</td>
+
+                  <td>
+                    {{item.paymentType}} <br *ngIf="item.paymentType"><br *ngIf="item.paymentType">
+                    <span *ngIf="item.payAmt">
+                      {{item.payAmtCurrency}} {{item.payAmt}} <br /><br />
+                    </span>
+                    {{item.comments}}
+                  </td>
+
+                  <td>{{item.createdOn}}</td>
+                  <td>
+                    <app-ProcessFileRenderer [parameters]="item"></app-ProcessFileRenderer>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot *ngIf="hasUpdateAccess && !isCompleted && isEditMode" style="
+                  background: whitesmoke;
+                  border: 0.5px solid rgb(202 170 170);
+                ">
+                <tr>
+
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      <button type="button" *ngIf="hasUpdateAccess" [disabled]="submitted" (click)="submitStageData()"
+                        style="background-color: transparent; color: #5ba146; border: none;">
+                        <i class="fas fa-save" style="font-size: 20px;"></i>
+                      </button>
+                    </div>
+                  </td>
+
+                  <td style="width: 250px">
+                    <select formControlName="stageName" id="stageName" (change)="onstageNameChanged($event)"
+                      class="form-select" [ngClass]="{'is-invalid':f.stageName.touched && f.stageName.errors }">
+                      <option *ngFor="let i of stagesList" value="{{i.listTypeItemId}}">{{i.itemName}}
+                      </option>
+                    </select>
+
+                    <div *ngIf="f.stageName.touched && f.stageName.errors" class="invalid-feedback">
+                      <div *ngIf="f.stageName.errors.required">
+                        Stage Name is required
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div *ngIf="isPaymentTerms">
+                      <label>Payment Type<span class="text-danger">*</span></label>
+                      <select class="pay_terms form-select" formControlName="payterms" id="payment_type">
+                        <option *ngFor="let i of paymentTypes" value="{{ i.listTypeItemId }}">
+                          {{ i.itemName }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div *ngIf="isPaymentAmt">
+                      <label>Payment Amount<span class="text-danger">*</span></label><br>
+                      <select id="currency" type="text" style="display: inline-block; width: 30%;margin-right: 1%;"
+                        formControlName="payAmtCurrencyId" class="form-select"
+                        [ngClass]="{ ' is -invalid': f.payAmtCurrencyId.touched && f.payAmtCurrencyId.errors}">
+                        <option *ngFor="let i of currencyList" value="{{i.id}}">
+                          {{i.code}}
+                        </option>
+                      </select>
+                      <input class="payAmt form-control" style="width:67%;display: inline-block;" type="number"
+                        formControlName="payAmt" id="payAmt" />
+                    </div>
+
+                    <label for="stageComments" *ngIf="isPaymentTerms || isPaymentAmt">Comments<span
+                        class="text-danger">*</span></label>
+                    <textarea formControlName="stageComments" class="form-control"
+                      [ngClass]="{'is-invalid':f.stageComments.touched && f.stageComments.errors }"></textarea>
+
+                    <div *ngIf="f.stageComments.touched && f.stageComments.errors" class="invalid-feedback">
+                      <div *ngIf="f.stageComments.errors.required">
+                        Stage Comments is required
+                      </div>
+                    </div>
+                  </td>
+
+                  <td></td>
+                  <td>
+                    <input multiple #stageFiles class="stageFilesList_class" id="fileList" type="file"
+                      accept=".pdf, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/pdf"
+                      (change)="
+                      getfil(stageFiles.files);
+                      listfile(stageFiles.files,'stageFilesList')" />
+
+                    <div>
+                      <input type="checkbox" (click)="DisableChoseFile('stageFilesList_class')"
+                        id="stageFilesList_Attachment" />
+                      <span> No Attachment</span>
+                    </div>
+
+                    <div id="stageFilesList" class="hidden" style="display: none; overflow-wrap: break-word"></div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>
+
+<style>
+  th>button {
+    padding: 6px 9px;
+  }
+
+  thead {
+    background-color: #68bb59;
+    color: white;
+  }
+
+  tbody {
+    border: 0.5px solid rgb(202 170 170);
+  }
+
+  td>textarea {
+    width: 300px;
+  }
+</style>

@@ -1,0 +1,112 @@
+<layout *ngIf="!isDialog">
+    <div class="right_col" role="main">
+        <div class="container">
+
+            <div class="page-title">
+                <div class="title_left" style="display: flex; justify-content: space-between; align-items: end;">
+                    <div class="d-flex" style="align-items: center;">
+                        <h3>Tenant</h3>
+                    </div>
+                    <div class="controls" style="display: flex;">
+                        <a (click)="Back()" class="nav-link">
+                            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+                        </a>
+                        <a class="nav-link" (click)="EditMode()"
+                            *ngIf="!isEditMode && !isNewMode">
+                            <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+                            <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="onSubmit()" *ngIf="(isNewMode)">
+                            <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+                        </a>
+                        <a class="nav-link" (click)="Upgrade()" *ngIf="(isEditMode)">                            
+                            <i class="fas fa-paper-plane" style="color: #5ba146;" title="Upgrade"></i>
+                        </a>
+                        <a class="nav-link" (click)="Deactivate()" *ngIf="(isEditMode)">                            
+                            <i class="fas fa-ban" style="color: #5ba146;" title="Deactivate"></i>
+                        </a>
+                        <a class="nav-link" (click)="Activate()" *ngIf="(isEditMode)">                            
+                            <i class="far fa-check-circle" style="color: #5ba146;" title="Activate"></i>
+                        </a>
+<!-- 
+                        <a class="nav-link" (click)="DeleteRecord()" *ngIf="(id != null) && hasDeleteAccess">
+                            <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+                        </a> -->
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+            <div class="col-md-12 col-sm-12">
+                <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4">
+                            <label>Name</label>
+                            <input formControlName="name" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.name.touched  && f.name.errors }" />
+
+                            <div *ngIf=" f.name.touched && f.name.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.name.errors.required">Name is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label>Identifier</label>
+                            <input formControlName="identifier" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.identifier.touched  && f.identifier.errors }" />
+
+                            <div *ngIf=" f.identifier.touched && f.identifier.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.identifier.errors.required">identifier is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label>Database Name</label>
+                            <input formControlName="connectionString" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.connectionString.touched  && f.connectionString.errors }" />
+
+                            <div *ngIf=" f.connectionString.touched && f.connectionString.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.connectionString.errors.required">Connection String is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label>Admin Email</label>
+                            <input formControlName="adminEmail" class="form-control"
+                                [ngClass]="{ 'is-invalid': f.adminEmail.touched  && f.adminEmail.errors }" />
+
+                            <div *ngIf=" f.adminEmail.touched && f.adminEmail.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.adminEmail.errors.required">Admin Email is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label>Valid Upto</label>
+                            <input formControlName="validUpTo" class="form-control" bsDatepicker
+                                [ngClass]="{ 'is-invalid': f.validUpTo.touched  && f.validUpTo.errors }" />
+
+                            <div *ngIf=" f.validUpTo.touched && f.validUpTo.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.validUpTo.errors.required">Valid Upto is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label for=""></label>
+                            <div class="checkbox">
+                              <label for="isActive">
+                                <input type="checkbox" formControlName="isActive" checked={{isActive}} class="" />
+                                IsActive
+                              </label>
+                            </div>
+                          </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</layout>
+

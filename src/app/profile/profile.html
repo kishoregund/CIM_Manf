@@ -1,0 +1,189 @@
+<layout [isNewSetUp]="isNewSetup" [showNavs]="!isNewSetup">
+
+  <div class="right_col" role="main">
+    <div class="container">
+
+      <div class="page-title">
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          <div class="d-flex" style="align-items: center;">
+            <h3>Roles</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link" *ngIf="!isNewSetup">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode &&!isNewSetup">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)&&!isNewSetup">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode && !isNewSetup">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+
+            <a class="nav-link" (click)="CopyRecord()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-copy" style="color: #5ba146;" title="Copy"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="profileform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="profilename">Profile Name<span class="text-danger">*</span></label>
+              <input type="text" formControlName="profilename" class="form-control"
+                [ngClass]="{ 'is-invalid':  f.profilename.touched && f.profilename.errors }" />
+              <div *ngIf=" f.profilename.touched && f.profilename.errors" class="invalid-feedback">
+                <div *ngIf="f.profilename.errors.required">Profile Name is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="description">Description<span class="text-danger">*</span></label>
+              <textarea type="text" formControlName="description" class="form-control"
+                [ngClass]="{ 'is-invalid':  f.description.touched && f.description.errors }"></textarea>
+              <div *ngIf=" f.description.touched && f.description.errors" class="invalid-feedback">
+                <div *ngIf="f.description.errors.required">Description is required</div>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+          <div class="row">
+            <div class="table-responsive">
+              <table class="table" style="border:1px solid black">
+                <thead>
+                  <tr>
+                    <th *ngIf="(hasDeleteAccess || hasAddAccess) && (isEditMode || isNewMode)">Action</th>
+                    <th>Category</th>
+                    <th>Screen Name</th>
+                    <th>Create <br> <input type="checkbox" id="selectallcreate" [disabled]="!isEditMode && !isNewMode"
+                        (change)="SelectAll('create')"></th>
+                    <th>Read<br> <input type="checkbox" id="selectallread" [disabled]="!isEditMode && !isNewMode"
+                        (change)="SelectAll('read')"></th>
+                    <th>Update<br> <input type="checkbox" id="selectallupdate" [disabled]="!isEditMode && !isNewMode"
+                        (change)="SelectAll('update')"></th>
+                    <th>Delete<br> <input type="checkbox" id="selectalldelete" [disabled]="!isEditMode && !isNewMode"
+                        (change)="SelectAll('delete')"></th>
+                    <th>Commercial<br> <input type="checkbox" id="selectallcommercial"
+                        [disabled]="!isEditMode && !isNewMode" (change)="SelectAll('commercial')"></th>
+                    <th>Privileges <br></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr formArrayName="permissions"
+                    *ngFor="let item of profileform.get('permissions')['controls'];let i=index">
+                    <td *ngIf="(isEditMode || isNewMode)">
+                      <button *ngIf="hasDeleteAccess" class="btn" type="button" (click)="DeleteScreen(i)">
+                        <i style="color: #5ba146;" class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                    <td [formGroupName]="i" style="font-weight: bold;">
+                      {{ getName(i).categoryName}}
+                    </td>
+                    <td [formGroupName]="i">
+                      <input type="hidden" formControlName="screenId" />
+                      <!--<input type="text" formControlName="screenName" readonly />-->
+                      <label>{{ getName(i).screenName }}</label>
+                    </td>
+                    <td [formGroupName]="i"><input type="checkbox" formControlName="create" />
+                    </td>
+                    <td [formGroupName]="i"><input type="checkbox" formControlName="read" />
+                    </td>
+                    <td [formGroupName]="i"><input type="checkbox" formControlName="update" />
+                    </td>
+                    <td [formGroupName]="i"><input type="checkbox" formControlName="delete" />
+                    </td>
+                    <td [formGroupName]="i"><input type="checkbox" formControlName="commercial"
+                        *ngIf="screenCode(i) == 'SAMC' || screenCode(i) == 'OFREQ'|| screenCode(i) == 'SINST' " />
+                    </td>
+                    <td [formGroupName]="i">
+                      <select type="text" formControlName="privilages" class="form-select">
+                        <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of privilagesList">
+                          {{listtypeitem.itemname}}</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot style="background: whitesmoke;border: 0.5px solid rgb(202 170 170);">
+                  <tr>
+                    <td *ngIf="hasAddAccess && (isEditMode || isNewMode)">
+                      <button class="btn" type="button" (click)="AddScreen()">
+                        <i style="color: #5ba146;" class="fas fa-save"></i>
+                      </button>
+                    </td>
+                    <td>
+                      <select type="text" formControlName="categoryId" class="form-select"
+                        (change)="onCategoryChange()">
+                        <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of lstCategory">
+                          {{listtypeitem.itemname}}</option>
+                      </select>
+                    </td>
+
+                    <td>
+                      <select type="text" formControlName="screenId" class="form-select">
+                        <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of lstScreens">
+                          {{listtypeitem.itemname}}</option>
+                      </select>
+                    </td>
+
+                    <td>
+                      <input type="checkbox" formControlName="create" />
+                    </td>
+
+                    <td>
+                      <input type="checkbox" formControlName="read" />
+                    </td>
+
+                    <td>
+                      <input type="checkbox" formControlName="update" />
+                    </td>
+
+                    <td>
+                      <input type="checkbox" formControlName="delete" />
+                    </td>
+
+                    <td>
+                      <input type="checkbox" formControlName="commercial"
+                        *ngIf="getScreenCode() == 'SAMC' || getScreenCode() == 'OFREQ'|| getScreenCode() == 'SINST' " />
+                      <!-- <input type="checkbox" formControlName="commercial" /> -->
+
+                    </td>
+                    <td>
+                      <select type="text" formControlName="privilages" (focusout)="AddScreen()" class="form-select">
+                        <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of privilagesList">
+                          {{listtypeitem.itemname}}</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>
+
+<style>
+  thead {
+    background: #5ba046;
+    color: #fff;
+  }
+</style>

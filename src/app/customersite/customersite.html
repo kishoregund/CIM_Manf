@@ -1,0 +1,213 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" routerLink="/customersite/{{ customerId }}"
+            routerLinkActive="active" role="tab" aria-controls="ex1-tabs-1" aria-selected="true">Customer Site</a>
+        </li>
+        <li class="nav-item" role="presentation" *ngIf="csiteId != null">
+          <a class="nav-link" id="ex1-tab-1" data-mdb-toggle="tab"
+            routerLink="/contactlist/CS/{{customerId}}/{{ csiteId }}" routerLinkActive="active" role="tab"
+            aria-controls="ex1-tabs-1" aria-selected="true">Site Contact</a>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+      <div class="col-md-12 col-sm-12 ">
+
+        <div class="page-title">
+          <div class="title_left" style="display: flex; justify-content: space-between;">
+            <div class="d-flex" style="align-items: center;">
+              <h3>Site Details</h3>
+              <!-- <h3>{{customerName}} / Site Details</h3> -->
+            </div>
+
+            <div class="controls" style="display: flex;">
+              <a (click)="Back()" class="nav-link">
+                <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              </a>
+              <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+                <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+              </a>
+
+              <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+                <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+              </a>
+
+              <a class="nav-link" (click)="onSubmit()"
+                *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+                <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+              </a>
+
+              <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+                <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <hr />
+
+        <form [formGroup]="customersiteform" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="custname">Customer Name<span class="text-danger">*</span></label>
+              <input formControlName="custName" disabled class="form-control">
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="regname">Region Name</label>
+              <input type="text" formControlName="regName" class="form-control" />
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="custRegName">Site Name<span class="text-danger">*</span></label>
+              <input type="text" formControlName="custRegName" class="form-control"
+                [ngClass]="{ 'is-invalid': f.custRegName.touched && f.custRegName.errors }" />
+              <div *ngIf="f.custRegName.touched && f.custRegName.errors" class="invalid-feedback">
+                <div *ngIf="f.custRegName.errors.required">Site Name is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="regionDistributor">Regional Distributor<span class="text-danger">*</span></label>
+              <select formControlName="regionId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.regionId.touched && f.regionId.errors }">
+                <option *ngFor="let dist of distRegions" value={{dist.id}}>
+                  {{dist.distRegName}}
+                </option>
+              </select>
+              <div *ngIf="f.regionId.touched && f.regionId.errors" class="invalid-feedback">
+                <div *ngIf="f.regionId.errors.required">Regional Distributor is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for=""></label>
+              <div class="checkbox">
+                <label for="">
+                  <input type="checkbox" class="" #chkdisplay [disabled]="!isEditMode"
+                    (change)="showallDdl(chkdisplay.checked)" />
+                  Display All
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <label for="payTerms">Payment Terms<span class="text-danger">*</span></label>
+              <select type="text" formControlName="payTerms" class="form-select"
+                [ngClass]="{ 'is-invalid': f.payTerms.touched && f.payTerms.errors }">
+                <option *ngFor="let i of PaymentTermsList;" [value]=" i.listTypeItemId">{{i.itemName}}</option>
+              </select>
+              <div *ngIf="f.payTerms.touched && f.payTerms.errors" class="invalid-feedback">
+                <div *ngIf="f.payTerms.errors.required">Payment Term is required</div>
+              </div>
+            </div>
+
+          </div>
+          <div *ngIf="hasAddAccess==true && hasUpdateAccess==true && hasDeleteAccess==true && hasReadAccess==true">
+            <div class="row">
+              <div class="col-md-4 col-sm-4">
+                <label for=""></label>
+                <div class="checkbox">
+                  <label for="isBlocked">
+                    <input type="checkbox" formControlName="isBlocked" class="" />
+                    Block Distributer Account
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Address</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr />
+
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="street">Street<span class="text-danger">*</span></label>
+              <input type="text" formControlName="street" class="form-control"
+                [ngClass]="{ 'is-invalid':f.street.touched && f.street.errors }" />
+              <div *ngIf="f.street.touched && f.street.errors" class="invalid-feedback">
+                <div *ngIf="f.street.errors.required">Street is required</div>
+              </div>
+            </div>
+            <!-- <div class="col-sm-4">
+                <label for="area">Area<span class="text-danger">*</span></label>
+                <input type="text" formControlName="area" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.area.touched && f.area.errors }" />
+                <div *ngIf="f.area.touched && f.area.errors" class="invalid-feedback">
+                  <div *ngIf="f.area.errors.required">Area is required</div>
+                </div>
+              </div> -->
+            <div class="col-sm-4">
+              <label for="place">State<span class="text-danger">*</span></label>
+              <input type="text" formControlName="place" class="form-control"
+                [ngClass]="{ 'is-invalid': f.place.touched && f.place.errors }" />
+              <div *ngIf="f.place.touched && f.place.errors" class="invalid-feedback">
+                <div *ngIf="f.place.errors.required">Place is required</div>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <label for="city">City<span class="text-danger">*</span></label>
+              <input type="text" formControlName="city" class="form-control"
+                [ngClass]="{ 'is-invalid': f.city.touched && f.city.errors }" />
+              <div *ngIf="f.city.touched && f.city.errors" class="invalid-feedback">
+                <div *ngIf="f.city.errors.required">City is required</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="countryId">Country<span class="text-danger">*</span></label>
+              <select formControlName="countryId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.countryId.touched && f.countryId.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let country of countries" value={{country.id}}>
+                  {{country.iso_3}} - {{country.name}}
+                </option>
+              </select>
+              <div *ngIf="f.countryId.touched && f.countryId.errors" class="invalid-feedback">
+                <div *ngIf="f.countryId.errors.required">Country is required</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="zip">Zip<span class="text-danger">*</span></label>
+              <input type="text" maxlength="10" formControlName="zip" class="form-control"
+                [ngClass]="{ 'is-invalid': f.zip.touched && f.zip.errors }" />
+
+              <div *ngIf="f.zip.touched && f.zip.errors" class="invalid-feedback">
+                <div *ngIf="f.zip.errors.required">Zip is required</div>
+                <div *ngIf="f.zip.errors?.minlength">Min length is 4</div>
+                <div *ngIf="f.zip.errors?.maxlength">Max length is 15</div>
+                <div *ngIf="f.zip.errors?.pattern">Invalid Pin Code.</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="geoLat">Latitude</label>
+              <input type="number" formControlName="geoLat" class="form-control" value="0"
+                [ngClass]="{ 'is-invalid': f.geoLat.touched && f.geoLat.errors }" />
+              <div *ngIf="f.geoLat.touched && f.geoLat.errors" class="invalid-feedback">
+                <div *ngIf="f.geoLat.errors.required">Latitude is required</div>
+                <div *ngIf="f.geoLat.errors.max || f.geoLat.errors.min">Invalid Latitude</div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label for="geoLong">Longitude</label>
+              <input type="number" formControlName="geoLong" class="form-control" value="0"
+                [ngClass]="{ 'is-invalid': f.geoLong.touched && f.geoLong.errors }" />
+              <div *ngIf="f.geoLong.touched && f.geoLong.errors" class="invalid-feedback">
+                <div *ngIf="f.geoLong.errors.required">Longitude is required</div>
+                <div *ngIf="f.geoLong.errors.max || f.geoLong.errors.min">Invalid Longitude</div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

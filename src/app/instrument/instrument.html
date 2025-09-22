@@ -1,0 +1,358 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+
+      <div class="page-title">
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+          <div class="d-flex" style="align-items: center;">
+            <h3>Instrument</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+            <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="instrumentform" (ngSubmit)="onSubmit()">
+          <div class="row">            
+            <div class="col-md-3 col-sm-3">
+              <label for="serialNos">Instrument Serial No<span class="text-danger">*</span></label>
+              <input type="text" #serialnos formControlName="serialNos" class="form-control"
+                [ngClass]="{ 'is-invalid': f.serialNos.touched && f.serialNos.errors }" />
+              <div *ngIf="f.serialNos.touched && f.serialNos.errors" class="invalid-feedback">
+                <div *ngIf="f.serialNos.errors.required">Instrument Serial No is required</div>
+              </div>
+            </div>
+            <div class="col-md-1 col-sm-1">
+              <label for=""></label>
+              <button type="button" class="btn btn-primary mt-4" *ngIf="isEditMode || isNewMode"
+                (click)="getInstrBySerialNo(serialnos.value)">Get</button>
+            </div>
+
+            <div class="col-md-4 col-sm-4">
+              <label for="insMfgDt">Instrument Manufacturing Date<span class="text-danger">*</span></label>
+              <input formControlName="insMfgDt" class="form-control" bsDatepicker
+                [ngClass]="{ 'is-invalid': f.insMfgDt.touched && f.insMfgDt.errors }" />
+              <div *ngIf="f.insMfgDt.touched && f.insMfgDt.errors" class="invalid-feedback">
+                <div *ngIf="f.insMfgDt.errors.required">Instrument Manufacturing Date is required</div>
+              </div>
+            </div>          
+          
+            <div class="col-sm-4">
+              <label for="insType">Instrument Type<span class="text-danger">*</span></label>
+              <select formControlName="insType" class="form-select"
+                [ngClass]="{ 'is-invalid': f.insType.touched && f.insType.errors }">
+                <option *ngFor="let congfig of instuType" value={{congfig.listTypeItemId}}>
+                  {{congfig.itemName}}
+                </option>
+              </select>
+              <div *ngIf="f.insType.touched && f.insType.errors" class="invalid-feedback">
+                <div *ngIf="f.insType.errors.required">Instrument Type is required</div>
+              </div>
+            </div>
+          </div>
+<!-- 
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Cost<span class="text-danger">*</span></label><br>
+              <select formControlName="currencyId"
+                [ngClass]="{ 'is-invalid': f.currencyId.touched && f.currencyId.errors }"
+                style="width: 30%;display: inline-block;" class="form-select">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+
+              <input formControlName="cost" type="number" pattern="^[0-9]*(\.[0-9]{0,2})?$" onKeyPress="if(this.value.length==15) return false;"
+                [ngClass]="{ 'is-invalid': f.cost.touched && f.cost.errors }"
+                style="width: 68%;display: inline-block;margin-left: 5px;" class="form-control" />
+                <div *ngIf="f.cost.errors?.pattern" class="invalid-feedback">Cost with 2 decimals is allowed</div>
+              <div *ngIf="(f.currencyId.touched || f.cost.touched) && (f.currencyId.errors || f.cost.errors)"
+                class="invalid-feedback">
+                <div *ngIf="f.currencyId.errors?.required || f.cost.errors?.required">Cost is required</div>
+                
+              </div>
+            </div>
+
+
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Exchange Rate</label><br>
+              <select formControlName="baseCurrencyId" disabled style="width: 30%;display: inline-block;"
+                class="form-select">
+                <option *ngFor="let item of lstCurrency" value="{{item.id}}">{{item.code}}</option>
+              </select>
+              <input formControlName="baseCurrencyAmt" #baseAmt type="number" pattern="^[0-9]*(\.[0-9]{0,2})?$" onKeyPress="if(this.value.length==15) return false;"
+               class="form-control" [ngClass]="{ 'is-invalid': f.baseCurrencyAmt.touched && f.baseCurrencyAmt.errors }" style="width: 68%;display: inline-block;margin-left: 5px;" />
+               <div *ngIf="f.baseCurrencyAmt.errors?.pattern" class="invalid-feedback">Exchange Value with 2 decimals is allowed</div>
+            </div>
+
+            <div class="col-md-4 col-sm-4" *ngIf="hasCommercial">
+              <label for="dateOfPurchase">Cost in USD</label><br>
+              <input [value]="(f.baseCurrencyAmt.value * f.cost.value).toFixed(2)" disabled type="number" min="0"
+              pattern="^[0-9]*\.[0-9]{2}$" onKeyPress="if(this.value.length==15) return false;" class="form-control" />
+            </div>
+          </div> -->
+
+          
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <label for="insVersion">Instrument Version<span class="text-danger">*</span></label>
+              <input type="text" formControlName="insVersion" class="form-control"
+                [ngClass]="{ 'is-invalid': f.insVersion.touched && f.insVersion.errors }" />
+              <div *ngIf="f.insVersion.touched && f.insVersion.errors" class="invalid-feedback">
+                <div *ngIf="f.insVersion.errors.required">Instrument Version is required</div>
+              </div>
+            </div>            
+
+            <div class="col-md-4 col-sm-4"  *ngIf="this.role == this.enviroment.distRoleCode">
+              <label for="currencyid">Business Unit<span class="text-danger">*</span></label>
+              <select formControlName="businessUnitId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.businessUnitId.touched && f.businessUnitId.errors }">
+                <option *ngFor="let c of businessUnitList" value={{c.id}}>
+                  {{c.businessUnitName}}
+                </option>
+              </select>
+              <div *ngIf="f.businessUnitId.touched && f.businessUnitId.errors" class="invalid-feedback">
+                <div *ngIf="f.businessUnitId.errors.required">Business Unit is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-4" *ngIf="this.role == this.enviroment.distRoleCode">
+              <label for="brandId">Brand<span class="text-danger">*</span></label>
+              <select formControlName="brandId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.brandId.touched && f.brandId.errors }">
+                <option *ngFor="let c of brandList" value={{c.id}}>
+                  {{c.brandName}}
+                </option>
+              </select>
+              <div *ngIf="f.brandId.touched && f.brandId.errors" class="invalid-feedback">
+                <div *ngIf="f.brandId.errors.required">Brand is required</div>
+              </div>
+            </div>            
+          </div> 
+          <div class="row">
+
+            <div class="col-md-4 col-sm-4" *ngIf="this.role == this.enviroment.distRoleCode">
+              <label for="manufId">Manufacturer<span class="text-danger">*</span></label>
+              <select formControlName="manufId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.manufId.touched && f.manufId.errors }">
+                <option *ngFor="let m of manfList" value={{m.id}}>
+                  {{m.manfName}}
+                </option>
+              </select>
+              <div *ngIf="f.manufId.touched && f.manufId.errors" class="invalid-feedback">
+                <div *ngIf="f.manufId.errors.required">Manufacturer is required</div>
+              </div>
+            </div>            
+            <div class="col-md-4 col-sm-4" >
+              <label for="image" style="margin-right:15px;margin-top:15px;">Image</label>
+              <input type='file' [disabled]="!isEditMode && !isNewMode" id="imageUpload" accept=".png, .jpg, .jpeg"
+                #fileInput (change)="uploadFile(fileInput.files,id)" />
+              <label *ngIf="removeUpload" [ngClass]="['custom-label', 'remove-image']"
+                (click)="removeUploadedFile()"></label>
+            </div>
+
+            <div class="col-md-4 col-sm-4 instrumentImg d-flex justify-content-center" style="text-align: right;"
+              *ngIf="imageUrl && imageUrl !== ''">
+              <img [src]="imageUrl" style="width: 200px;height: 200px; padding:10px;">
+            </div>
+          </div>
+
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Spare Parts List</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr />
+
+          <div *ngIf="!isAccessories" class="row">
+            <div class="col-sm-4">
+              <label for="configTypeId">Config Type</label>
+              <select [disabled]="!isEditMode && !isNewMode" class="form-select" #mySelect
+                formControlName="configTypeId" 
+                [ngClass]="{ 'is-invalid': f.configTypeId.touched && f.configTypeId.errors }">
+                <option *ngFor="let congfig of listTypeItems" value={{congfig.listTypeItemId}}>
+                  {{congfig.itemName}}
+                </option>
+              </select>
+              <div *ngIf="f.configTypeId.touched && f.configTypeId.errors" class="invalid-feedback">
+                <div *ngIf="f.configTypeId.errors.required">Config Type is required</div>
+              </div>
+            </div>
+            <!-- <div class="col-sm-4">
+              <label for="configValueId">Config Value</label>
+              <select class="form-select" formControlName="configValueId" [disabled]="!isEditMode && !isNewMode"
+                #myConfigVal>
+                <option value="0"></option>
+                <option *ngFor="let congfig of configValueList" value={{congfig.id}}>
+                  {{congfig.configValue}}
+                </option>
+              </select>
+            </div> -->
+            <div class="col-sm-4">
+              <label for=""></label>
+              <button type="button" class="btn btn-primary mt-4" [disabled]="!isEditMode && !isNewMode"
+                (click)="onDropdownChange(mySelect.value)">Add</button>
+            </div>
+          </div>
+          <div *ngIf="isAccessories" class="row">
+            <div class="col-md-12">
+              <button (click)="openAccessoryModel()" [disabled]="!isEditMode && !isNewMode" class="btn btn-primary"
+                style="margin: 10px;" type="button">
+                <i class="fas fa-plus" title="Add" style="color: white !important;"></i>
+              </button>
+            </div>
+
+          </div>
+          <br />
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" *ngIf="(isEditMode || isNewMode) && (this.role == this.enviroment.distRoleCode)">
+              <a class="nav-link" id="home-tab" (click)="ChangeTab('all')" data-bs-toggle="tab" role="tab"
+                data-bs-target="#home" style="cursor: pointer;" aria-selected="true">All Spares</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" id="recommended-tab" (click)="ChangeTab('recommended')" data-bs-toggle="tab" role="tab"
+                data-bs-target="#recommended" style="cursor: pointer;" aria-selected="true">Recommended</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profile-tab" (click)="ChangeTab('consumable')" data-bs-toggle="tab" role="tab"
+                data-bs-target="#profile" style="cursor: pointer;" aria-selected="false">Consumables</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="contact-tab" (click)="ChangeTab('full')" data-bs-toggle="tab" role="tab"
+                data-bs-target="#contact" style="cursor: pointer;" aria-selected="false">Full Spare</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="otherspare-tab" (click)="ChangeTab('other')" data-bs-toggle="tab" role="tab"
+                data-bs-target="#otherspare" style="cursor: pointer;" aria-selected="false">Other Spare</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="accessories-tab" (click)="ChangeTab('accessory')" data-bs-toggle="tab" role="tab"
+                data-bs-target="#accessories" style="cursor: pointer;" aria-selected="false">Accessories</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade" id="home" *ngIf="(isEditMode || isNewMode) && (this.role == this.enviroment.distRoleCode)" role="tabpanel" aria-labelledby="home-tab">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <div style="margin-bottom: 5px;">                  
+                  <button type="button" class="btn btn-primary mt-4" 
+                (click)="AddSelectedSpares()">Add Spares</button>
+                  <input type="text" (input)="onQuickFilterChanged()" style="margin-top: 25px;float: right;" id="quickFilter" placeholder="Search..."/>                  
+                </div>
+                  <ag-grid-angular style="width: 100%; height: 500px;" (gridReady)="onAllSparesGridReady($event)" 
+                    [columnDefs]="columnAllSparesDefs" [rowData]="sparePartsList" rowSelection="multiple"  (rowClicked)="onRowClicked($event)" [suppressRowClickSelection]="true"></ag-grid-angular>
+                    <!--  pagination="true" paginationPageSize=10  (cellValueChanged)="onCellValueChanged($event)" -->
+                
+              </div>
+            </div>
+            <div class="tab-pane fade show active" id="recommended" role="tabpanel" aria-labelledby="recommended-tab">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="recomandedFilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="consumfilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  (cellValueChanged)="onCellValueChanged($event)" [columnDefs]="columnDefs" [rowData]="fullsparefilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="otherspare" role="tabpanel" aria-labelledby="otherspare-tab">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
+                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  (cellValueChanged)="onCellValueChanged($event)" [columnDefs]="columnDefs" [rowData]="othersparefilter"
+                  rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="accessories" role="tabpanel" aria-labelledby="accessories-tab">
+              <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+                <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="DeleteInstrumentAccessory($event)"
+                  class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs"
+                  [rowData]="accessoriesData" rowSelection="single" pagination="true"
+                  paginationPageSize=10></ag-grid-angular>                  
+              </div>
+            </div>
+          </div>
+                   <div class="row">
+          <!--            <div class="col-md-4 col-sm-4">-->
+          <!--              <label for="pdf" style="margin-right:15px;margin-top:15px;">Document</label>-->
+          <!--              <input type='file' id="pdfUpload" multiple accept=".pdf" #filePdfInput (change)="uploadPdfFile($event)" />-->
+          <!--            </div>-->
+          <!--            <div class="col-md-4 col-sm-4" *ngIf="PdffileData" style="margin-top:4%;">-->
+          <!--              <label></label>-->
+          <!--              <button type="button" class="btn btn-link" (click)="download()">{{ PdffileData.fileName }}</button>-->
+          <!--              &lt;!&ndash;<a href="pdfBase64" download="PdffileData.fileName">{{ PdffileData.fileName }}</a>&ndash;&gt;-->
+          <!--            </div>-->
+                   </div>
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3 style="padding:15px 0 5px 0">Attachments</h3>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr />
+
+          <div class="row" *ngIf="hasUpdateAccess || hasAddAccess" style="margin:15px;">
+            <div class="col-md-3">
+              <input type="file" id="myFile" [disabled]="!isEditMode && !isNewMode" #file placeholder="Choose file"
+                (change)="getfil(file.files); listfile(file.files) ;" multiple
+                accept="text/plain, application/pdf, image/*">
+            </div>
+            <div id="selectedfiles" class="hidden col-md-4" style="max-height:200px; overflow-y:auto;display: none;">
+              <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                <h5>Selected Files:</h5>
+                <hr />
+              </section>
+
+            </div>
+          </div>
+
+          <div class="row" *ngIf="PdffileData">
+            <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
+              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
+                (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)" [columnDefs]="pdfcolumnDefs"
+                [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
+            </div>
+          </div>
+          <hr />
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>

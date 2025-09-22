@@ -1,0 +1,75 @@
+<div class="model" id="model" role="dialog">
+  <div class="model-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #589b44; color: #fff">
+        <h4 class="modal-title" id="modal-basic-title">Add WorkTime</h4>
+        <button type="button" class="btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
+        </button>
+      </div>
+      <div class="py-3 px-3 pb-2">
+        <form [formGroup]="workTimeForm" (ngSubmit)="onValueSubmit()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12 form-group">
+                <label for="workTimeDate">Date<span class="text-danger">*</span></label>
+                <input bsDatepicker formControlName="workTimeDate" class="form-control"
+                  [ngClass]="{'is-invalid':f.workTimeDate.touched && f.workTimeDate.errors}" />
+                <div class="invalid-feedback" f="f.workTimeDate.errors">
+                  <div *ngIf="f.workTimeDate.errors?.required">
+                    Work Time Date is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                <label for="startTime">Start time<span class="text-danger">*</span></label>
+                <input type="time" formControlName="startTime" (input)="PerDayHrs()" class="form-control"
+                  [ngClass]="{'is-invalid':f.startTime.touched && f.startTime.errors}" />
+                <div class="invalid-feedback" *ngIf="f.startTime.errors">
+                  <div *ngIf="f.startTime.errors?.required">
+                    Start Time is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                <label for="endTime">End time<span class="text-danger">*</span></label>
+                <input type="time" formControlName="endTime" (input)="PerDayHrs()" class="form-control"
+                  [ngClass]="{'is-invalid':f.endTime.touched && f.endTime.errors}" />
+                <div class="invalid-feedback" *ngIf="f.endTime.errors">
+                  <div *ngIf="f.endTime.errors?.required">
+                    End Time is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <label for="perDayHrs">Per Day Hrs<span class="text-danger">*</span></label>
+                <input type="text" formControlName="perDayHrs" readonly class="form-control"
+                  [ngClass]="{'is-invalid':f.perDayHrs.touched && f.perDayHrs.errors}" />
+                <div class="invalid-feedback" *ngIf="f.perDayHrs.errors">
+                  <div *ngIf="f.perDayHrs.errors?.required">
+                    Per Day Hrs is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+              <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

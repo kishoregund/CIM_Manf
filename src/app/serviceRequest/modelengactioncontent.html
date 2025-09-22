@@ -1,0 +1,79 @@
+<script src="node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"></script>
+<div class="model" id="model" role="dialog">
+  <div class="model-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #589b44; color: #fff">
+        <h4 class="modal-title" id="modal-basic-title">Add Engineer Action</h4>
+        <button type="button" class="btn" aria-label="Close" data-dismiss="modal" (click)="close()">
+          <i class="fas fa-times" style="color: #fff !important" title="Close"></i>
+        </button>
+      </div>
+      <div class="px-3 py-3 pb-3">
+        <form [formGroup]="actionForm" (ngSubmit)="onValueSubmit()">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-6 form-group">
+                <label for="engineername">Engineer<span class="text-danger">*</span></label>
+                <select formControlName="engineerId" readonly disabled="disabled" class="form-select"
+                  [ngClass]="{ 'is-invalid': submitted && f.engineerId.errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let c of engineerlist" value={{c.id}}>
+                    {{c.firstName}} {{c.lastName}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-sm-6 form-group">
+                <label for="actionDate">Action Date<span class="text-danger">*</span></label>
+                <input bsDatepicker formControlName="actionDate" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.actionDate.touched  && f.actionDate.errors }" />
+                <div *ngIf="f.actionDate.touched && f.actionDate.errors" class="invalid-feedback">
+                  <div *ngIf="f.actionDate.errors.required">Action Date is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <label for="actionTaken">Action Taken<span class="text-danger">*</span></label>
+                <select formControlName="actionTaken" class="form-select" (change)="getActionTaken($event.target)"
+                  [ngClass]="{ 'is-invalid': f.actionTaken.touched  && f.actionTaken.errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let st of actiontakenlist" value={{st.listTypeItemId}}>
+                    {{st.itemName}}
+                  </option>
+                </select>
+                <div *ngIf="f.actionTaken.touched && f.actionTaken.errors" class="invalid-feedback">
+                  <div *ngIf="f.actionTaken.errors.required">Action Taken is required</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label for="comments">Comments<span class="text-danger">*</span></label>
+                <textarea type="text" formControlName="comments" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.comments.touched  && f.comments.errors }"></textarea>
+                <div *ngIf="f.comments.touched && f.comments.errors" class="invalid-feedback">
+                  <div *ngIf="f.comments.errors.required">Comments is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="hasRemote">
+              <div class="col-sm-6">
+                <label for="teamviewrecording">TeamViewer<span class="text-danger">*</span></label>
+                <input type="file" id="myFile" #file accept=".zip,.rar,.7zip" placeholder="Choose file"
+                  (change)="getfil(file.files);" multiple>
+              </div>
+              <label style="color: red">Files Should be Compressed to a .zip or .rar format</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-6" style="margin-left: 16px;">
+              <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Submit
+              </button>
+              <!--<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>-->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

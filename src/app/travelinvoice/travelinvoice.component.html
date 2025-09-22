@@ -1,0 +1,136 @@
+<layout>
+    <div class="right_col" role="main">
+        <div class="container">
+
+            <div class="page-title">
+                <div class="title_left" style="display: flex; justify-content: space-between;">
+                    <div class="d-flex" style="align-items: center;">
+                        <h3>Travel Invoice</h3>
+                    </div>
+
+                    <div class="controls" style="display: flex;">
+                        <a (click)="Back()" class="nav-link">
+                            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+                        </a>
+                        <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
+                            <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
+                            <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="onSubmit()"
+                            *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+                            <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+                        </a>
+
+                        <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+                            <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+                        </a>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+            <div class="clearfix"></div>
+            <hr />
+
+            <div class="col-md-12 col-sm-12 ">
+                <form [formGroup]="form">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <label>Distributor<span class="text-danger">*</span></label>
+                            <select formControlName="distributorId" class="form-select"
+                                (input)="getengineers($event.target.value)"
+                                [ngClass]="{'is-invalid':f.distributorId.touched && f.distributorId.errors }">
+                                <option *ngFor="let i of DistributorList" value="{{i.id}}">{{i.distName}}</option>
+                            </select>
+
+                            <div *ngIf="f.distributorId.touched && f.distributorId.errors" class="invalid-feedback">
+                                <div *ngIf="f.distributorId.errors.required">Distributor is required</div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label>Engineer Name<span class="text-danger">*</span></label>
+                            <select formControlName="engineerId" class="form-select"
+                                (change)="getservicerequest(distId ,$event.target.value);"
+                                [ngClass]="{'is-invalid':f.engineerId.touched && f.engineerId.errors }">
+                                <option *ngFor="let i of engineer" value="{{i.id}}">{{i.firstName + " " + i.lastName}}</option>
+                            </select>
+
+                            <div *ngIf="f.engineerId.touched && f.engineerId.errors" class="invalid-feedback">
+                                <div *ngIf="f.engineerId.errors.required">Engineer Name is required</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label for="serviceRequestId">Service Request No.<span class="text-danger">*</span></label>
+                            <select formControlName="serviceRequestId" class="form-select"
+                                [ngClass]="{'is-invalid':f.serviceRequestId.touched && f.serviceRequestId.errors }">
+                                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serReqNo}}</option>
+                            </select>
+                            <div Style="display: block" *ngIf="f.serviceRequestId.touched && f.serviceRequestId.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.serviceRequestId.errors.required">
+                                    Service Request is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label>Amount Build<span class="text-danger">*</span></label>
+                            <input formControlName="amountBuild" type="number" min="0" class="form-control" />
+                            <div Style="display: block" *ngIf="f.amountBuild.touched && f.amountBuild.errors"
+                                class="invalid-feedback">
+                                <div *ngIf="f.amountBuild.errors.required">
+                                    Amount is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <br />
+                        <div class="row" *ngIf="(hasUpdateAccess || hasAddAccess) && isEditMode" style="margin:15px;">
+                            <div class="col-md-3">
+                                <input type="file" id="myFile" #file placeholder="Choose file"
+                                    (change)="getfil(file.files); listfile(file.files) ;" multiple
+                                    accept="text/plain, application/pdf, image/*">
+                            </div>
+                            <div id="selectedfiles" class="hidden col-md-4"
+                                style="max-height:200px; overflow-y:auto;display: none;">
+                                <section style="margin:30px 0 0 50px; max-width:600px; min-width: 300px;">
+                                    <h5>Selected Files:</h5>
+                                    <hr />
+                                </section>
+
+                            </div>
+                        </div>
+
+                        <div class="attachment my-4" *ngIf="id!=null">
+                            <div class="page-title">
+                                <div class="title_left">
+                                    <h3>Attachment List</h3>
+                                    <hr>
+                                </div>
+                            </div>
+                            <ag-grid-angular style="width: 100%; height: 250px;" class="my-4 ag-theme-alpine"
+                                (gridReady)="onGridReadyAttachments($event)" [columnDefs]="columnDefsAttachments"
+                                [rowData]="attachments" rowSelection="single" pagination="true" paginationPageSize=10>
+                            </ag-grid-angular>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</layout>

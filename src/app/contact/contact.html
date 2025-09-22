@@ -1,0 +1,271 @@
+<layout>
+  <div class="right_col" role="main">
+    <div class="container">
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+
+        <div class="page-title">
+          <div class="title_left" style="display: flex; justify-content: space-between;">
+            <div class="d-flex" style="align-items: center;">
+              <h3>Contact Details </h3>
+            </div>
+
+            <div class="controls" style="display: flex;">
+              <a (click)="Back()" class="nav-link">
+                <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              </a>
+              <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode && !isUserActive">
+                <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+              </a>
+
+              <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode) ">
+                <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+              </a>
+
+              <a class="nav-link" (click)="onSubmit(false)"
+                *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+                <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+              </a>
+
+              <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
+                <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+              </a>
+              <button (click)="addUser()"
+                *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && !isUser && userType != 'CS'" class="nav-link btn">
+                <i class="fas fa-user" style="color: #5ba146;" title="Add User"></i>
+              </button>
+              <div *ngIf="role != this.environment.custRoleCode"> 
+                <button (click)="deactivateUser()" [disabled]="!isUserActive"
+                  *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && isUser && userType != 'CS'" class="nav-link btn">
+                  <i class="fas fa-user-times" style="color: #5ba146;" title="Deactivate User"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="clearfix"></div>
+          <hr />
+          <form [formGroup]="contactform" (ngSubmit)="onSubmit()">
+            <div class="row">
+
+              <div class="col-sm-4" *ngIf="type == 'DR' || type == 'CS'">
+                <label for="distCustName">{{distCustName}}</label>
+                <input type="text" disabled formControlName="distCustName" class="form-control" />
+              </div>
+
+              <div class="col-sm-4">
+                <label for="parentEntity">{{label}}</label>
+                <input type="text" disabled formControlName="parentEntity" class="form-control" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="firstName">First Name<span class="text-danger">*</span></label>
+                <input type="text" formControlName="firstName" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.firstName.touched && f.firstName.errors }" />
+                <div *ngIf="f.firstName.touched && f.firstName.errors" class="invalid-feedback">
+                  <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="mname">Middle Name</label>
+                <input type="text" formControlName="middleName" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.middleName.touched && f.middleName.errors }" />
+                <div *ngIf="f.middleName.touched && f.middleName.errors" class="invalid-feedback">
+                  <div *ngIf="f.middleName.errors.required">Middle Name is required</div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="lastName">Last Name<span class="text-danger">*</span></label>
+                <input type="text" formControlName="lastName" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.lastName.touched && f.lastName.errors }" />
+                <div *ngIf="f.lastName.touched && f.lastName.errors" class="invalid-feedback">
+                  <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-sm-4">
+                <label for="primaryContactNo">Primary Mobile Phone Number<span class="text-danger">*</span></label><br />
+                <input type="tel" phoneInput formControlName="primaryContactNo" class="form-control"
+                  maxlength="20" 
+                  [ngClass]="{ 'is-invalid': f.primaryContactNo.touched && f.primaryContactNo.errors }" />
+                <!--<input type="tel" formControlName="primaryContactNo" class="form-control"
+                     maxlength="10" [ngClass]="{ 'is-invalid': f.place.touched && f.primaryContactNo.errors }" />-->
+                <div *ngIf="f.primaryContactNo.touched && f.primaryContactNo.errors" style="display: block;"
+                  class="invalid-feedback">
+                  <div *ngIf="f.primaryContactNo.errors?.required">Primary Contact No. is required</div>
+                  <div *ngIf="f.primaryContactNo.errors?.pattern">Primary Contact No. is invalid</div>
+                  <!-- <div *ngIf="f.primaryContactNo.errors?.maxlength">Max length is 13</div> -->
+                  <!--<div *ngIf="f.primaryContactNo.errors?.minlength">Min length is 10</div>-->
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="primaryEmail">Primary E-mail<span class="text-danger">*</span></label>
+                <input type="email" formControlName="primaryEmail" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.primaryEmail.touched && f.primaryEmail.errors }" />
+                <div *ngIf="f.primaryEmail.touched && f.primaryEmail.errors" class="invalid-feedback">
+                  <div *ngIf="f.primaryEmail.errors?.required">Primary E-mail is required</div>
+                  <div *ngIf="f.primaryEmail.errors?.pattern">Please provide valid E-mail</div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="secondaryContactNo">Secondory Phone Number<span class="text-danger">*</span></label><br />
+                <input type="tel"  formControlName="secondaryContactNo" class="form-control" maxlength="20" 
+                  [ngClass]="{ 'is-invalid': f.secondaryContactNo.touched && f.secondaryContactNo.errors }" />
+                <div *ngIf="f.secondaryContactNo.touched && f.secondaryContactNo.errors" style="display: block;"
+                  class="invalid-feedback">
+                  <div *ngIf="f.secondaryContactNo.errors.required">Secondory Contact No. is required</div>
+                  <div *ngIf="f.secondaryContactNo.errors.pattern">Secondory Contact No. is invalid</div>
+                  <!-- <div *ngIf="f.secondaryContactNo.errors?.maxlength">Max length is 13</div> -->
+                  <!--<div *ngIf="f.secondaryContactNo.errors?.minlength">Min length is 10</div>-->
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-sm-4">
+                <label for="whatsappNo">WhatsApp No<span class="text-danger">*</span></label><br />
+                <input type="tel"  formControlName="whatsappNo" class="form-control" maxlength="20" 
+                  [ngClass]="{ 'is-invalid': f.whatsappNo.touched && f.whatsappNo.errors }" />
+                <div *ngIf="f.whatsappNo.touched && f.whatsappNo.errors" style="display: block;"
+                  class="invalid-feedback">
+                  <div *ngIf="f.whatsappNo.errors.required">WhatsApp No. is required</div>
+                  <div *ngIf="f.whatsappNo.errors.rpattern">WhatsApp No. is required invaliddiv>
+                    <!-- <div *ngIf="f.whatsappNo.errors?.maxlength">Max length is 13</div> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="secondaryEmail">Secondory E-Mail<span class="text-danger">*</span></label>
+                <input type="email" formControlName="secondaryEmail" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.secondaryEmail.touched && f.secondaryEmail.errors }" />
+                <div *ngIf="f.secondaryEmail.touched && f.secondaryEmail.errors" style="display: block;" class="invalid-feedback">
+                  <div *ngIf="f.secondaryEmail.errors?.required">Secondory Email is required</div>
+                  <div *ngIf="f.secondaryEmail.errors?.pattern">Please provide valid email</div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <label for="designationId">Designation<span class="text-danger">*</span></label>
+                <select formControlName="designationId" class="form-select"
+                  [ngClass]="{ 'is-invalid': f.designationId.touched && f.designationId.errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let designation of listTypeItems" value={{designation.listTypeItemId}}>
+                    {{designation.itemName}}
+                  </option>
+                </select>
+                <!--<input type="text" formControlName="designation" class="form-control" [ngClass]="{ 'is-invalid': f.place.touched && f.designation.errors }" />-->
+                <div *ngIf="f.designationId.touched && f.designationId.errors" class="invalid-feedback">
+                  <div *ngIf="f.designationId.errors.required">Designation is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-4 mt-3" >
+                <label for="isActive">
+                  <input id="isActive" type="checkbox" disabled formControlName="isActive">
+                  Active 
+                </label>
+              </div>
+              
+              <div class="col-md-4 col-sm-4 mt-3" *ngIf="type == 'DR'">
+                <label for="isFieldEngineer">
+                  <input id="isFieldEngineer" type="checkbox" formControlName="isFieldEngineer">
+                  Is Engineer?
+                </label>
+              </div>
+            </div>
+
+            <div class="page-title">
+              <div class="title_left">
+                <h3 style="padding:15px 0 5px 0">Address</h3>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <label for="street">Street<span class="text-danger">*</span></label>
+                  <input type="text" formControlName="street" class="form-control"
+                    [ngClass]="{ 'is-invalid':f.street.touched && f.street.errors }" />
+                  <div *ngIf="f.street.touched && f.street.errors" class="invalid-feedback">
+                    <div *ngIf="f.street.errors.required">Street is required</div>
+                  </div>
+                </div>
+                <!-- <div class="col-sm-4">
+                  <label for="area">Area<span class="text-danger">*</span></label>
+                  <input type="text" formControlName="area" class="form-control"
+                    [ngClass]="{ 'is-invalid': f.area.touched && f.area.errors }" />
+                  <div *ngIf="f.area.touched && f.area.errors" class="invalid-feedback">
+                    <div *ngIf="f.area.errors.required">Area is required</div>
+                  </div>
+                </div> -->
+                <div class="col-sm-4">
+                  <label for="city">City<span class="text-danger">*</span></label>
+                  <input type="text" formControlName="city" class="form-control"
+                    [ngClass]="{ 'is-invalid': f.city.touched && f.city.errors }" />
+                  <div *ngIf="f.city.touched && f.city.errors" class="invalid-feedback">
+                    <div *ngIf="f.city.errors.required">City is required</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="place">State<span class="text-danger">*</span></label>
+                  <input type="text" formControlName="place" class="form-control"
+                    [ngClass]="{ 'is-invalid': f.place.touched && f.place.errors }" />
+                  <div *ngIf="f.place.touched && f.place.errors" class="invalid-feedback">
+                    <div *ngIf="f.place.errors.required">Place is required</div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <label for="addrCountryId">Country<span class="text-danger">*</span></label>
+                  <select formControlName="addrCountryId" class="form-select"
+                    [ngClass]="{ 'is-invalid': f.addrCountryId.touched && f.addrCountryId.errors }">
+                    <!--<option value="0">--All--</option>-->
+                    <option *ngFor="let country of countries" value={{country.id}}>
+                      {{country.iso_3}} - {{country.name}}
+                    </option>
+                  </select>
+                  <div *ngIf="f.addrCountryId.touched && f.addrCountryId.errors" class="invalid-feedback">
+                    <div *ngIf="f.addrCountryId.errors.required">Country is required</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="zip">Zip<span class="text-danger">*</span></label>
+                  <input type="text" maxlength="10" formControlName="zip" class="form-control"
+                    [ngClass]="{ 'is-invalid': f.zip.touched && f.zip.errors }" />
+
+                  <div *ngIf="f.zip.touched && f.zip.errors" class="invalid-feedback">
+                    <div *ngIf="f.zip.errors.required">Zip is required</div>
+                    <div *ngIf="f.zip.errors?.minlength">Min length is 4</div>
+                    <div *ngIf="f.zip.errors?.maxlength">Max length is 15</div>
+                    <div *ngIf="f.zip.errors?.pattern">Invalid Pin Code.</div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="geoLat">Latitude</label>
+                  <input type="number" formControlName="geoLat" class="form-control" value="0"
+                    [ngClass]="{ 'is-invalid': f.geoLat.touched && f.geoLat.errors }" />
+                  <div *ngIf="f.geoLat.touched && f.geoLat.errors" class="invalid-feedback">
+                    <div *ngIf="f.geoLat.errors.required">Latitude is required</div>
+                    <div *ngIf="f.geoLat.errors.max || f.geoLat.errors.min">Invalid Latitude</div>
+
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <label for="geoLong">Longitude</label>
+                  <input type="number" formControlName="geoLong" class="form-control" value="0"
+                    [ngClass]="{ 'is-invalid': f.geoLong.touched && f.geoLong.errors }" />
+                  <div *ngIf="f.geoLong.touched && f.geoLong.errors" class="invalid-feedback">
+                    <div *ngIf="f.geoLong.errors.required">Longitude is required</div>
+                    <div *ngIf="f.geoLong.errors.max || f.geoLong.errors.min">Invalid Longitude</div>
+                  </div>
+                </div>
+
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</layout>

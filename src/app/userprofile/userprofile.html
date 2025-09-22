@@ -1,0 +1,164 @@
+<layout [isNewSetUp]="isNewSetup" [showNavs]="!isNewSetup">
+  <div class="right_col" role="main">
+    <div class="container">
+
+      <div class="page-title">
+        <div class="title_left" style="display: flex; justify-content: space-between;">
+
+          <div class="d-flex" style="align-items: center;">
+            <h3>User Profile</h3>
+          </div>
+
+          <div class="controls" style="display: flex;">
+            <a (click)="Back()" class="nav-link" *ngIf="!isNewSetup">
+              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+            </a>
+            <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode&&!isNewSetup">
+              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+            </a>
+
+            <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode &&!isNewSetup">
+              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+            </a>
+
+            <a class="nav-link" (click)="onSubmit()"
+              *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
+              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+            </a>
+
+          </div>
+
+
+        </div>
+
+      </div>
+      <hr />
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 ">
+        <form [formGroup]="userprofileform">
+          <div class="row">
+            <div class="col-sm-6">
+              <label for="userId">User Name<span class="text-danger">*</span></label>
+              <select formControlName="userId" class="form-select" #myuser (change)="onUserChange(myuser.value)"
+                [ngClass]="{ 'is-invalid':  f.userId.touched && f.userId.errors }">
+                <option value="0">--Select--</option>
+                <option *ngFor="let usr of userList" value={{usr.id}}>
+                  {{usr.userName}}
+                </option>
+              </select>
+              <div *ngIf="f.userId.touched && f.userId.errors" class="invalid-feedback">
+                <div *ngIf="f.userId.errors.required">Username is required</div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+              <label for="designation">User Designation</label>
+              <input type="text" formControlName="designation" class="form-control" readonly />
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-6">
+              <label for="distributorName">Entity Name</label>
+              <input type="text" formControlName="distributorName" class="form-control" readonly />
+            </div>
+            <div class="col-md-6 col-sm-6">
+              <label for="price">Role<span class="text-danger">*</span></label>
+              <select formControlName="roleId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.roleId.touched && f.roleId.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let role of roleList" value={{role.id}}>
+                  {{role.name}}
+                </option>
+              </select>
+              <div *ngIf="f.roleId.touched && f.roleId.errors" class="invalid-feedback">
+                <div *ngIf="f.roleId.errors.required">Role is required</div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4" *ngIf="hidetable==true">
+              <label for="price">Profile for</label>
+              <select formControlName="profileForId" #profileId (change)="onprofileClick(profileId.value)"
+                class="form-select" [ngClass]="{ 'is-invalid': f.profileForId.touched && f.profileForId.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let l of listTypeItems" value={{l.listTypeItemId}}>
+                  {{l.itemName}}
+                </option>
+              </select>
+              <div *ngIf="f.profileForId.touched && f.profileForId.errors" class="invalid-feedback">
+                <div *ngIf="f.profileForId.errors.required">Profile Name is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-6">
+              <label for="roleId">Segment<span class="text-danger">*</span></label>
+              <select formControlName="segmentId" class="form-select" (change)="onSegmentChange($event.target.value)"
+                [ngClass]="{ 'is-invalid': f.roleId.touched && f.roleId.errors }">
+                <!--<option value="0">--All--</option>-->
+                <option *ngFor="let r of segmentList" value={{r.listTypeItemId}}>
+                  {{r.itemName}}
+                </option>
+              </select>
+              <div *ngIf="f.roleId.touched && f.roleId.errors" class="invalid-feedback">
+                <div *ngIf="f.roleId.errors.required">Role is required</div>
+              </div>
+            </div>
+            <!-- > -->
+            <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">
+               <label for="regions">Distributor Regions</label>
+              <ng-multiselect-dropdown [settings]="dropdownSettings" [disabled]="!isEditMode && !isNewMode"
+                [data]="regionList" id="regions" formControlName="distRegions">
+              </ng-multiselect-dropdown>
+              <div *ngIf="f.distRegions.touched && f.distRegions.errors" class="invalid-feedback">
+                <div *ngIf="f.distRegions.errors.required">Distributor Region is required</div>
+              </div>
+            </div>
+
+             <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">    
+              <label for="businessUnitId">Business Unit</label>
+              <ng-multiselect-dropdown [settings]="businessUnitDropdownSettings" [disabled]="!isEditMode && !isNewMode"
+                [data]="businessUnitList" id="businessUnitIds" formControlName="businessUnitIds">\
+              </ng-multiselect-dropdown>
+              <div *ngIf="f.businessUnitIds.touched && f.businessUnitIds.errors" class="invalid-feedback">
+                <div *ngIf="f.businessUnitIds.errors.required">Business Unit is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">
+              <label for="brandId">Brand</label>
+              <ng-multiselect-dropdown [settings]="brandDropdownSettings" [disabled]="!isEditMode && !isNewMode"
+                [data]="brandList" id="brandIds" formControlName="brandIds">
+              </ng-multiselect-dropdown>
+              <div *ngIf="f.brandIds.touched && f.brandIds.errors" class="invalid-feedback">
+                <div *ngIf="f.brandIds.errors.required">Brand is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6" *ngIf="isCustomer">
+              <label for="site">Customer Sites</label>
+              <ng-multiselect-dropdown [settings]="siteDropdownSettings" [disabled]="!isEditMode && !isNewMode"
+                [data]="siteList" id="site" formControlName="custSites">
+              </ng-multiselect-dropdown>
+              <div *ngIf="f.custSites.touched && f.custSites.errors" class="invalid-feedback">
+                <div *ngIf="f.custSites.errors.required">Customer Site is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6">
+              <label>Description<span class="text-danger">*</span></label>
+              <textarea class="form-control" required [disabled]="!isEditMode && !isNewMode"
+                [ngClass]="{ 'is-invalid':  f.userId.touched && f.userId.errors }" formControlName="description">
+              </textarea>
+              <div *ngIf="f.description.touched && f.description.errors" class="invalid-feedback">
+                <div *ngIf="f.description.errors.required">Description is required</div>
+              </div>
+            </div>
+
+
+          </div>
+          <hr />
+        </form>
+      </div>
+    </div>
+  </div>
+</layout>
