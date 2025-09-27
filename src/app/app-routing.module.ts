@@ -85,6 +85,9 @@ import { CreateBrandComponent } from './account/brand.component';
 import { BrandListComponent } from './account/brandlist.component';
 import { CreateBusinessUnitComponent } from './account/businessunit.component';
 import { BusinessUnitListComponent } from './account/businessunitlist.component';
+import { CreateManfBusinessUnitComponent } from './account/manfbusinessunit.component';
+import { ManfBusinessUnitListComponent } from './account/manfbusinessunitlist.component';
+
 import { ManufacturerListComponent } from './manufacturer/manufacturerlist';
 import { ManufacturerSalesRegionListComponent } from './manufacturersalesregion/manfsalesregionlist';
 import { ManufacturerComponent } from './manufacturer/manufacturer';
@@ -714,6 +717,23 @@ const routes: Routes = [
   {
     path: "businessunit",
     component: CreateBusinessUnitComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
+  },
+
+  
+  {
+    path: "manfbusinessunitlist",
+    component: ManfBusinessUnitListComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "manfbusinessunit/:id",
+    component: CreateManfBusinessUnitComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack],
+  },
+  {
+    path: "manfbusinessunit",
+    component: CreateManfBusinessUnitComponent,
     canActivate: [AuthGuard, TextValidator, BrowserBack],
   },
   // {

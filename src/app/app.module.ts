@@ -131,6 +131,7 @@ import { CIMComponent } from './account/cim.component';
 // import { ImportOfferRequestComponent } from './Offerrequest/importofferrequest.component';
 import { ImportDistributorComponent } from './distributor/importdistributor.component';
 import { CreateBusinessUnitComponent } from './account/businessunit.component';
+import { CreateManfBusinessUnitComponent } from './account/manfbusinessunit.component';
 //import { CreateCompanyComponent } from './account/company.component';
 import { CreateBrandComponent } from './account/brand.component';
 import { ConfigBsDatepicker, GetParsedDate, GetParsedDatePipe } from './_helpers/Providers';
@@ -139,6 +140,7 @@ import { DownloadReportFile, PastservicereportlistComponent } from './pastservic
 import { Accessories } from './instrument/Accessories.component';
 import { BrandListComponent } from './account/brandlist.component';
 import { BusinessUnitListComponent } from './account/businessunitlist.component';
+import { ManfBusinessUnitListComponent } from './account/manfbusinessunitlist.component';
 //import { CompanyListComponent } from './account/companylist.component';
 import SetUp from './account/setup.component';
 import ChangeCIM from './account/ChangeCIM.component';
@@ -296,6 +298,7 @@ import { TenantListComponent } from './tenant/tenantlist.component';
     IsEscationSupervisor,
     //ImportDistributorComponent,
     CreateBusinessUnitComponent,
+    CreateManfBusinessUnitComponent,
     CreateBrandComponent,
     // CreateCompanyComponent,
     PastservicereportComponent,
@@ -304,6 +307,7 @@ import { TenantListComponent } from './tenant/tenantlist.component';
     Accessories,
     BrandListComponent,
     BusinessUnitListComponent,
+    ManfBusinessUnitListComponent,
     //CompanyListComponent,
     SetUp,
     ChangeCIM,

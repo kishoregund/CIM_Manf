@@ -4,13 +4,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Subject } from "rxjs";
 import { NotificationService, AccountService } from "../_services";
-import { TenantService } from "../_services/tenant.service";
 import { AppBasicService } from "../_services/AppBasic.service";
+import { ManfBusinessUnitService } from "../_services/manfbusinessunit.service";
 
 @Component({
-  templateUrl: "./tenant.component.html"
+  templateUrl: "./manfbusinessunit.component.html"
 })
-export class TenantComponent implements OnInit, AfterViewInit {
+export class CreateManfBusinessUnitComponent implements OnInit, AfterViewInit {
   Form: FormGroup
   submitted: boolean
   @Input("companyId") companyId: any
@@ -30,7 +30,7 @@ export class TenantComponent implements OnInit, AfterViewInit {
 
   constructor(
     public activeModal: BsModalService,
-    private tenantService: TenantService,
+    private manfBusinessUnitService: ManfBusinessUnitService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private AccountService: AccountService,
@@ -42,23 +42,19 @@ export class TenantComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     this.onClose = new Subject();
-//    this.hasDeleteAccess = this.AccountService.userValue.isAdmin;
+    this.hasDeleteAccess = this.AccountService.userValue.isAdmin;
 
     this.Form = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      connectionString: ['', [Validators.required]],
-      identifier: ['', [Validators.required]],
-      adminEmail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$"), Validators.required]],
-      validUpTo: ['', [Validators.required]],
-      isActive: true,
-      subscribedBy: false,
+      businessUnitName: ['', [Validators.required]],
+      //companyId: ['', [Validators.required]],
+      //company: ['', [Validators.required]],
       id: [""]
     });
     var id = this.activeRoute.snapshot.paramMap.get("id")
     this.isNewMode = id == null;
 
     let user = this.AccountService.userValue;
-    //console.log(user);
+    console.log(user);
 
     // this.Form.get('companyId').setValue(user.companyId);
     // this.Form.get('companyId').disable();
@@ -67,11 +63,23 @@ export class TenantComponent implements OnInit, AfterViewInit {
       this.id = id;
       this.Form.get('id').setValue(id);
 
-      var getByIdRequest: any = await this.tenantService.GetById(id).toPromise();
-      debugger;
+      var getByIdRequest: any = await this.manfBusinessUnitService.GetById(id).toPromise();
       this.formData = getByIdRequest.data;
       this.Form.patchValue(this.formData);
     }
+
+    // var request: any = await this.CompanyService.GetAllCompany().toPromise();
+
+    // this.companyList = request.object;
+
+
+    // if (this.companyId) this.f.companyId.setValue(this.companyId)
+    // else {
+    //   this.companyId = user.companyId;
+    // }
+
+    // this.Form.get("company")
+    //   .setValue(this.companyList?.find(comp => comp.id == this.companyId)?.companyName)
 
   }
 
@@ -80,10 +88,11 @@ export class TenantComponent implements OnInit, AfterViewInit {
       this.Form.disable();
     }
 
+    //this.FormControlDisable()
   }
 
   Back() {
-    this.router.navigate(["/tenantlist"]);
+    this.router.navigate(["/manfbusinessunitlist"]);
   }
 
 
@@ -104,25 +113,22 @@ export class TenantComponent implements OnInit, AfterViewInit {
       });
   }
 
-  // DeleteRecord() {
-  //   this.tenantService.Delete(this.id)
-  //     .subscribe((data: any) => {
-  //       if (data.isSuccessful) {
-  //         this.notificationService.showSuccess("Deleted Successfully", "Success")
-  //         this.router.navigate(["/tenantlist"], { queryParams: { isNSNav: true } })
-  //       }
-  //       else this.notificationService.showInfo(data.messages[0], "Error")
-  //     })
-  // }
+  DeleteRecord() {
+    this.manfBusinessUnitService.Delete(this.id)
+      .subscribe((data: any) => {
+        if (data.isSuccessful) {
+          this.notificationService.showSuccess("Deleted Successfully", "Success")
+          this.router.navigate(["/manfbusinessunitlist"], { queryParams: { isNSNav: true } })
+        }
+        else this.notificationService.showInfo(data.messages[0], "Error")
+      })
+  }
 
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
     if (this.id != null) this.Form.patchValue(this.formData);
-    else 
-    {
-      this.Form.reset();
-    //this.Form.get("name").reset();
-    }
+    else this.Form.get("businessUnitName").reset();
+
     this.Form.disable()
     this.isEditMode = false;
     this.isNewMode = false;
@@ -146,12 +152,12 @@ export class TenantComponent implements OnInit, AfterViewInit {
     //this.FormControlDisable();
 
     if (!this.id) {
-      this.tenantService.Save(formData)
+      this.manfBusinessUnitService.Save(formData)
         .subscribe((data: any) => {
           var success = data.isSuccessful;
           if (success) {
-            this.notificationService.showSuccess("Tenant created successfully!", "Success")
-            this.router.navigate(["/tenantlist"],
+            this.notificationService.showSuccess("Business Unit created successfully!", "Success")
+            this.router.navigate(["/manfbusinessunitlist"],
               {
                 queryParams: { isNSNav: true },
               });
@@ -161,56 +167,24 @@ export class TenantComponent implements OnInit, AfterViewInit {
         })
     }
 
-  }
-
-  Upgrade()
-  {
-    let formData = this.Form.value;
-    this.tenantService.Update({TenantId:this.id, NewExpiryDate:formData.validUpTo})
+    else {
+      this.manfBusinessUnitService.Update(this.id, formData)
         .subscribe((data: any) => {
-          if (data.isSuccessful) {           
-            this.notificationService.showSuccess("Tenant upgraded successfully!", "Success")
-            this.router.navigate(["/tenantlist"],
+          var success = data.isSuccessful;
+          if (success) {
+            this.onClose.next({ result: success, object: data.data });
+            this.notificationService.showSuccess("Business Unit updated successfully!", "Success")
+            this.router.navigate(["/manfbusinessunitlist"],
               {
                 queryParams: { isNSNav: true },
               });
           }
+
           else this.notificationService.showInfo(data.messages[0], "Info");
         })
+    }
   }
 
-
-  Activate()
-  {
-    let formData = this.Form.value;
-    this.tenantService.Activate({TenantId:this.id})
-        .subscribe((data: any) => {
-          if (data.isSuccessful) {           
-            this.notificationService.showSuccess("Tenant activated successfully!", "Success")
-            this.router.navigate(["/tenantlist"],
-              {
-                queryParams: { isNSNav: true },
-              });
-          }
-          else this.notificationService.showInfo(data.messages[0], "Info");
-        })
-  }
-
-  Deactivate()
-  {
-    let formData = this.Form.value;
-    this.tenantService.Deactivate({TenantId:this.id})
-        .subscribe((data: any) => {
-          if (data.isSuccessful) {           
-            this.notificationService.showSuccess("Tenant deactivated successfully!", "Success")
-            this.router.navigate(["/tenantlist"],
-              {
-                queryParams: { isNSNav: true },
-              });
-          }
-          else this.notificationService.showInfo(data.messages[0], "Info");
-        })
-  }
 
   close(success) {
     this.onClose.next(success);
