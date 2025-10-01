@@ -58,8 +58,13 @@
                       </a>
                     </li>
                     <li>
+                      <a class="collapse-item" (click)="navigate('/manfbusinessunitlist')" *ngIf="isAdmin && isManfSubs">
+                        <i class="bx bx-right-arrow-alt"></i>Manufacturer BUs
+                      </a>
+                    </li>
+                    <li>
                       <a class="collapse-item" (click)="navigate('/businessunitlist')" *ngIf="isAdmin && !isSuperAdmin">
-                        <i class="bx bx-right-arrow-alt"></i>Business Unit
+                        <i class="bx bx-right-arrow-alt"></i>Distributor BUs
                       </a>
                     </li>
                     <li>

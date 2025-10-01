@@ -70,6 +70,7 @@ export class NavSideMenuComponent implements OnInit {
   hasManufacturer: boolean = false;
   isAdmin: boolean;
   isSuperAdmin: boolean;
+  isManfSubs: boolean = false;
   isCustomer: boolean = false;
   isRoot: boolean = true;
 
@@ -95,6 +96,7 @@ export class NavSideMenuComponent implements OnInit {
 
     debugger;
     if (this.user != null) {
+      this.isManfSubs = this.user.isManfSubscribed;
       //[KG]
       //this.profileService.getUserProfile(this.user.userProfileId);
       this.profile = JSON.parse(sessionStorage.getItem('userprofile'));

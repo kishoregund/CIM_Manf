@@ -35,6 +35,7 @@ export class UserDetails {
     permissions: any;
     isAdmin:boolean = false;
 	company:string;
+	isManfSubscribed:boolean;
 }
  
 export class UserLoginResponse{
