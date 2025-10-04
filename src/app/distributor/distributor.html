@@ -87,16 +87,15 @@
                 <div *ngIf="f.manufacturerIds.errors.required">Manufacturer is required</div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 col-sm-6">
+          
+            <div class="col-md-6 col-sm-6" *ngIf="isManfSubs">
               <label for="payterms">Manufacturer's BU<span class="text-danger">*</span></label>
-              <select type="text" formControlName="ManfBU" class="form-select"
-                [ngClass]="{ 'is-invalid': f.payterms.touched && f.payterms.errors }">
-                <option *ngFor="let i of PaymentTermsList;" [value]="i.listTypeItemId">{{i.itemName}}</option>
+              <select type="text" formControlName="manfBusinessUnitId" class="form-select"
+                [ngClass]="{ 'is-invalid': f.manfBusinessUnitId.touched && f.manfBusinessUnitId.errors }">
+                <option *ngFor="let i of manfBUList;" [value]="i.id">{{i.businessUnitName}}</option>
               </select>
-              <div *ngIf="f.payterms.touched && f.payterms.errors" class="invalid-feedback">
-                <div *ngIf="f.payterms.errors.required">Payment Term is required</div>
+              <div *ngIf="f.manfBusinessUnitId.touched && f.manfBusinessUnitId.errors" class="invalid-feedback">
+                <div *ngIf="f.manfBusinessUnitId.errors.required">Payment Term is required</div>
               </div>
             </div>
           </div>

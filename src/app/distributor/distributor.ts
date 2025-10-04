@@ -10,6 +10,7 @@ import { Guid } from 'guid-typescript';
 import { DistributorService } from '../_services/distributor.service';
 import { UserDetails } from '../_newmodels/UserDetails';
 import { ManufacturerService } from '../_services/manufacturer.service';
+import { ManfBusinessUnitService } from '../_services/manfbusinessunit.service';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 
@@ -37,9 +38,11 @@ export class DistributorComponent implements OnInit {
 
 
   isNewSetUp: boolean = false;
+  isManfSubs: boolean = false;
   formData: { [key: string]: any; };
   PaymentTermsList: any;
   manfList: any;
+  manfBUList: any;
   dropdownSettings: IDropdownSettings = {};
 
   constructor(
@@ -53,13 +56,15 @@ export class DistributorComponent implements OnInit {
     private notificationService: NotificationService,
     private profileService: ProfileService,
     private listTypeService: ListTypeService,
-    private manfService: ManufacturerService
+    private manfService: ManufacturerService,
+    private manfBUService: ManfBusinessUnitService
   ) {
 
     this.form = this.formBuilder.group({
       distName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       payterms: ['', Validators.required],
       manufacturerIds: ['', Validators.required],
+      manfBusinessUnitId: [''],
       code: [''],
       isBlocked: false,
       isActive: true,
@@ -109,16 +114,19 @@ export class DistributorComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
-
-
+    if(this.user.isManfSubscribed)
+    {
+      this.isManfSubs = true;
+      this.manfBUService.GetAll()
+      .subscribe((data: any) => this.manfBUList = data.data);
+    }
 
     this.listTypeService.getById("GPAYT")
       .subscribe((data: any) => this.PaymentTermsList = data.data);
 
     this.manfService.getAll()
       .subscribe((data: any) => this.manfList = data.data);
-
-
+    
     this.countryService.getAll()
       .pipe(first()).subscribe({
         next: (data: any) => {
