@@ -164,7 +164,7 @@ export class CIMComponent implements OnInit {
     this.f.businessUnitId.valueChanges.subscribe((data: any) => {
       //      let companyId = this.f.companyId.value
       if (data != "new") return; // || !companyId) return;
-      this.onClose.next({ result: false })//, companyId })
+      this.onClose.next({ result: false })
       this.activeModal.hide();
       this.notificationService.filter("businessunit")
     })
@@ -186,8 +186,7 @@ export class CIMComponent implements OnInit {
     // stop here if form is invalid
     if (this.Form.invalid || this.f.businessUnitId.value === "new" || this.f.brandId.value === "new") return;
     this.Form.enable()
-    //let companyId = this.f.companyId.value
-    this.close({ result: true, form: this.Form.value }) //, companyId })
+    this.close({ result: true, form: this.Form.value }) 
     this.Form.disable()
 
   }
@@ -196,7 +195,6 @@ export class CIMComponent implements OnInit {
     this.onClose.next(result);
     this.activeModal.hide();
     this.notificationService.filter("itemadded");
-    this.accountService.logout();
   }
 }
 

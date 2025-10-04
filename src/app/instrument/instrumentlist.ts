@@ -62,12 +62,14 @@ export class InstrumentListComponent implements OnInit {
         this.hasDeleteAccess = profilePermission[0].delete;
       }
     }
-    if (this.user.isAdmin) {
-      this.hasAddAccess = false;
-      this.hasDeleteAccess = false;
+    if (this.user.isAdmin) {      
+      this.hasAddAccess = true;
+      this.hasDeleteAccess = true;
     }
     else {
       role = role[0]?.itemCode;
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
     }
 
     if (role == this.environment.distRoleCode) this.isDist = true;
@@ -124,19 +126,33 @@ export class InstrumentListComponent implements OnInit {
         sortable: true,
         tooltipField: 'serialNos'
       },
+      // {
+      //   headerName: 'Business Unit',
+      //   field: 'businessUnitName',
+      //   filter: true,
+      //   sortable: true,
+      //   tooltipField: 'Business Unit'
+      // },
+      // {
+      //   headerName: 'Brand',
+      //   field: 'brandName',
+      //   filter: true,
+      //   sortable: true,
+      //   tooltipField: 'Brand'
+      // },
       {
-        headerName: 'Business Unit',
-        field: 'businessUnitName',
+        headerName: 'Instrument Type',
+        field: 'insTypeName',
         filter: true,
         sortable: true,
-        tooltipField: 'Business Unit'
+        tooltipField: 'insTypeName'
       },
       {
-        headerName: 'Brand',
-        field: 'brandName',
+        headerName: 'Instrument Version',
+        field: 'insVersion',
         filter: true,
         sortable: true,
-        tooltipField: 'Brand'
+        tooltipField: 'insVersion'
       },
       {
         headerName: 'Manufacturer',

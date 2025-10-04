@@ -45,6 +45,7 @@ import { UserDetails } from '../_newmodels/UserDetails';
 import { InstrumentService } from '../_services/instrument.service';
 import { FilerendercomponentComponent } from './filerendercomponent.component';
 import { ManufacturerService } from '../_services/manufacturer.service';
+import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-instrument',
@@ -194,15 +195,17 @@ export class InstrumentComponent implements OnInit {
     }
 
     if (this.user.isAdmin) {
-      this.hasAddAccess = false;
-      this.hasDeleteAccess = false;
-      this.hasUpdateAccess = false;
-      this.hasReadAccess = false;
-      //this.notificationService.RestrictAdmin() -- this is master screen
-      //return;
+      this.hasAddAccess = true;
+      this.hasDeleteAccess = true;
+      this.hasUpdateAccess = true;
+      this.hasReadAccess = true;
     }
     else {
       this.role = role[0]?.itemCode;
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
+      this.hasUpdateAccess = false;
+      this.hasReadAccess = true;
     }
 
     this.imageUrl = this.noimageData;
@@ -249,40 +252,41 @@ export class InstrumentComponent implements OnInit {
     //     this.instrumentform.get("baseCurrencyId").setValue(this.baseCurrId)
     //   })
 
+    if (!this.user.isManfSubscribed) {
+      this.businessUnitService.GetAll()
+        .pipe(first()).subscribe((data: any) => {
+          this.businessUnitList = data.data;
+          debugger;
+          var businessUnit = this.businessUnitList?.find(x => x.id == this.user.selectedBusinessUnitId);
+          if (this.role != this.enviroment.distRoleCode || !businessUnit) return;
 
-    this.businessUnitService.GetAll()
-      .pipe(first()).subscribe((data: any) => {
-        this.businessUnitList = data.data;
-        debugger;
-        var businessUnit = this.businessUnitList?.find(x => x.id == this.user.selectedBusinessUnitId);
-        if (this.role != this.enviroment.distRoleCode || !businessUnit) return;
+          this.instrumentform.get("businessUnitId").setValue(businessUnit.id)
+        })
 
-        this.instrumentform.get("businessUnitId").setValue(businessUnit.id)
-      })
+      this.instrumentform.get("businessUnitId").valueChanges
+        .subscribe((value: any) => {
+          if (value != "") {
+            this.brandService.GetByBU(value)
+              .pipe(first()).subscribe((data: any) => {
+                var brandLst = []
+                this.user.brandIds?.split(',').forEach(e => {
+                  if (data.data && data.data.length > 0) {
+                    var obj = data.data.find(x => x.id == e);
+                    if (obj) brandLst.push(obj);
+                  }
+                });
+                this.brandList = brandLst;
 
-    this.instrumentform.get("businessUnitId").valueChanges
-      .subscribe((value: any) => {
-        if (value != "") {
-          this.brandService.GetByBU(value)
-            .pipe(first()).subscribe((data: any) => {
-              var brandLst = []
-              this.user.brandIds?.split(',').forEach(e => {
-                if (data.data && data.data.length > 0) {
-                  var obj = data.data.find(x => x.id == e);
-                  if (obj) brandLst.push(obj);
-                }
-              });
-              this.brandList = brandLst;
+                setTimeout(() => {
+                  var brand = this.brandList.find(x => x.id == this.user.selectedBrandId);
+                  if (brand && this.role == this.enviroment.distRoleCode) this.instrumentform.get("brandId").setValue(brand.id)
+                }, 300);
 
-              setTimeout(() => {
-                var brand = this.brandList.find(x => x.id == this.user.selectedBrandId);
-                if (brand && this.role == this.enviroment.distRoleCode) this.instrumentform.get("brandId").setValue(brand.id)
-              }, 300);
-
-            })
-        }
-      })
-
+              })
+          }
+        })
+    }
+    
     if (this.id != null) {
 
       this.instrumentAccessoryService.GetByInsId(this.id).subscribe((data: any) => {
@@ -296,9 +300,9 @@ export class InstrumentComponent implements OnInit {
           if (data.data.image == "" || data.data.image == null) {
             this.imageUrl = this.noimageData;
           }
-          else {            
-              //this.imageUrl = "data:image/jpeg;base64, " + data.data.image;
-              this.imageUrl = data.data.image;
+          else {
+            //this.imageUrl = "data:image/jpeg;base64, " + data.data.image;
+            this.imageUrl = data.data.image;
             //this.imageUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.imageUrl)
           }
 
@@ -595,7 +599,7 @@ export class InstrumentComponent implements OnInit {
       });
   }
 
-  onDropdownChange(value: string){ //, configvalue: string) {
+  onDropdownChange(value: string) { //, configvalue: string) {
     if (!value)// || !configvalue || configvalue == "0")
       return this.notificationService.showInfo("Please select Config Type", "Info");
 
@@ -744,6 +748,11 @@ export class InstrumentComponent implements OnInit {
     // this.instrument.cost = this.instrument.cost != ""? parseFloat(this.instrument.cost):0.00;
     // this.instrument.baseCurrencyAmt = this.instrument.baseCurrencyAmt != ""? parseFloat(this.instrument.baseCurrencyAmt):0.00;
     debugger;
+    if(this.user.isManfSubscribed)
+    {
+      this.instrument.businessUnitId = Guid.EMPTY;
+      this.instrument.brandId = Guid.EMPTY;
+    }
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
         .pipe(first())
@@ -1306,15 +1315,15 @@ export class InstrumentComponent implements OnInit {
                 .pipe(first())
                 .subscribe(() => {
                   this.notificationService.showSuccess("Deleted Successfully", "Success");
-                  this.selectedConfigType = this.selectedConfigType.filter(x => !( x.listTypeItemId == data.configTypeId && x.sparePartId == data.id));
+                  this.selectedConfigType = this.selectedConfigType.filter(x => !(x.listTypeItemId == data.configTypeId && x.sparePartId == data.id));
                   this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configTypeId == data.configTypeId && x.id == data.id));
                   this.recomandFilter();
                 });
             }
             else {
               this.notificationService.showSuccess("Deleted Successfully ", "Success");
-              this.selectedConfigType = this.selectedConfigType.filter(x => !( x.listTypeItemId == data.configTypeId && x.sparePartId == data.id));
-              this.sparePartDetails = this.sparePartDetails.filter(x => !( x.configTypeId == data.configTypeId && x.id == data.id));
+              this.selectedConfigType = this.selectedConfigType.filter(x => !(x.listTypeItemId == data.configTypeId && x.sparePartId == data.id));
+              this.sparePartDetails = this.sparePartDetails.filter(x => !(x.configTypeId == data.configTypeId && x.id == data.id));
               this.recomandFilter();
 
             }
