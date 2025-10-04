@@ -17,6 +17,7 @@ export class UserProfile {
   profileRegions: ProfileRegions
   distRegions: any;
   businessUnitIds: any;
+  manfBUIds:any;
   brandIds: any;
   custSites: any;
 }

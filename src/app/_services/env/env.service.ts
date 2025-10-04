@@ -14,6 +14,7 @@ export class EnvService {
   custRoleCode = 'RCUST';
   distRoleCode = 'RDTSP';
   engRoleCode = 'RENG';
+  manfRoleCode = 'RMANF';
   configTypeCode = 'CONTY';
   location = 'PMCL';
   INS = 'INS';

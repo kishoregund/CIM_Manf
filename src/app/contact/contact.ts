@@ -690,7 +690,6 @@ export class ContactComponent implements OnInit {
             this.notificationService.showInfo(data.messages[0], "Info");
           }
         })
-
     }
     else {
       this.contact.id = this.id;

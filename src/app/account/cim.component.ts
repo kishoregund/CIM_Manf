@@ -196,6 +196,7 @@ export class CIMComponent implements OnInit {
     this.onClose.next(result);
     this.activeModal.hide();
     this.notificationService.filter("itemadded");
+    this.accountService.logout();
   }
 }
 

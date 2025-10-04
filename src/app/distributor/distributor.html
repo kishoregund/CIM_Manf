@@ -55,11 +55,11 @@
       <div class="col-md-12 col-sm-12">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
-            <div class="col-sm-6" *ngIf="distributorId != null">
+            <div class="col-md-4 col-sm-4" *ngIf="distributorId != null">
               <label for="distName">Distributor Code</label>
               <input type="text" formControlName="code" disabled class="form-control" />
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-4 col-sm-4">
               <label for="distName">Distributor Name<span class="text-danger">*</span></label>
               <input type="text" formControlName="distName" class="form-control"
                 [ngClass]="{ 'is-invalid': f.distName.touched && f.distName.errors }" />
@@ -68,7 +68,7 @@
                 <div *ngIf="f.distName.errors.pattern">Distributor Name should contain characters only</div>
               </div>
             </div>
-            <div class="col-md-6 col-sm-6">
+            <div class="col-md-4 col-sm-4">
               <label for="payterms">Payment Term<span class="text-danger">*</span></label>
               <select type="text" formControlName="payterms" class="form-select"
                 [ngClass]="{ 'is-invalid': f.payterms.touched && f.payterms.errors }">
@@ -78,7 +78,7 @@
                 <div *ngIf="f.payterms.errors.required">Payment Term is required</div>
               </div>
             </div>
-            <div class="col-md-6 col-sm-6">
+            <div class="col-md-4 col-sm-4">
               <label for="regions">Manufacturers</label>
               <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="manfList" id="manfs"
                 formControlName="manufacturerIds">
@@ -88,7 +88,7 @@
               </div>
             </div>
           
-            <div class="col-md-6 col-sm-6" *ngIf="isManfSubs">
+            <div class="col-md-4 col-sm-4" *ngIf="isManfSubs">
               <label for="payterms">Manufacturer's BU<span class="text-danger">*</span></label>
               <select type="text" formControlName="manfBusinessUnitId" class="form-select"
                 [ngClass]="{ 'is-invalid': f.manfBusinessUnitId.touched && f.manfBusinessUnitId.errors }">

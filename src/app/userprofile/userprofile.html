@@ -104,8 +104,19 @@
               </div>
             </div>
             <!-- > -->
+
+            <div class="col-md-6 col-sm-6" *ngIf="isManf">
+              <label for="regions">Manufacturer BU</label>
+              <ng-multiselect-dropdown [settings]="manfBUDropdownSettings" [disabled]="!isEditMode && !isNewMode"
+                [data]="manfBUList" id="manfBUs" formControlName="manfBUIds">
+              </ng-multiselect-dropdown>
+              <div *ngIf="f.manfBUIds.touched && f.manfBUIds.errors" class="invalid-feedback">
+                <div *ngIf="f.manfBUIds.errors.required">Manufacturer BU is required</div>
+              </div>
+            </div>
+
             <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">
-               <label for="regions">Distributor Regions</label>
+              <label for="regions">Distributor Regions</label>
               <ng-multiselect-dropdown [settings]="dropdownSettings" [disabled]="!isEditMode && !isNewMode"
                 [data]="regionList" id="regions" formControlName="distRegions">
               </ng-multiselect-dropdown>
@@ -114,7 +125,7 @@
               </div>
             </div>
 
-             <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">    
+            <div class="col-md-6 col-sm-6" *ngIf="isEng || isDist">
               <label for="businessUnitId">Business Unit</label>
               <ng-multiselect-dropdown [settings]="businessUnitDropdownSettings" [disabled]="!isEditMode && !isNewMode"
                 [data]="businessUnitList" id="businessUnitIds" formControlName="businessUnitIds">\

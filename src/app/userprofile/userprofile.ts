@@ -29,6 +29,7 @@ import { UserDetails } from '../_newmodels/UserDetails';
 import { CustomerService } from '../_services/customer.service';
 import { DistributorService } from '../_services/distributor.service';
 import { RoleService } from '../_services/role.service';
+import { ManfBusinessUnitService } from '../_services/manfbusinessunit.service';
 
 
 @Component({
@@ -59,6 +60,8 @@ export class UserProfileComponent implements OnInit {
 
   isEng: boolean = false;
   isDist: boolean = false;
+  isManf: boolean = false;
+  isManfSubs: boolean = false;
   regionList: any;
   dropdownSettings: IDropdownSettings = {};
   siteDropdownSettings: IDropdownSettings = {};
@@ -69,10 +72,12 @@ export class UserProfileComponent implements OnInit {
   businessUnitDropdownSettings: any;
   businessUnitList: any[];
   brandDropdownSettings: any;
+  manfBUDropdownSettings: any;
   brandList: any[];
   isNewSetup: boolean;
   formData: any;
-  contactType:string;
+  contactType: string;
+  manfBUList: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -88,9 +93,10 @@ export class UserProfileComponent implements OnInit {
     private profileService: ProfileService,
     private DistributorService: DistributorService,
     private customerService: CustomerService,
-    private environment: EnvService,    
+    private environment: EnvService,
     private businessUnitService: BusinessUnitService,
-    private brandService: BrandService
+    private brandService: BrandService,
+    private manfBUService: ManfBusinessUnitService
   ) { }
 
   ngOnInit() {
@@ -112,6 +118,11 @@ export class UserProfileComponent implements OnInit {
     this.brandDropdownSettings = {
       idField: 'id',
       textField: 'brandName',
+    };
+
+    this.manfBUDropdownSettings = {
+      idField: 'id',
+      textField: 'businessUnitName',
     };
 
     this.user = this.accountService.userValue;
@@ -139,15 +150,17 @@ export class UserProfileComponent implements OnInit {
       segmentId: ['', Validators.required],
       profileForId: [''],
       distributorName: [''],
-      roleId: ['', Validators.required],      
+      roleId: ['', Validators.required],
       distRegions: ['', Validators.required],
       custSites: [],
       isDeleted: [false],
       profileRegions: this.formBuilder.array([]),
+      manfBUIds: ["", Validators.required],
       businessUnitIds: ["", Validators.required],
       brandIds: ["", Validators.required],
       description: ["", Validators.required]
     });
+
 
     this.listTypeService.getById("RF").pipe(first())
       .subscribe((data: any) => {
@@ -164,12 +177,17 @@ export class UserProfileComponent implements OnInit {
     this.roleService.getAll().pipe(first())
       .subscribe((data: any) => this.roleList = data.data);
 
-      this.userService.getAll().pipe(first())
+    this.userService.getAll().pipe(first())
       .subscribe((data: any) => this.userList = data.data);
 
     // this.userprofileService.getUserAll().pipe(first())
     //   .subscribe((data: any) => this.userList = data.data);
 
+    if (this.user.isManfSubscribed) {
+      this.isManfSubs = true;
+      this.manfBUService.GetAll()
+        .subscribe((data: any) => this.manfBUList = data.data);
+    }
     this.businessUnitService.GetAll()
       .pipe(first()).subscribe((data: any) => this.businessUnitList = data.data)
 
@@ -177,17 +195,19 @@ export class UserProfileComponent implements OnInit {
       .valueChanges.subscribe((values: any) => {
         if (!values) return;
         var buIds = values.map(x => x.id).toString();
-        this.brandService.GetByBUs(buIds)
-          .pipe(first()).subscribe((data: any) => {
-            var nBrand = [];
-            var lstBrand: any[] = this.userprofileform.get("brandIds").value
-            this.brandList = data.data;
-            this.brandList.forEach(element => {
-              var obj = lstBrand.find(x => x.id == element.id);
-              if (obj) nBrand.push(obj);
+        if (buIds != "") {
+          this.brandService.GetByBUs(buIds)
+            .pipe(first()).subscribe((data: any) => {
+              var nBrand = [];
+              var lstBrand: any[] = this.userprofileform.get("brandIds").value
+              this.brandList = data.data;
+              this.brandList.forEach(element => {
+                var obj = lstBrand.find(x => x.id == element.id);
+                if (obj) nBrand.push(obj);
+              })
+              this.userprofileform.get("brandIds").setValue(nBrand);
             })
-            this.userprofileform.get("brandIds").setValue(nBrand);
-          })
+        }
       })
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -209,7 +229,7 @@ export class UserProfileComponent implements OnInit {
           debugger;
           if (this.isCustomer) {
             this.userprofileform.get("custSites").setValidators([Validators.required])
-            this.userprofileform.get("custSites").updateValueAndValidity();          
+            this.userprofileform.get("custSites").updateValueAndValidity();
 
             this.userprofileService.getSitesByConId(data.data.contactId)
               .pipe(first()).subscribe((data: any) => {
@@ -225,31 +245,46 @@ export class UserProfileComponent implements OnInit {
           // this.listTypeService.getById("ROLES")
           //   .pipe(first()).subscribe({
           //     next: (data: ListTypeItem[]) => {
-            debugger;
-                switch (this.segmentList?.find(x => x.listTypeItemId == role)?.itemCode) {                  
-                  case this.environment.engRoleCode:
-                    this.isEng = true;
-                    this.GetDistributorByContactId();
-                    break;
+          debugger;
+          switch (this.segmentList?.find(x => x.listTypeItemId == role)?.itemCode) {
+            case this.environment.engRoleCode:
+              this.isEng = true;
+              this.GetDistributorByContactId();
+              this.userprofileform.get('manfBUIds').clearValidators()
+              this.userprofileform.get('manfBUIds').updateValueAndValidity()
+              break;
 
-                  case this.environment.distRoleCode:
-                    this.isDist = true;
-                    this.GetDistributorByContactId();
-                    break;
+            case this.environment.distRoleCode:
+              this.isDist = true;
+              this.GetDistributorByContactId();
+              this.userprofileform.get('manfBUIds').clearValidators()
+              this.userprofileform.get('manfBUIds').updateValueAndValidity()
+              break;
 
-                  case this.environment.custRoleCode:
-                    this.isDist = false;
-                    this.isEng = false;
-                    this.userprofileform.get('distRegions').clearValidators()
-                    this.userprofileform.get('distRegions').updateValueAndValidity()
-                    this.userprofileform.get('businessUnitIds').clearValidators()
-                    this.userprofileform.get('businessUnitIds').updateValueAndValidity()
-                    this.userprofileform.get('brandIds').clearValidators()
-                    this.userprofileform.get('brandIds').updateValueAndValidity()
-                    break;
-                }
-            //   }
-            // })
+            case this.environment.custRoleCode:
+              this.isDist = false;
+              this.isEng = false;
+              this.userprofileform.get('distRegions').clearValidators()
+              this.userprofileform.get('distRegions').updateValueAndValidity()
+              this.userprofileform.get('businessUnitIds').clearValidators()
+              this.userprofileform.get('businessUnitIds').updateValueAndValidity()
+              this.userprofileform.get('brandIds').clearValidators()
+              this.userprofileform.get('brandIds').updateValueAndValidity()
+              this.userprofileform.get('manfBUIds').clearValidators()
+              this.userprofileform.get('manfBUIds').updateValueAndValidity()
+              break;
+            case this.environment.manfRoleCode:
+              this.isManf = true;
+              this.userprofileform.get('distRegions').clearValidators()
+              this.userprofileform.get('distRegions').updateValueAndValidity()
+              this.userprofileform.get('businessUnitIds').clearValidators()
+              this.userprofileform.get('businessUnitIds').updateValueAndValidity()
+              this.userprofileform.get('brandIds').clearValidators()
+              this.userprofileform.get('brandIds').updateValueAndValidity()
+              break;
+          }
+          //   }
+          // })
 
           var subreq = data.data.distRegions?.split(',');
           let items: any = [];
@@ -259,6 +294,16 @@ export class UserProfileComponent implements OnInit {
               items.push(t);
             }
             this.userprofileform.patchValue({ "distRegions": items });
+          }
+
+          subreq = data.data.manfBUIds?.split(',');
+          items = [];
+          if (subreq != null && subreq.length > 0) {
+            for (var i = 0; i < subreq.length; i++) {
+              let t = { id: subreq[i] }
+              items.push(t);
+            }
+            this.userprofileform.patchValue({ "manfBUIds": items });
           }
 
           subreq = data.data.businessUnitIds?.split(',');
@@ -354,18 +399,18 @@ export class UserProfileComponent implements OnInit {
   }
 
   //DeleteRecord() {
-    // if (confirm("Are you sure you want to delete the record?")) {
+  // if (confirm("Are you sure you want to delete the record?")) {
 
-    //   this.userprofileService.delete(this.id).pipe(first())
-    //     .subscribe((data: any) => {
-    //       if (data.isSuccessful)
-    //         this.router.navigate(["userprofilelist"], {
-    //           //relativeTo: this.activeRoute,
-    //           queryParams: { isNSNav: true },
-    //           //queryParamsHandling: 'merge'
-    //         })
-    //     })
-    // }
+  //   this.userprofileService.delete(this.id).pipe(first())
+  //     .subscribe((data: any) => {
+  //       if (data.isSuccessful)
+  //         this.router.navigate(["userprofilelist"], {
+  //           //relativeTo: this.activeRoute,
+  //           queryParams: { isNSNav: true },
+  //           //queryParamsHandling: 'merge'
+  //         })
+  //     })
+  // }
   //}
 
   onSegmentChange(segment: string) {
@@ -373,30 +418,30 @@ export class UserProfileComponent implements OnInit {
     //   .pipe(first())
     //   .subscribe((data: ListTypeItem[]) => {
     debugger;
-        //switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
-        switch (this.segmentList.find(x => x.listTypeItemId == segment)?.itemCode) {
-          case this.environment.engRoleCode:
-            this.isEng = true;
-            this.GetDistributorByContactId();
-            break;
+    //switch (data?.find(x => x.listTypeItemId == role)?.itemCode) {
+    switch (this.segmentList.find(x => x.listTypeItemId == segment)?.itemCode) {
+      case this.environment.engRoleCode:
+        this.isEng = true;
+        this.GetDistributorByContactId();
+        break;
 
-          case this.environment.distRoleCode:
-            this.isDist = true;
-            this.GetDistributorByContactId();
-            break;
+      case this.environment.distRoleCode:
+        this.isDist = true;
+        this.GetDistributorByContactId();
+        break;
 
-          case this.environment.custRoleCode:
-            this.isDist = false;
-            this.isEng = false;
-            this.userprofileform.get('distRegions').clearValidators()
-            this.userprofileform.get('distRegions').updateValueAndValidity()
-            this.userprofileform.get('businessUnitIds').clearValidators()
-            this.userprofileform.get('businessUnitIds').updateValueAndValidity()
-            this.userprofileform.get('brandIds').clearValidators()
-            this.userprofileform.get('brandIds').updateValueAndValidity()
-            break;
-        }
-      ///})
+      case this.environment.custRoleCode:
+        this.isDist = false;
+        this.isEng = false;
+        this.userprofileform.get('distRegions').clearValidators()
+        this.userprofileform.get('distRegions').updateValueAndValidity()
+        this.userprofileform.get('businessUnitIds').clearValidators()
+        this.userprofileform.get('businessUnitIds').updateValueAndValidity()
+        this.userprofileform.get('brandIds').clearValidators()
+        this.userprofileform.get('brandIds').updateValueAndValidity()
+        break;
+    }
+    ///})
   }
 
   GetDistributorByContactId() {
@@ -405,7 +450,7 @@ export class UserProfileComponent implements OnInit {
       .subscribe((data: any) => {
         if (data.isSuccessful)
           debugger;
-          this.regionList = data.data;
+        this.regionList = data.data;
       })
   }
 
@@ -469,30 +514,28 @@ export class UserProfileComponent implements OnInit {
     //[KG]
     this.contactId = this.userList.filter(x => x.id === value)[0].contactId;
     this.contactType = this.userList.filter(x => x.id === value)[0].contactType;
-    if(this.contactType == "CS")
-    {
+    if (this.contactType == "CS") {
       this.userprofileService.getSitesByConId(this.contactId)
         .pipe(first()).subscribe((data: any) => {
           if (data.data.length > 0) this.siteList = data.data;
           else this.siteList = []
         });
     }
-    else if(this.contactType == "DR")
-    {
+    else if (this.contactType == "DR") {
       this.GetDistributorByContactId();
     }
-      this.userprofileService.getByUserId(this.contactId, this.contactType)
-          .pipe(first()).subscribe((data: any) => {
-            this.isCustomer = data.data?.userType.toLowerCase() == "customer";
-            if (this.isCustomer) {
-              this.userprofileform.get("custSites").setValidators([Validators.required])
-              this.userprofileform.get("custSites").updateValueAndValidity();
-            }
-            this.userprofileform.controls['designation'].setValue(data.data.designation);
-            this.userprofileform.controls['distributorName'].setValue(data.data.entityParentName);
-            this.contactId = data.data.contactid;
-          })
-      
+    this.userprofileService.getByUserId(this.contactId, this.contactType)
+      .pipe(first()).subscribe((data: any) => {
+        this.isCustomer = data.data?.userType.toLowerCase() == "customer";
+        if (this.isCustomer) {
+          this.userprofileform.get("custSites").setValidators([Validators.required])
+          this.userprofileform.get("custSites").updateValueAndValidity();
+        }
+        this.userprofileform.controls['designation'].setValue(data.data.designation);
+        this.userprofileform.controls['distributorName'].setValue(data.data.entityParentName);
+        this.contactId = data.data.contactid;
+      })
+
   }
 
   onSubmit() {
@@ -512,6 +555,11 @@ export class UserProfileComponent implements OnInit {
     if (this.userprofileform.get('distRegions').value?.length > 0) {
       var selectarray = this.userprofileform.get('distRegions').value;
       this.userprofile.distRegions = selectarray.map(x => x.id).join(',');
+    }
+
+    if (this.userprofileform.get('manfBUIds').value?.length > 0) {
+      var selectarray = this.userprofileform.get('manfBUIds').value;
+      this.userprofile.manfBUIds = selectarray.map(x => x.id).join(',');
     }
 
     if (this.userprofileform.get('businessUnitIds').value?.length > 0) {
@@ -535,7 +583,7 @@ export class UserProfileComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.isSuccessful) {
             this.notificationService.showSuccess(data.messages[0], "Success");
-            
+
             this.router.navigate(["userprofilelist"],
               {
                 //relativeTo: this.activeRoute,
