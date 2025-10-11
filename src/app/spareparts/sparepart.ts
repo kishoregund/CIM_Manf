@@ -136,12 +136,16 @@ export class SparePartComponent implements OnInit {
     }
 
     if (this.user.isAdmin) {
+      this.hasAddAccess = true;
+      this.hasDeleteAccess = true;
+      this.hasUpdateAccess = true;
+      this.hasReadAccess = true;
+    }
+    else {
       this.hasAddAccess = false;
       this.hasDeleteAccess = false;
       this.hasUpdateAccess = false;
-      this.hasReadAccess = false;
-      //this.notificationService.RestrictAdmin()
-      //return;
+      this.hasReadAccess = true;
     }
 
 

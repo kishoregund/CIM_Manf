@@ -106,6 +106,8 @@ import { TravelinvoiceComponent } from './travelinvoice/travelinvoice.component'
 import { TravelInvoiceListComponent } from './travelinvoice/travelinvoicelist.component';
 import { TenantListComponent } from './tenant/tenantlist.component';
 import { TenantComponent } from './tenant/tenant.component';
+import { InstrumentAllocationComponent } from './instrumentallocation/instrumentallocation';
+import { InstrumentAllocationListComponent } from './instrumentallocation/instrumentallocationlist';
 // import { CreateCompanyComponent } from './account/company.component';
 // import { CompanyListComponent } from './account/companylist.component';
 // import { PreventivemaintenancetablelistComponent } from './preventivemaintenancetable/preventivemaintenancetablelist.component';
@@ -244,6 +246,18 @@ const routes: Routes = [
   },
   {
     path: 'instrument/:id', component: InstrumentComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },  
+  {
+    path: 'instrumentallocation', component: InstrumentAllocationComponent,
+    canActivate: [AuthGuard, TextValidator, BrowserBack]
+  },
+  {
+    path: 'instrumentallocationlist', component: InstrumentAllocationListComponent,
+    canActivate: [AuthGuard, TextValidator]
+  },
+  {
+    path: 'instrumentallocation/:id', component: InstrumentAllocationComponent,
     canActivate: [AuthGuard, TextValidator, BrowserBack]
   },  
   {

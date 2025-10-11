@@ -18,6 +18,7 @@ export class NavSideMenuComponent implements OnInit {
   hasDistributor: boolean = false;
   hasCustomer: boolean = false;
   hasInstrument: boolean = false;
+  hasInstrumentallocation: boolean = false;
   hasSparePart: boolean = false;
   hasUserProfile: boolean = false;
   hasProfile: boolean = false;
@@ -124,6 +125,12 @@ export class NavSideMenuComponent implements OnInit {
             || this.profile.permissions.filter(x => x.screenCode == 'SINST')[0].update == true
             || this.profile.permissions.filter(x => x.screenCode == 'SINST')[0].read == true
             || this.profile.permissions.filter(x => x.screenCode == 'SINST')[0].delete == true
+        }
+        if (this.profile.permissions.filter(x => x.screenCode == 'SINAL').length > 0) {
+          this.hasInstrumentallocation = this.profile.permissions.filter(x => x.screenCode == 'SINAL')[0].create == true
+            || this.profile.permissions.filter(x => x.screenCode == 'SINAL')[0].update == true
+            || this.profile.permissions.filter(x => x.screenCode == 'SINAL')[0].read == true
+            || this.profile.permissions.filter(x => x.screenCode == 'SINAL')[0].delete == true
         }
         if (this.profile.permissions.filter(x => x.screenCode == 'SCDLE').length > 0) {
           this.hasschedule = this.profile.permissions.filter(x => x.screenCode == 'SCDLE')[0].create == true

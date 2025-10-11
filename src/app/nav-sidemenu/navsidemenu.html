@@ -23,7 +23,7 @@
                     <div class="menu-title">Home</div>
                   </a>
                 </li> -->
-              
+
                 <li class="" *ngIf="isRoot">
                   <a class="has-arrow" aria-expanded="false">
                     <div class="parent-icon">
@@ -36,7 +36,7 @@
                       <a class="collapse-item" (click)="navigate('/tenantlist')" *ngIf="isRoot">
                         <i class="bx bx-right-arrow-alt"></i>Tenants
                       </a>
-                    </li>                    
+                    </li>
                   </ul>
                 </li>
 
@@ -58,7 +58,8 @@
                       </a>
                     </li>
                     <li>
-                      <a class="collapse-item" (click)="navigate('/manfbusinessunitlist')" *ngIf="isAdmin && isManfSubs">
+                      <a class="collapse-item" (click)="navigate('/manfbusinessunitlist')"
+                        *ngIf="isAdmin && isManfSubs">
                         <i class="bx bx-right-arrow-alt"></i>Manufacturer BUs
                       </a>
                     </li>
@@ -72,12 +73,11 @@
                         <i class="bx bx-right-arrow-alt"></i> Brand
                       </a>
                     </li>
-                    <li>
+                    <!-- <li>
                       <a class="collapse-item" (click)="navigate('/companylist')" *ngIf="isSuperAdmin">
                         <i class="bx bx-right-arrow-alt"></i> Company
                       </a>
-                    </li>
-
+                    </li> -->
                     <li>
                       <a class="collapse-item" (click)="navigate('/rolelist')" *ngIf="hasProfile && !isCustomer">
                         <i class="bx bx-right-arrow-alt"></i>Role</a>
@@ -131,14 +131,18 @@
                         Instrument
                       </a>
                     </li>
-
                     <li>
                       <a class="collapse-item" (click)="navigate('/sparepartlist')" *ngIf="hasSparePart">
                         <i class="bx bx-right-arrow-alt"></i>
                         Spare Parts
                       </a>
                     </li>
-
+                    <li>
+                      <a class="collapse-item" (click)="navigate('/instrumentallocation')"
+                        *ngIf="hasInstrumentallocation">
+                        <i class="bx bx-right-arrow-alt"></i> Instrument Allocation
+                      </a>
+                    </li>
                   </ul>
                 </li>
                 <li class="" *ngIf="hasTransactions">
@@ -150,7 +154,8 @@
                   </a>
                   <ul class="mm-collapse" style="height: 2px;">
                     <li>
-                      <a class="collapse-item" (click)="navigate('/customerinstrumentlist')" *ngIf="hasCustomerInstrument">
+                      <a class="collapse-item" (click)="navigate('/customerinstrumentlist')"
+                        *ngIf="hasCustomerInstrument">
                         <i class="bx bx-right-arrow-alt"></i>
                         Installed Instruments
                       </a>

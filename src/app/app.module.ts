@@ -167,6 +167,8 @@ import { TravelinvoiceComponent } from './travelinvoice/travelinvoice.component'
 import { TravelInvoiceListComponent } from './travelinvoice/travelinvoicelist.component';
 import { TenantComponent } from './tenant/tenant.component';
 import { TenantListComponent } from './tenant/tenantlist.component';
+import { InstrumentAllocationComponent } from './instrumentallocation/instrumentallocation';
+import { InstrumentAllocationListComponent } from './instrumentallocation/instrumentallocationlist';
 
 
 @NgModule({
@@ -308,6 +310,8 @@ import { TenantListComponent } from './tenant/tenantlist.component';
     BrandListComponent,
     BusinessUnitListComponent,
     ManfBusinessUnitListComponent,
+    InstrumentAllocationComponent,
+    InstrumentAllocationListComponent,
     //CompanyListComponent,
     SetUp,
     ChangeCIM,

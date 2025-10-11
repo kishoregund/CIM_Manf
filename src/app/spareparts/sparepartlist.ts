@@ -62,11 +62,13 @@ export class SparePartListComponent implements OnInit {
       }
     }
     if (this.user.isAdmin) {
-      this.hasAddAccess = false;
+      this.hasAddAccess = true;
       this.hasDeleteAccess = true;
     }
     else {
       role = role[0]?.itemCode;
+      this.hasAddAccess = false;
+      this.hasDeleteAccess = false;
     }
 
     if (role == this.environment.distRoleCode) this.isDist = true;
