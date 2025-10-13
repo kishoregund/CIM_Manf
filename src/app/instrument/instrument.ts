@@ -169,8 +169,8 @@ export class InstrumentComponent implements OnInit {
       // baseCurrencyAmt: [1.00, Validators.required],
       // baseCurrencyId: ["", Validators.required],
       manufId: ['', Validators.required],
-      businessUnitId: ["", Validators.required],
-      brandId: ["", Validators.required],
+      businessUnitId: [""],
+      brandId: [""],
     });
 
     this.isAccessories = false;
@@ -252,41 +252,7 @@ export class InstrumentComponent implements OnInit {
     //     this.instrumentform.get("baseCurrencyId").setValue(this.baseCurrId)
     //   })
 
-    if (!this.user.isManfSubscribed) {
-      this.businessUnitService.GetAll()
-        .pipe(first()).subscribe((data: any) => {
-          this.businessUnitList = data.data;
-          debugger;
-          var businessUnit = this.businessUnitList?.find(x => x.id == this.user.selectedBusinessUnitId);
-          if (this.role != this.enviroment.distRoleCode || !businessUnit) return;
 
-          this.instrumentform.get("businessUnitId").setValue(businessUnit.id)
-        })
-
-      this.instrumentform.get("businessUnitId").valueChanges
-        .subscribe((value: any) => {
-          if (value != "") {
-            this.brandService.GetByBU(value)
-              .pipe(first()).subscribe((data: any) => {
-                var brandLst = []
-                this.user.brandIds?.split(',').forEach(e => {
-                  if (data.data && data.data.length > 0) {
-                    var obj = data.data.find(x => x.id == e);
-                    if (obj) brandLst.push(obj);
-                  }
-                });
-                this.brandList = brandLst;
-
-                setTimeout(() => {
-                  var brand = this.brandList.find(x => x.id == this.user.selectedBrandId);
-                  if (brand && this.role == this.enviroment.distRoleCode) this.instrumentform.get("brandId").setValue(brand.id)
-                }, 300);
-
-              })
-          }
-        })
-    }
-    
     if (this.id != null) {
 
       this.instrumentAccessoryService.GetByInsId(this.id).subscribe((data: any) => {
@@ -477,10 +443,10 @@ export class InstrumentComponent implements OnInit {
     // this.instrumentform.get('baseCurrencyId').disable()
     // this.instrumentform.get('baseCurrencyId').disable()
 
-    if (this.role == this.enviroment.distRoleCode) {
-      this.instrumentform.get('businessUnitId').disable()
-      this.instrumentform.get('brandId').disable()
-    }
+    // if (this.role == this.enviroment.distRoleCode) {
+    //   this.instrumentform.get('businessUnitId').disable()
+    //   this.instrumentform.get('brandId').disable()
+    // }
   }
 
   DeleteRecord() {
@@ -748,11 +714,8 @@ export class InstrumentComponent implements OnInit {
     // this.instrument.cost = this.instrument.cost != ""? parseFloat(this.instrument.cost):0.00;
     // this.instrument.baseCurrencyAmt = this.instrument.baseCurrencyAmt != ""? parseFloat(this.instrument.baseCurrencyAmt):0.00;
     debugger;
-    if(this.user.isManfSubscribed)
-    {
-      this.instrument.businessUnitId = Guid.EMPTY;
-      this.instrument.brandId = Guid.EMPTY;
-    }
+    this.instrument.businessUnitId = Guid.EMPTY;
+    this.instrument.brandId = Guid.EMPTY;
     if (this.id == null) {
       this.instrumentService.save(this.instrument)
         .pipe(first())

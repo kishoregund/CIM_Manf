@@ -72,7 +72,7 @@ export class BusinessUnitListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "businessUnitName",
-                //  width: "1280"
+                width: "680"
             },
              {
                 headerName: 'Distributor',
@@ -80,6 +80,7 @@ export class BusinessUnitListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "Distributor",
+                width: "600"
             }
         ]
     }

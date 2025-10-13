@@ -48,9 +48,8 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
     this.hasDeleteAccess = this.AccountService.userValue.isAdmin;
 
     this.Form = this.formBuilder.group({
+      distributorId: ['', [Validators.required]],
       businessUnitName: ['', [Validators.required]],
-      //companyId: ['', [Validators.required]],
-      //company: ['', [Validators.required]],
       id: [""]
     });
 
@@ -63,13 +62,6 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
         this.distributorList = data.data;
       });
 
-
-    //let user = this.AccountService.userValue;
-    //console.log(user);
-
-    // this.Form.get('companyId').setValue(user.companyId);
-    // this.Form.get('companyId').disable();
-
     if (id) {
       this.id = id;
       this.Form.get('id').setValue(id);
@@ -78,28 +70,12 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
       this.formData = getByIdRequest.data;
       this.Form.patchValue(this.formData);
     }
-
-    // var request: any = await this.CompanyService.GetAllCompany().toPromise();
-
-    // this.companyList = request.object;
-
-
-    // if (this.companyId) this.f.companyId.setValue(this.companyId)
-    // else {
-    //   this.companyId = user.companyId;
-    // }
-
-    // this.Form.get("company")
-    //   .setValue(this.companyList?.find(comp => comp.id == this.companyId)?.companyName)
-
   }
 
   ngAfterViewInit(): void {
     if (!this.isNewMode) {
       this.Form.disable();
     }
-
-    //this.FormControlDisable()
   }
 
   Back() {
@@ -148,8 +124,8 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   }
 
   //FormControlDisable() {
-    // this.Form.get('companyId').disable();
-    // this.Form.get('company').disable();
+  // this.Form.get('companyId').disable();
+  // this.Form.get('company').disable();
   //}
 
   async onSubmit() {

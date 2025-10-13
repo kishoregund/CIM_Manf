@@ -45,26 +45,23 @@
             <hr />
             <div class="col-md-12 col-sm-12">
                 <form [formGroup]="Form" (ngSubmit)="onSubmit()">
-                    <div class="row">             
-                        
+                    <div class="row">                                     
                         <div class="col-md-6">
-                            <label for="distributorId">Distributor/label>
+                            <label for="distributorId">Distributor</label>
                             <select id="distributorId" formControlName="distributorId" class="form-select"
                                 [ngClass]="{ 'is-invalid': f.distributorId.touched && f.distributorId.errors }">
-                                <option [value]="i.id" *ngFor="let i of distributorList>{{i.distName}}</option>
+                                <option [value]="i.id" *ngFor="let i of distributorList">{{i.distName}}</option>
                             </select>
-                            <div *ngIf=" f.distributorId.touched && f.distributorId.errors" class="invalid-feedback">
+                            <div *ngIf="f.distributorId.touched && f.distributorId.errors" class="invalid-feedback">
                                 <div *ngIf="f.distributorId.errors.required">Distributor is required</div>
                             </div>
-                        </div>
-
-                        
+                        </div>                        
                         <div class="col-md-6">
                             <label>Business Unit</label>
                             <input formControlName="businessUnitName" class="form-control"
                                 [ngClass]="{ 'is-invalid': f.businessUnitName.touched  && f.businessUnitName.errors }" />
 
-                            <div *ngIf=" f.businessUnitName.touched && f.businessUnitName.errors"
+                            <div *ngIf="f.businessUnitName.touched && f.businessUnitName.errors"
                                 class="invalid-feedback">
                                 <div *ngIf="f.businessUnitName.errors.required">Business Unit is required</div>
                             </div>

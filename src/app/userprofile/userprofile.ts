@@ -78,6 +78,7 @@ export class UserProfileComponent implements OnInit {
   formData: any;
   contactType: string;
   manfBUList: any;
+  distributorId: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -188,8 +189,13 @@ export class UserProfileComponent implements OnInit {
       this.manfBUService.GetAll()
         .subscribe((data: any) => this.manfBUList = data.data);
     }
-    this.businessUnitService.GetAll()
-      .pipe(first()).subscribe((data: any) => this.businessUnitList = data.data)
+
+    this.id = this.route.snapshot.paramMap.get('id');
+
+    this.route.queryParams.subscribe((data) => {
+      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
+    });
+
 
     this.userprofileform.get("businessUnitIds")
       .valueChanges.subscribe((values: any) => {
@@ -198,6 +204,7 @@ export class UserProfileComponent implements OnInit {
         if (buIds != "") {
           this.brandService.GetByBUs(buIds)
             .pipe(first()).subscribe((data: any) => {
+              debugger;
               var nBrand = [];
               var lstBrand: any[] = this.userprofileform.get("brandIds").value
               this.brandList = data.data;
@@ -210,11 +217,6 @@ export class UserProfileComponent implements OnInit {
         }
       })
 
-    this.id = this.route.snapshot.paramMap.get('id');
-
-    this.route.queryParams.subscribe((data) => {
-      this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
-    });
 
     if (this.id != null) {
       this.userprofileService.getById(this.id)
@@ -236,6 +238,9 @@ export class UserProfileComponent implements OnInit {
                 this.siteList = data.data;
               });
           }
+
+          this.businessUnitService.GetByDistId(data.data.entityParentId)
+            .pipe(first()).subscribe((data: any) => this.businessUnitList = data.data)
 
           // this.customerService.getAllByConId(data.data.contactid)
           //   .pipe(first()).subscribe((data: any) => {
@@ -341,6 +346,7 @@ export class UserProfileComponent implements OnInit {
           this.userprofileform.patchValue({ "designation": data.data.designation });
           //this.userprofileform.patchValue({ "profileId": data.data.profileId });
           this.userprofileform.patchValue({ "profileForId": data.data.profileForId });
+          this.userprofileform.patchValue({ "distributorId": data.data.entityParentId });
           this.userprofileform.patchValue({ "distributorName": data.data.entityParentName });
           this.userprofileform.patchValue({ "roleId": data.data.roleId });
           this.userprofileform.patchValue({ "segmentId": data.data.segmentId });
