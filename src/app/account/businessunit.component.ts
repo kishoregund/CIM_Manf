@@ -6,6 +6,8 @@ import { Subject } from "rxjs";
 import { NotificationService, AccountService } from "../_services";
 import { BusinessUnitService } from "../_services/businessunit.service";
 import { AppBasicService } from "../_services/AppBasic.service";
+import { DistributorService } from "../_services/distributor.service";
+import { first } from "rxjs/operators";
 
 @Component({
   templateUrl: "./businessunit.component.html"
@@ -21,7 +23,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
 
   hasDeleteAccess: boolean = false;
   companyList: any;
-
+  distributorList: any[];
 
   public modalRef: BsModalRef;
   public onClose: Subject<any>;
@@ -30,6 +32,7 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
 
   constructor(
     public activeModal: BsModalService,
+    private distributorService: DistributorService,
     private businessUnitService: BusinessUnitService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
@@ -50,11 +53,19 @@ export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
       //company: ['', [Validators.required]],
       id: [""]
     });
+
     var id = this.activeRoute.snapshot.paramMap.get("id")
     this.isNewMode = id == null;
 
-    let user = this.AccountService.userValue;
-    console.log(user);
+
+    this.distributorService.getAll()
+      .pipe(first()).subscribe((data: any) => {
+        this.distributorList = data.data;
+      });
+
+
+    //let user = this.AccountService.userValue;
+    //console.log(user);
 
     // this.Form.get('companyId').setValue(user.companyId);
     // this.Form.get('companyId').disable();

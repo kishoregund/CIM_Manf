@@ -126,7 +126,7 @@ export class InstrumentAllocationListComponent implements OnInit {
       },
       {
         headerName: 'Distributor',
-        field: 'distributor',
+        field: 'distributorName',
         filter: true,
         sortable: true,
         tooltipField: 'Distributor'

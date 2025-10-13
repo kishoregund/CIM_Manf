@@ -51,16 +51,16 @@
               </div>
             </div>
             <div class="col-sm-4">
-              <label for="defDistId">Distributor<span class="text-danger">*</span></label>
-              <select formControlName="defDistId" class="form-select" (change)="onDefDistchanged($event.target.value)"
-                [ngClass]="{ 'is-invalid': f.defDistId.touched && f.defDistId.errors }">
+              <label for="distributorId">Distributor<span class="text-danger">*</span></label>
+              <select formControlName="distributorId" class="form-select" 
+                [ngClass]="{ 'is-invalid': f.distributorId.touched && f.distributorId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of distributorList" value={{distributor.id}}>
                   {{distributor.distName}}
                 </option>
               </select>
-              <div *ngIf="f.defDistId.touched && f.defDistId.errors" class="invalid-feedback">
-                <div *ngIf="f.defDistId.errors.required">Default Distributor is required</div>
+              <div *ngIf="f.distributorId.touched && f.distributorId.errors" class="invalid-feedback">
+                <div *ngIf="f.distributorId.errors.required">Default Distributor is required</div>
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
@@ -89,8 +89,6 @@
               </div>
             </div>
           </div>
-
-
         </form>
       </div>
     </div>

@@ -24,6 +24,10 @@ export class BusinessUnitService {
         return this.http.get(`${this.environment.apiUrl}/AppBasics/BUby-id/${id}`)
     }
 
+    GetByDistId(id: any) {
+        return this.http.get(`${this.environment.apiUrl}/AppBasics/BUDistall/${id}`)
+    }
+
     // GetByCompanyId() {
     //     return this.http.get(`${this.environment.apiUrl}/BusinessUnits/GetByCompanyId`)
     // }

@@ -152,14 +152,14 @@ export class InstrumentAllocationComponent implements OnInit {
         this.distributorList = data.data;
       });
 
-
-    this.businessUnitService.GetAll()
-      .pipe(first()).subscribe((data: any) => {
-        this.businessUnitList = data.data;
-        debugger;
-        // var businessUnit = this.businessUnitList?.find(x => x.id == this.user.selectedBusinessUnitId);
-        // if (this.role != this.enviroment.distRoleCode || !businessUnit) return;
-
+    this.instrumentallocationform.get("distributorId").valueChanges
+      .subscribe((value: any) => {
+        if (value != "") {
+          this.businessUnitService.GetByDistId(value)
+            .pipe(first()).subscribe((data: any) => {
+              this.businessUnitList = data.data;         
+            })
+        }
       })
 
     this.instrumentallocationform.get("businessUnitId").valueChanges
@@ -167,14 +167,7 @@ export class InstrumentAllocationComponent implements OnInit {
         if (value != "") {
           this.brandService.GetByBU(value)
             .pipe(first()).subscribe((data: any) => {
-              var brandLst = []
-              this.user.brandIds?.split(',').forEach(e => {
-                if (data.data && data.data.length > 0) {
-                  var obj = data.data.find(x => x.id == e);
-                  if (obj) brandLst.push(obj);
-                }
-              });
-              this.brandList = brandLst;
+              this.brandList = data.data;
             })
         }
       })
@@ -188,6 +181,7 @@ export class InstrumentAllocationComponent implements OnInit {
           this.formData = data.data;
           this.instrumentallocationform.patchValue(this.formData);
         });
+      setTimeout(() => this.instrumentallocationform.disable(), 1000);
     }
     else {
       this.isNewMode = true
@@ -229,10 +223,10 @@ export class InstrumentAllocationComponent implements OnInit {
   }
 
   FormControlDisable() {
-    this.instrumentallocationform.get('instrumetnId').disable()
-    this.instrumentallocationform.get('distributorId').disable()
-    this.instrumentallocationform.get('businessUnitId').disable()
-    this.instrumentallocationform.get('brandId').disable()
+    // this.instrumentallocationform.get('instrumentId').disable()
+    // this.instrumentallocationform.get('distributorId').disable()
+    // this.instrumentallocationform.get('businessUnitId').disable()
+    // this.instrumentallocationform.get('brandId').disable()
   }
 
   DeleteRecord() {
@@ -292,7 +286,7 @@ export class InstrumentAllocationComponent implements OnInit {
     else {
       debugger;
       this.instrumentallocation.id = this.id;
-      this.instrumentService.update(this.id, this.instrumentallocation)
+      this.instrumentAllocationService.update(this.id, this.instrumentallocation)
         .pipe(first())
         .subscribe({
           next: (data: any) => {

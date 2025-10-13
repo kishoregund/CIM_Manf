@@ -72,8 +72,15 @@ export class BusinessUnitListComponent implements OnInit {
                 filter: true,
                 sortable: true,
                 tooltipField: "businessUnitName",
-                 width: "1280"
+                //  width: "1280"
             },
+             {
+                headerName: 'Distributor',
+                field: 'distributorName',
+                filter: true,
+                sortable: true,
+                tooltipField: "Distributor",
+            }
         ]
     }
 

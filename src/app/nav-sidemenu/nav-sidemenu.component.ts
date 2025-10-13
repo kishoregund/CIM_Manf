@@ -397,6 +397,7 @@ export class NavSideMenuComponent implements OnInit {
         this.serviceRequestReport = true;
         this.serviceContractRevenueReport = true;
         this.haspastservicereport = true;
+        this.hasInstrumentallocation = true;
       }
 
       if (this.hasMaster || this.hasProfile || this.hasUserProfile) {// || this.user.isSuperAdmin) {

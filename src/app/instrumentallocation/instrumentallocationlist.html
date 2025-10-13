@@ -25,16 +25,10 @@
       </div>
       <hr />
       <div class="clearfix"></div>
-
-      <!--[KG]: this should be placed on Customer Insturment screen, this is master data not associated
-      to Customer-->
-      <!-- <app-distributorfilter [hasInstrument]="false" (showData)="ShowData($event)" *ngIf="!showGrid && isDist"
-        (nData)="DataFilter($event)" controller="Instrument">
-      </app-distributorfilter> -->
-
+   
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (rowClicked)="EditRecord()"
-          (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="instrumentList" rowSelection="single"
+          (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="instrumentAllocationList" rowSelection="single"
           pagination="true" paginationPageSize=10></ag-grid-angular>
       </div>
 
