@@ -68,8 +68,12 @@ export class ManufacturerListComponent implements OnInit {
     // this.manufacturerId = this.route.snapshot.paramMap.get('id');
     this.manufacturerService.getAll()
       .pipe(first()).subscribe((data: any)=> {
-       debugger; 
-        this.manufacturerModel = data.data
+        this.manufacturerModel = data.data;
+        if(this.user.isManfSubscribed && this.manufacturerModel.length > 0)
+        {
+          this.hasAddAccess = false;
+        }
+
       });
 
       this.columnDefs = this.createColumnDefs();

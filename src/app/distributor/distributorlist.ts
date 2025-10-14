@@ -67,9 +67,11 @@ export class DistributorListComponent implements OnInit {
     this.columnDefs = this.createColumnDefs();
     // this.distributorId = this.route.snapshot.paramMap.get('id');
     this.distributorService.getAll()
-      .pipe(first()).subscribe((data: any)=> {
-       debugger; 
-        this.distributorModel = data.data
+      .pipe(first()).subscribe((data: any) => {
+        this.distributorModel = data.data;
+        if (!this.user.isManfSubscribed && this.distributorModel.length > 0) {
+          this.hasAddAccess = false;
+        }
       });
   }
 
@@ -87,7 +89,7 @@ export class DistributorListComponent implements OnInit {
     this.router.navigate([`distributor/${data.id}`], {
       queryParams: {
         isNSNav: true
-//        creatingNewDistributor: true
+        //        creatingNewDistributor: true
       },
     })
   }

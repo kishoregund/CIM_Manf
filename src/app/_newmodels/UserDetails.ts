@@ -15,6 +15,7 @@ export class UserDetails {
 	profileFor:string;
 	roleId:string;
 	segmentId:string;
+	segmentCode:string;
 	userId:string;
 	firstName:string;
 	lastName:string;

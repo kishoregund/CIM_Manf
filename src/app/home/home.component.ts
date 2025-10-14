@@ -23,51 +23,38 @@ export class HomeComponent {
     private route: ActivatedRoute,
     private listTypeService: ListTypeService,
   ) {
-    // this.GetCIM()
     this.route.queryParams.subscribe((data: any) => {
       this.isRedirected = data.redirected === "true" || data.redirected === true
     })
 
-    // this.user = this.accountService.userValue;
-    // if (!this.user.isAdmin) {
-      //[KG]
-      // this.profileServicce.getUserProfile(this.user.userProfileId);
-      // setTimeout(() => {
-      //   this.listTypeService.getById("SEGMENTS")
-      //     .pipe(first()).subscribe((data: ListTypeItem[]) => {
-      //       this.roles = data;
-      //       let userrole = this.roles.find(x => x.listTypeItemId == this.user.roleId)
-      //       sessionStorage.setItem('segments', JSON.stringify([userrole]))
-      //       if (userrole != null && !this.isRedirected) {
-      //         switch (userrole.itemname) {
-      //           case "Distributor Support":
-      //             this.router.navigate(["distdashboard"], {
-      //               //relativeTo: this.activeRoute,
-      //               queryParams: { isNSNav: true },
-      //               //queryParamsHandling: 'merge'
-      //             });
-      //             break;
-
-      //           case "Customer":
-      //             this.router.navigate(["custdashboard"], {
-      //               //relativeTo: this.activeRoute,
-      //               queryParams: { isNSNav: true },
-      //               //queryParamsHandling: 'merge'
-      //             });
-      //             break;
-
-      //           case "Engineer":
-      //             this.router.navigate(["engdashboard"], {
-      //               //relativeTo: this.activeRoute,
-      //               queryParams: { isNSNav: true },
-      //               //queryParamsHandling: 'merge'
-      //             });
-      //             break;
-      //         }
-      //       }
-      //     });
+    this.user = this.accountService.userValue;
+    if (!this.user.isAdmin) {
+      // setTimeout(() => {        
+        switch (this.user.contactType) {
+          case "DR":
+            if (this.user.segmentCode == "RDTSP") {
+              this.router.navigate(["distdashboard"], {
+                queryParams: { isNSNav: true },
+              });
+            }
+            else {
+              this.router.navigate(["engdashboard"], {
+                queryParams: { isNSNav: true },
+              });
+            }
+            break;
+          case "CS":
+            this.router.navigate(["custdashboard"], {
+              queryParams: { isNSNav: true },
+            });
+            break;
+          case "MSR":
+            this.router.navigate(["manfdashboard"], {
+              queryParams: { isNSNav: true },
+            });
+            break;
+        }       
       // }, 1000);
-    //}
-
+    }
   }
 }

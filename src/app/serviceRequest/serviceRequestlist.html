@@ -8,12 +8,12 @@
             <h3>Service Request List</h3>
             <div class="d-flex">
 
-              <a *ngIf="!showGrid && IsDistributorView" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
+              <!-- <a *ngIf="!showGrid && IsDistributorView" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
                 <i class="fas fa-arrow-left" title="Grid"></i>
               </a>
               <a *ngIf="showGrid && IsDistributorView" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
                 <i class="fas fa-search" title="Search"></i>
-              </a>
+              </a> -->
               <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;"
                 *ngIf="hasAddAccess==true && IsEngineerView == false">
                 <i class="fas fa-plus" style="color: #5ba146;" title="Add"></i>
@@ -30,9 +30,9 @@
 
       <div class="clearfix"></div>
 
-      <app-distributorfilter (showData)="ShowData($event)" (nData)="getallrecored($event)" controller="ServiceRequest"
+      <!-- <app-distributorfilter (showData)="ShowData($event)" (nData)="getallrecored($event)" controller="ServiceRequest"
         *ngIf="!showGrid && IsDistributorView">
-      </app-distributorfilter>
+      </app-distributorfilter> -->
 
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
         <ag-grid-angular style="width: 100%; height: 500px;" *ngIf="IsDistributorView==true && IsAdminView==false"

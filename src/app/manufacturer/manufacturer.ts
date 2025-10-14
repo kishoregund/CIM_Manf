@@ -202,18 +202,20 @@ export class ManufacturerComponent implements OnInit {
       return;
     }
     if (this.manufacturerId == null) {
-      this.manufacturerId = Guid.create().toString();
       this.manufacturerModel = this.form.value;
-      this.manufacturerModel.id = this.manufacturerId;
+      this.manufacturerModel.id = Guid.create().toString();
       this.manufacturerService.save(this.manufacturerModel)
         .subscribe((data: any) => {
           if (!data.isSuccessful) return;
-          this.router.navigate(['manfsalesregion', this.manufacturerId], {
-            queryParams: {
-              isNSNav: true
-              //isNewDist: true
-            }
-          });
+          else {
+            this.manufacturerId =this.manufacturerModel.id ;
+            this.router.navigate(['manfsalesregion', this.manufacturerId], {
+              queryParams: {
+                isNSNav: true
+                //isNewDist: true
+              }
+            });
+          }
           // sessionStorage.setItem("distributor", JSON.stringify(this.manufacturerModel));
           // this.router.navigate([`/contact/${this.type}/${this.manufacturerId}`], {
           //   queryParams: {

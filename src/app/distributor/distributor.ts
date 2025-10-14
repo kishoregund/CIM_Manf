@@ -114,11 +114,10 @@ export class DistributorComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
-    if(this.user.isManfSubscribed)
-    {
+    if (this.user.isManfSubscribed) {
       this.isManfSubs = true;
       this.manfBUService.GetAll()
-      .subscribe((data: any) => this.manfBUList = data.data);
+        .subscribe((data: any) => this.manfBUList = data.data);
     }
 
     this.listTypeService.getById("GPAYT")
@@ -126,7 +125,7 @@ export class DistributorComponent implements OnInit {
 
     this.manfService.getAll()
       .subscribe((data: any) => this.manfList = data.data);
-    
+
     this.countryService.getAll()
       .pipe(first()).subscribe({
         next: (data: any) => {
@@ -248,18 +247,20 @@ export class DistributorComponent implements OnInit {
     }
 
     if (this.distributorId == null) {
-      this.distributorId = Guid.create().toString();
       //this.distributorModel = this.form.value;
-      this.distributorModel.id = this.distributorId;
+      this.distributorModel.id = Guid.create().toString();
       this.distributorService.save(this.distributorModel)
         .subscribe((data: any) => {
           if (!data.isSuccessful) return;
-          this.router.navigate(['distributorregion', this.distributorId], {
-            queryParams: {
-              isNSNav: true,
-              isNewDist: true
-            }
-          });
+          else {
+            this.distributorId = this.distributorModel.id;
+            this.router.navigate(['distributorregion', this.distributorId], {
+              queryParams: {
+                isNSNav: true,
+                isNewDist: true
+              }
+            });
+          }
           // sessionStorage.setItem("distributor", JSON.stringify(this.distributorModel));
           // this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
           //   queryParams: {
