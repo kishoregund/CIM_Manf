@@ -32,12 +32,13 @@ export class HomeComponent {
       // setTimeout(() => {        
         switch (this.user.contactType) {
           case "DR":
-            if (this.user.segmentCode == "RDTSP") {
+            debugger;
+            if (this.user.segmentCode == "RDTSP" && this.user.selectedBusinessUnitId != "") {
               this.router.navigate(["distdashboard"], {
                 queryParams: { isNSNav: true },
               });
             }
-            else {
+            else if (this.user.segmentCode == "RENG"){
               this.router.navigate(["engdashboard"], {
                 queryParams: { isNSNav: true },
               });

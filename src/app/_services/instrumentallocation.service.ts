@@ -28,6 +28,10 @@ export class InstrumentAllocationService {
     return this.http.get<Instrument>(`${this.environment.apiUrl}/Instruments/InAllby-id/${id}`);
   }
 
+  getByInsId(id: string) {
+    return this.http.get<Instrument>(`${this.environment.apiUrl}/Instruments/InAllby-insid/${id}`);
+  }
+
   update(id, params) {
     return this.http.put(`${this.environment.apiUrl}/Instruments/InAllupdate`, params)
       .pipe(map(x => {

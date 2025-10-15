@@ -415,7 +415,7 @@ debugger;
               if (data.isSuccessful) {
                 setTimeout(() => {
                   this.ngOnInit();
-                  this.notificationService.showSuccess(data.messages[0], "Success")
+                  this.notificationService.showSuccess("Service Request raised successfully", "Success")
                 }, 1000);
               }
               else

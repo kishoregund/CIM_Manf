@@ -55,6 +55,7 @@ import { SRAssignedHistoryService } from '../_services/srassignedhistory.service
 import { CustomerSiteService } from '../_services/customersite.service';
 import { CustomerInstrumentService } from '../_services/customerinstrument.service';
 import { BUBrandModel } from '../_newmodels/BUBrandModel';
+import { InstrumentAllocationService } from '../_services/instrumentallocation.service';
 
 
 @Component({
@@ -102,7 +103,7 @@ export class ServiceRequestComponent implements OnInit {
   subreqtypelist: ListTypeItem[];
   reqtypelist: ListTypeItem[];
   instrumentList: Instrument[];
-  siteUsers: any =[];
+  siteUsers: any = [];
   IsCustomerView: boolean = true;
   IsDistributorView: boolean = false;
   IsEngineerView: boolean = false;
@@ -148,6 +149,7 @@ export class ServiceRequestComponent implements OnInit {
   SREngSigned: boolean = false;
   SRCustSigned: boolean = false;
   SRCompleted: boolean = false;
+  showSiteUser: boolean = true;
 
   lstCurrency: any[] = [];
   baseCurrId: any;
@@ -179,7 +181,6 @@ export class ServiceRequestComponent implements OnInit {
     private srAssignedHistoryService: SRAssignedHistoryService,
     private uploadService: UploadService,
     private currencyService: CurrencyService,
-    private instrumentService: InstrumentService
   ) {
     this.notificationService.listen().subscribe((m: any) => {
       if (this.serviceRequestId != null) {
@@ -257,7 +258,7 @@ export class ServiceRequestComponent implements OnInit {
       eDate: [""],
       serReqNo: ['', Validators.required],
       distId: ['', Validators.required],
-      custId:  this.emptyGuid,
+      custId: this.emptyGuid,
       statusId: this.emptyGuid,
       stageId: this.emptyGuid,
       siteId: this.emptyGuid,
@@ -518,7 +519,9 @@ export class ServiceRequestComponent implements OnInit {
             this.SRCustSigned = data.data.srStages.custSigned;
             this.SRCompleted = data.data.srStages.completed;
             this.siteUserId = data.data.siteUserId;
-
+            if (data.data.siteUserId == this.emptyGuid) {
+              this.showSiteUser = false;
+            }
             this.onServiceTypeChange(data.data.visitType);
             var subreq = data.data.subRequestTypeId.split(',');
             let items: ListTypeItem[] = [];
@@ -630,7 +633,7 @@ export class ServiceRequestComponent implements OnInit {
             this.serviceRequestform.patchValue({ "baseCurrency": data.data.baseCurrency });
             this.serviceRequestform.patchValue({ "totalCostCurrency": data.data.totalCostCurrency });
             this.serviceRequestform.patchValue({ "amcServiceQuote": data.data.amcServiceQuote });
-            
+
 
             this.formData = data.data;
             this.serviceRequestform.patchValue(this.formData);
@@ -638,7 +641,7 @@ export class ServiceRequestComponent implements OnInit {
             if (data.data.isReportGenerated) {
               this.serviceRequestform.disable()
               this.isGenerateReport = true;
-            }            
+            }
             //}, 100);
           },
 
@@ -803,6 +806,9 @@ export class ServiceRequestComponent implements OnInit {
       } else {
         if (this.user.contactType?.toLocaleLowerCase() == "cs") {
           this.serviceRequestform.get('siteId').disable();
+          if (this.isNewMode) {
+            this.showSiteUser = false;
+          }
         }
         else {
           this.serviceRequestform.get('siteId').enable();
@@ -902,21 +908,19 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   onSiteChanged(value: any) {
-    if(value != "")    {
-      this.getInstrumnetsBySiteIds(value); 
+    if (value != "") {
+      this.getInstrumnetsBySiteIds(value);
       this.getSiteUsers(value);
     }
   }
 
-  getSiteUsers(id:any)
-  {
+  getSiteUsers(id: any) {
     this.serviceRequestService.GetSiteUsers(id).pipe(first())
       .subscribe({
         next: (data: any) => {
           this.siteUsers = data.data;
-          if(this.siteUserId != null)
-          {
-            this.serviceRequestform.patchValue({ "siteUserId": this.siteUserId });  
+          if (this.siteUserId != null) {
+            this.serviceRequestform.patchValue({ "siteUserId": this.siteUserId });
           }
         }
       });
@@ -938,22 +942,22 @@ export class ServiceRequestComponent implements OnInit {
 
   public oninstuchange(id: string) {
     var instument;
-
-    //this.instrumentService.getSerReqInstrument(id)
-    this.serviceRequestService.GetInstrument(id, this.siteId).pipe(first())
-      .pipe(first())
-      .subscribe({
-        next: (data: any) => {
-          instument = data.data;
-          this.siteId = data.data.custSiteId;
-          this.serviceRequestform.patchValue({ "machModelName": instument.insType });
-          this.serviceRequestform.patchValue({ "operatorName": instument.operatorEng.firstName + '' + instument.operatorEng.lastName });
-          this.serviceRequestform.patchValue({ "operatorNumber": instument.operatorEng.primaryContactNo });
-          this.serviceRequestform.patchValue({ "operatorEmail": instument.operatorEng.primaryEmail });
-          this.serviceRequestform.patchValue({ "machEngineer": instument.machineEng.firstName + ' ' + instument.machineEng.lastName });
-          this.serviceRequestform.patchValue({ "xrayGenerator": instument.insVersion });
-        },
-      });
+    if (this.siteId != undefined) {
+      this.serviceRequestService.GetInstrument(id, this.siteId).pipe(first())
+        .pipe(first())
+        .subscribe({
+          next: (data: any) => {
+            instument = data.data;
+            this.siteId = data.data.custSiteId;
+            this.serviceRequestform.patchValue({ "machModelName": instument.insType });
+            this.serviceRequestform.patchValue({ "operatorName": instument.operatorEng.firstName + '' + instument.operatorEng.lastName });
+            this.serviceRequestform.patchValue({ "operatorNumber": instument.operatorEng.primaryContactNo });
+            this.serviceRequestform.patchValue({ "operatorEmail": instument.operatorEng.primaryEmail });
+            this.serviceRequestform.patchValue({ "machEngineer": instument.machineEng.firstName + ' ' + instument.machineEng.lastName });
+            this.serviceRequestform.patchValue({ "xrayGenerator": instument.insVersion });
+          },
+        });
+    }
   }
 
 
@@ -1038,7 +1042,7 @@ export class ServiceRequestComponent implements OnInit {
 
     }
 
-   
+
 
     if (this.serviceRequestId == null) {
 
@@ -1049,8 +1053,7 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequest.serResolutionDate = datepipie.transform(serResolutionDate, 'dd/MM/YYYY');
       this.serviceRequest.siteId = this.siteId;
       this.serviceRequest.custId = this.customerId;
-      if(this.serviceRequest.breakoccurDetailsId == null)
-      {
+      if (this.serviceRequest.breakoccurDetailsId == null) {
         this.serviceRequest.breakoccurDetailsId = this.emptyGuid;
       }
       if (this.serviceRequest.isRecurring == null) {
@@ -1100,8 +1103,7 @@ export class ServiceRequestComponent implements OnInit {
       this.serviceRequest.assignedHistory = [];
       this.serviceRequest.engAction = [];
       this.serviceRequest.serResolutionDate = datepipie.transform(GetParsedDate(serResolutionDate), 'dd/MM/YYYY');
-      if(this.serviceRequest.breakoccurDetailsId == null)
-      {
+      if (this.serviceRequest.breakoccurDetailsId == null) {
         this.serviceRequest.breakoccurDetailsId = this.emptyGuid;
       }
 
