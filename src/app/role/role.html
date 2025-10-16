@@ -82,7 +82,7 @@
                         (change)="SelectAll('delete')"></th>
                     <th>Commercial<br> <input type="checkbox" id="selectallcommercial"
                         [disabled]="!isEditMode && !isNewMode" (change)="SelectAll('commercial')"></th>
-                    <th>Privileges <br></th>
+                    <!-- <th>Privileges <br></th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -112,12 +112,12 @@
                     <td [formGroupName]="i"><input type="checkbox" formControlName="commercial"
                         *ngIf="screenCode(i) == 'SAMC' || screenCode(i) == 'OFREQ'|| screenCode(i) == 'SINST' " />
                     </td>
-                    <td [formGroupName]="i">
+                    <!-- <td [formGroupName]="i">
                       <select type="text" formControlName="privilages" class="form-select">
                         <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of privilagesList">
                           {{listtypeitem.itemName}}</option>
                       </select>
-                    </td>
+                    </td> -->
                   </tr>
                 </tbody>
                 <tfoot style="background: whitesmoke;border: 0.5px solid rgb(202 170 170);">
@@ -164,12 +164,12 @@
                       <!-- <input type="checkbox" formControlName="commercial" /> -->
 
                     </td>
-                    <td>
+                    <!-- <td>
                       <select type="text" formControlName="privilages" (focusout)="AddScreen()" class="form-select">
                         <option value="{{listtypeitem.listTypeItemId}}" *ngFor="let listtypeitem of privilagesList">
                           {{listtypeitem.itemName}}</option>
                       </select>
-                    </td>
+                    </td> -->
                   </tr>
                 </tfoot>
               </table>

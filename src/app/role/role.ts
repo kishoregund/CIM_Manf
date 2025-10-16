@@ -53,7 +53,7 @@ export class RoleComponent implements OnInit {
   isCopy: boolean = false;
   isEditMode: boolean;
   isNewMode: boolean;
-  privilagesList: any[];
+  //privilagesList: any[];
   screensList: any[];
   lstScreens: any[] = [];
   lstCategory: any[];
@@ -110,7 +110,7 @@ export class RoleComponent implements OnInit {
       update: false,
       delete: false,
       commercial: false,
-      privilages: [""],
+      //privilages: [""],
     });
 
 
@@ -120,8 +120,8 @@ export class RoleComponent implements OnInit {
       this.isNewSetup = data.isNewSetUp != null && data.isNewSetUp != undefined;
     });
 
-    this.listTypeService.getById("PVGLS")
-      .pipe(first()).subscribe((data: any) => this.privilagesList = data.data)
+    // this.listTypeService.getById("PVGLS")
+    //   .pipe(first()).subscribe((data: any) => this.privilagesList = data.data)
 
     this.listTypeService.getById("PRGRP")
       .pipe(first()).subscribe((data: any) => this.lstCategory = data.data)
@@ -186,7 +186,7 @@ export class RoleComponent implements OnInit {
           this.roleform.get("update").setValue(x.update)
           this.roleform.get("delete").setValue(x.delete)
           this.roleform.get("commercial").setValue(x.commercial)
-          this.roleform.get("privilages").setValue(x.privilages)
+          //this.roleform.get("privilages").setValue(x.privilages)
           if (!this.isCopy) {
             this.AddScreen(x.id)
           }
@@ -245,7 +245,7 @@ export class RoleComponent implements OnInit {
       read: this.listT.read == undefined || this.listT.read == null ? false : this.listT.read,
       categoryName: this.listT.categoryName,
       update: this.listT.update == undefined || this.listT.update == null ? false : this.listT.update,
-      privilages: this.listT.privilages,
+      //privilages: this.listT.privilages,
       delete: this.listT.delete == undefined || this.listT.delete == null ? false : this.listT.delete,
       commercial: this.listT.commercial == undefined || this.listT.commercial == null ? false : this.listT.commercial,
     }));
@@ -287,8 +287,8 @@ export class RoleComponent implements OnInit {
     let fupdate = this.roleform.get("update")
     let fcommercial = this.roleform.get("commercial")
     let screen = this.lstScreens.find(x => x.screenId == screnId.value);
-    let privilages = this.roleform.get("privilages");
-    if (!privilages.value) return this.notificationService.showInfo("Select privilege", "Info");
+    // let privilages = this.roleform.get("privilages");
+    // if (!privilages.value) return this.notificationService.showInfo("Select privilege", "Info");
 
     let obj = {
       id,
@@ -296,7 +296,7 @@ export class RoleComponent implements OnInit {
       screenName: screen?.screenName,
       screenCode: screen?.screenCode,
       categoryName: screen?.categoryName,
-      privilages: privilages.value,
+      //privilages: privilages.value,
       create: fcreate.value,
       read: fread.value,
       delete: fdelete.value,
@@ -306,7 +306,7 @@ export class RoleComponent implements OnInit {
 
     this.roleform.get("categoryId").reset();
     screnId.reset();
-    privilages.reset();
+    //privilages.reset();
     fcreate.reset();
     fread.reset();
     fdelete.reset();
