@@ -64,7 +64,7 @@ export class DistributorComponent implements OnInit {
       distName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       payterms: ['', Validators.required],
       manufacturerIds: ['', Validators.required],
-      manfBusinessUnitId: [''],
+      manfBusinessUnitId: [Guid.EMPTY],
       code: [''],
       isBlocked: false,
       isActive: true,
@@ -132,7 +132,7 @@ export class DistributorComponent implements OnInit {
           this.countries = data.data
         }
       });
-
+    
     if (this.distributorId != null) {
       this.hasAddAccess = false;
 
@@ -245,6 +245,7 @@ export class DistributorComponent implements OnInit {
       var selectarray = this.form.get('manufacturerIds').value;
       this.distributorModel.manufacturerIds = selectarray.map(x => x.id).join(',');
     }
+   
 
     if (this.distributorId == null) {
       //this.distributorModel = this.form.value;
@@ -261,13 +262,6 @@ export class DistributorComponent implements OnInit {
               }
             });
           }
-          // sessionStorage.setItem("distributor", JSON.stringify(this.distributorModel));
-          // this.router.navigate([`/contact/${this.type}/${this.distributorId}`], {
-          //   queryParams: {
-          //     isNewDistSetUp: true,
-          //     isNSNav: true
-          //   }
-          // })
         });
     }
     else {
