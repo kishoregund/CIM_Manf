@@ -1,0 +1,9 @@
+/* dynamic-query.component.css */
+.container { max-width: 980px; margin: 16px auto; }
+.full { width: 100%; }
+.filters { margin: 12px 0; display: flex; flex-direction: column; gap: 8px; }
+.filter-row { display: flex; gap: 8px; align-items: center; }
+.screen-col, .op-col, .value-col { flex: 1; }
+.between { display: flex; gap: 8px; align-items: center; flex: 2; }
+.order-limit { display: flex; gap: 12px; align-items: center; margin: 12px 0; }
+.results { margin-top: 16px; }

@@ -170,6 +170,16 @@ import { TenantListComponent } from './tenant/tenantlist.component';
 import { InstrumentAllocationComponent } from './instrumentallocation/instrumentallocation';
 import { InstrumentAllocationListComponent } from './instrumentallocation/instrumentallocationlist';
 
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+//import { MatButtonModule } from '@angular/material/button;
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatDividerModule } from '@angular/material/divider';
+import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
+
+
 
 @NgModule({
   declarations: [
@@ -182,6 +192,7 @@ import { InstrumentAllocationListComponent } from './instrumentallocation/instru
     FooterComponent,
     LayoutComponent,
     AlertComponent,
+    DynamicQueryComponent,
     TenantComponent,
     TenantListComponent,
     SparePartComponent,
@@ -337,7 +348,10 @@ import { InstrumentAllocationListComponent } from './instrumentallocation/instru
     BsDatepickerModule.forRoot(),
     NgMultiSelectDropDownModule.forRoot(),
     AgGridModule.withComponents([]),
-    ScheduleModule, RecurrenceEditorModule
+    ScheduleModule, RecurrenceEditorModule,
+    MatSelectModule, MatFormFieldModule, MatInputModule,
+    //MatButtonModule, 
+    MatIconModule, MatTableModule, MatDividerModule
   ],
   providers: [EnvServiceProvider, DecimalPipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
