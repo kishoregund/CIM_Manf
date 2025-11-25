@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {Sparequotedet} from "../_models/sparequotedet";
 import { EnvService } from './env/env.service';
