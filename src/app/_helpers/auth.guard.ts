@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, NavigationStart, ActivatedRoute, Route } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, NavigationStart, ActivatedRoute, Route } from '@angular/router';
 
 import { AccountService, NotificationService } from '../_services';
 import { CIMLoginComponent } from '../account/cimlogin.component';
 
 @Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanActivate {
+export class AuthGuard  {
     constructor(
         private router: Router,
         private accountService: AccountService,
@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
 }
 
 @Injectable({ providedIn: 'root' })
-export class TextValidator implements CanActivate {
+export class TextValidator  {
     constructor(
         private notificationService: NotificationService
     ) { }
@@ -42,7 +42,7 @@ export class TextValidator implements CanActivate {
 }
 
 @Injectable({ providedIn: 'root' })
-export class BrowserBack implements CanActivate {
+export class BrowserBack  {
 
     constructor(router: Router) {
         router.events
