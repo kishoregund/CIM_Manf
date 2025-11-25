@@ -8,7 +8,8 @@ import { TenantService } from "../_services/tenant.service";
 import { AppBasicService } from "../_services/AppBasic.service";
 
 @Component({
-  templateUrl: "./tenant.component.html"
+    templateUrl: "./tenant.component.html",
+    standalone: false
 })
 export class TenantComponent implements OnInit, AfterViewInit {
   Form: FormGroup

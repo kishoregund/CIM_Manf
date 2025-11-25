@@ -14,8 +14,9 @@ import { DistributorRegionService } from '../_services/distRegion.service';
 
 
 @Component({
-  selector: 'app-customersite',
-  templateUrl: './customersite.html',
+    selector: 'app-customersite',
+    templateUrl: './customersite.html',
+    standalone: false
 })
 export class CustomerSiteComponent implements OnInit {
   user: UserDetails;

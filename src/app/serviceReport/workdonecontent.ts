@@ -17,8 +17,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 import { WorkDoneService } from '../_services/workdone.service';
 
 @Component({
-  selector: 'app-workdonecomponent',
-  templateUrl: './workdonecontent.html',
+    selector: 'app-workdonecomponent',
+    templateUrl: './workdonecontent.html',
+    standalone: false
 })
 export class WorkdoneContentComponent implements OnInit {
   user: UserDetails;

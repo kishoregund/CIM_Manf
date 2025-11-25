@@ -8,8 +8,9 @@ import {first} from "rxjs/operators";
 import { UserDetails } from '../_newmodels/UserDetails';
 
 @Component({
-  selector: 'app-changepasswoard',
-  templateUrl: './changepasswoard.component.html',
+    selector: 'app-changepasswoard',
+    templateUrl: './changepasswoard.component.html',
+    standalone: false
 })
 export class ChangepasswoardComponent implements OnInit {
   NewPasswoard: ChangePasswordModel;

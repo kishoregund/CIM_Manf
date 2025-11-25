@@ -8,7 +8,8 @@ import { AppBasicService } from "../_services/AppBasic.service";
 import { ManfBusinessUnitService } from "../_services/manfbusinessunit.service";
 
 @Component({
-  templateUrl: "./manfbusinessunit.component.html"
+    templateUrl: "./manfbusinessunit.component.html",
+    standalone: false
 })
 export class CreateManfBusinessUnitComponent implements OnInit, AfterViewInit {
   Form: FormGroup

@@ -7,7 +7,8 @@ import { InstrumentAccessoryService } from "../_services/InstrumentAccessory.Ser
 
 @Component({
     templateUrl: "./Accessories.component.html",
-    selector: "app-Accessories"
+    selector: "app-Accessories",
+    standalone: false
 })
 export class Accessories implements OnInit {
     form: FormGroup

@@ -14,8 +14,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 
 @Component({
-  selector: 'app-instuList',
-  templateUrl: './userprofilelist.html',
+    selector: 'app-instuList',
+    templateUrl: './userprofilelist.html',
+    standalone: false
 })
 export class UserProfileListComponent implements OnInit {
   user: UserDetails;

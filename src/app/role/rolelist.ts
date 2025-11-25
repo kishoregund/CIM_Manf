@@ -15,8 +15,9 @@ import { RoleService } from '../_services/role.service';
 
 
 @Component({
-  selector: 'app-instuList',
-  templateUrl: './rolelist.html',
+    selector: 'app-instuList',
+    templateUrl: './rolelist.html',
+    standalone: false
 })
 export class RoleListComponent implements OnInit {
   user: UserDetails;

@@ -5,8 +5,9 @@ import { first } from 'rxjs/operators';
 
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'  
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    standalone: false
 })
 export class AppComponent {
   title = 'app';

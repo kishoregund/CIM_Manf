@@ -18,6 +18,7 @@ import { UserDetails } from '../_newmodels/UserDetails';
 @Component({
     selector: 'app-pastservicereport',
     templateUrl: './pastservicereportlist.component.html',
+    standalone: false
 })
 export class PastservicereportlistComponent implements OnInit {
     form: FormGroup;
@@ -172,13 +173,13 @@ export class PastservicereportlistComponent implements OnInit {
 
 @Component({
     selector: 'app-DownloadReportFile',
-
     template: ` <button type="button"
                         class="btn btn-link"
                         (click)="download()"
                         *ngIf="params.value">
                     <i class="fas fa-download" title="Download"></i>
-                </button>`
+                </button>`,
+    standalone: false
 })
 
 export class DownloadReportFile implements AgRendererComponent {

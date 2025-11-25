@@ -8,7 +8,8 @@ import { TenantService } from "../_services/tenant.service";
 
 @Component({
     selector: "CreateTenant",
-    templateUrl: "./tenantlist.component.html"
+    templateUrl: "./tenantlist.component.html",
+    standalone: false
 })
 
 export class TenantListComponent implements OnInit {

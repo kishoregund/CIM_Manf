@@ -15,8 +15,9 @@ import { ManufacturerSalesRegionService } from '../_services/manufacturerSalesRe
 
 
 @Component({
-  selector: 'app-manfsalesregion',
-  templateUrl: './manfsalesregion.html',
+    selector: 'app-manfsalesregion',
+    templateUrl: './manfsalesregion.html',
+    standalone: false
 })
 export class ManufacturerSalesRegionComponent implements OnInit {
   user: UserDetails;

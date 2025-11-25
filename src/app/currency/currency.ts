@@ -12,8 +12,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 
 @Component({
-  selector: 'app-currency',
-  templateUrl: './currency.html',
+    selector: 'app-currency',
+    templateUrl: './currency.html',
+    standalone: false
 })
 export class CurrencyComponent implements OnInit {
   currencyform: FormGroup;

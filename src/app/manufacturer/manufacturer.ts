@@ -13,8 +13,9 @@ import { ManufacturerService } from '../_services/manufacturer.service';
 
 
 @Component({
-  selector: 'app-manufacturer',
-  templateUrl: './manufacturer.html',
+    selector: 'app-manufacturer',
+    templateUrl: './manufacturer.html',
+    standalone: false
 })
 export class ManufacturerComponent implements OnInit {
   user: UserDetails;

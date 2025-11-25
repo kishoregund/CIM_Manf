@@ -12,8 +12,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 
 @Component({
-  selector: 'app-country',
-  templateUrl: './country.html',
+    selector: 'app-country',
+    templateUrl: './country.html',
+    standalone: false
 })
 export class CountryComponent implements OnInit {
   user: UserDetails;

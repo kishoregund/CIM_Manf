@@ -7,6 +7,7 @@ import { UserDetails } from "../_newmodels/UserDetails";
 
 @Component({
     templateUrl: "./ChangeCIM.component.html",
+    standalone: false
 })
 export default class ChangeCIM implements OnInit {
     Form: FormGroup;

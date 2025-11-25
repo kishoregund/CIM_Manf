@@ -36,8 +36,9 @@ import { BUBrandModel } from "../_newmodels/BUBrandModel";
 import { CustomerInstrumentService } from "../_services/customerinstrument.service";
 
 @Component({
-  selector: "app-Amc",
-  templateUrl: "./Amc.html",
+    selector: "app-Amc",
+    templateUrl: "./Amc.html",
+    standalone: false
 })
 export class AmcComponent implements OnInit {
   form: FormGroup;

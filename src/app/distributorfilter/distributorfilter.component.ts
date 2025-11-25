@@ -10,22 +10,21 @@ import { InstrumentService } from '../_services/instrument.service';
 import { UserDetails } from '../_newmodels/UserDetails';
 
 @Component({
-  selector: 'app-distributorfilter',
-  templateUrl: './distributorfilter.component.html',
-  animations: [
-    trigger(
-      'enterAnimation', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)', opacity: 0 }),
-        animate('500ms', style({ transform: 'translateY(0)', opacity: 1 }))
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateY(0)', opacity: 1 }),
-        animate('500ms', style({ transform: 'translateY(100%)', opacity: 0 }))
-      ])
-    ]
-    )
-  ],
+    selector: 'app-distributorfilter',
+    templateUrl: './distributorfilter.component.html',
+    animations: [
+        trigger('enterAnimation', [
+            transition(':enter', [
+                style({ transform: 'translateY(100%)', opacity: 0 }),
+                animate('500ms', style({ transform: 'translateY(0)', opacity: 1 }))
+            ]),
+            transition(':leave', [
+                style({ transform: 'translateY(0)', opacity: 1 }),
+                animate('500ms', style({ transform: 'translateY(100%)', opacity: 0 }))
+            ])
+        ])
+    ],
+    standalone: false
 })
 export class DistributorfilterComponent implements OnInit {
 

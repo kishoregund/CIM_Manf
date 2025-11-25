@@ -7,8 +7,9 @@ import { EngdashboardService } from '../_services/engdashboard.service';
 declare function EngDashboardCharts(): any;
 
 @Component({
-  selector: 'app-engdashboard',
-  templateUrl: './engdashboard.component.html',
+    selector: 'app-engdashboard',
+    templateUrl: './engdashboard.component.html',
+    standalone: false
 })
 
 export class EngdashboardComponent implements OnInit {

@@ -45,9 +45,10 @@ interface DynamicQueryRequest {
 }
 
 @Component({
-  selector: 'app-reportbuilder',
-  templateUrl: './reportbuilder.component.html',
-  styleUrls: ['./reportbuilder.component.css']
+    selector: 'app-reportbuilder',
+    templateUrl: './reportbuilder.component.html',
+    styleUrls: ['./reportbuilder.component.css'],
+    standalone: false
 })
 export class DynamicQueryComponent implements OnInit {
   screensCtrl = new FormControl<string[]>([]);

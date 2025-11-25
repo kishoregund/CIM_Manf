@@ -4,9 +4,10 @@ import { UsernotificationService } from '../_services/usernotification.service';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-notificationspopup',
-  templateUrl: './notificationspopup.component.html',
-  styleUrls: ['./notificationspopup.component.css']
+    selector: 'app-notificationspopup',
+    templateUrl: './notificationspopup.component.html',
+    styleUrls: ['./notificationspopup.component.css'],
+    standalone: false
 })
 export class NotificationspopupComponent implements OnInit {
   notification: HTMLElement;

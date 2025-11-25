@@ -13,6 +13,7 @@ import { UserDetails } from "../_newmodels/UserDetails";
 @Component({
     selector: 'app-travelexpenseitem',
     templateUrl: './travelexpenseitem.component.html',
+    standalone: false
 })
 
 export class TravelexpenseItemComponent implements OnInit {

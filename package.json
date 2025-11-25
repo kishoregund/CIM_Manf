@@ -12,16 +12,16 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^18.2.14",
-    "@angular/common": "~18.2.14",
-    "@angular/compiler": "~18.2.14",
-    "@angular/core": "~18.2.14",
-    "@angular/forms": "~18.2.14",
+    "@angular/animations": "^19.2.15",
+    "@angular/common": "~19.2.15",
+    "@angular/compiler": "~19.2.15",
+    "@angular/core": "~19.2.15",
+    "@angular/forms": "~19.2.15",
     "@angular/material": "^8.2.3",
-    "@angular/platform-browser": "~18.2.14",
-    "@angular/platform-browser-dynamic": "~18.2.14",
-    "@angular/platform-server": "~18.2.14",
-    "@angular/router": "~18.2.14",
+    "@angular/platform-browser": "~19.2.15",
+    "@angular/platform-browser-dynamic": "~19.2.15",
+    "@angular/platform-server": "~19.2.15",
+    "@angular/router": "~19.2.15",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@ng-bootstrap/ng-bootstrap": "^9.0.2",
     "@ng-select/ng-select": "^5.1.0",
@@ -48,13 +48,13 @@
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "xlsx": "^0.16.9",
-    "zone.js": "0.14.10"
+    "zone.js": "0.15.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.0.0",
     "@angular/cli": "^21.0.0",
-    "@angular/compiler-cli": "18.2.14",
-    "@angular/language-service": "18.2.14",
+    "@angular/compiler-cli": "19.2.15",
+    "@angular/language-service": "19.2.15",
     "@types/jasmine": "^3.6.2",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "~12.11.6",
@@ -66,7 +66,7 @@
     "karma-coverage-istanbul-reporter": "^2.1.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.5.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.8.3"
   },
   "optionalDependencies": {
     "node-sass": "^4.12.0",

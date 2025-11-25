@@ -19,8 +19,9 @@ import { EngCommentService } from '../_services/engcomment.service';
 
 
 @Component({
-  selector: 'app-modelcomponent',
-  templateUrl: './modelengcontent.html',
+    selector: 'app-modelcomponent',
+    templateUrl: './modelengcontent.html',
+    standalone: false
 })
 export class ModelEngContentComponent implements OnInit {
   user: UserDetails;

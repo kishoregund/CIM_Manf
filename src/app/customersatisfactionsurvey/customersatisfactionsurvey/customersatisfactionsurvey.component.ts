@@ -26,8 +26,9 @@ import { ServiceReportService } from "src/app/_services/serviceReport.service";
 import { CustomersatisfactionsurveyService } from 'src/app/_services/customersatisfactionsurvey.service';
 
 @Component({
-  selector: "app-customersatisfactionsurvey",
-  templateUrl: "./customersatisfactionsurvey.component.html",
+    selector: "app-customersatisfactionsurvey",
+    templateUrl: "./customersatisfactionsurvey.component.html",
+    standalone: false
 })
 export class CustomersatisfactionsurveyComponent implements OnInit {
   form: FormGroup;

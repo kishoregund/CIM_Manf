@@ -33,8 +33,9 @@ import { ManfBusinessUnitService } from '../_services/manfbusinessunit.service';
 
 
 @Component({
-  selector: 'app-userp',
-  templateUrl: './userprofile.html',
+    selector: 'app-userp',
+    templateUrl: './userprofile.html',
+    standalone: false
 })
 export class UserProfileComponent implements OnInit {
   user: UserDetails;

@@ -34,8 +34,9 @@ import { InstrumentService } from '../_services/instrument.service';
 import { CustomerInstrumentService } from '../_services/customerinstrument.service';
 
 @Component({
-  selector: 'app-Offerrequest',
-  templateUrl: './Offerrequest.component.html',
+    selector: 'app-Offerrequest',
+    templateUrl: './Offerrequest.component.html',
+    standalone: false
 })
 export class OfferrequestComponent implements OnInit {
   form: FormGroup;
@@ -1347,13 +1348,14 @@ debugger;
 
 
 @Component({
-  template: `
+    template: `
   <form [formGroup]="form">
     <select formControlName="currency" class="form-select">
       <option *ngFor="let c of lstCurrency" value={{c.id}}> {{c.code}}</option>
     </select>
   </form>
-  `
+  `,
+    standalone: false
 })
 export class OfferrequestCurrencyComponent implements AgRendererComponent {
 
@@ -1385,13 +1387,14 @@ export class OfferrequestCurrencyComponent implements AgRendererComponent {
 }
 
 @Component({
-  template: `
+    template: `
   <form [formGroup]="form">
     <select formControlName="country" class="form-select">
       <option *ngFor="let c of lstCountry" value={{c.id}}> {{c.name}}</option>
     </select>
   </form>
-  `
+  `,
+    standalone: false
 })
 export class OfferRequestCountryComponent implements AgRendererComponent {
 

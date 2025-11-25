@@ -8,7 +8,7 @@ import {
 import { HttpEventType, HttpResponse } from "@angular/common/http";
 
 @Component({
-  template: ` <button
+    template: ` <button
       type="button"
       class="btn btn-link"
       (click)="download(params)"
@@ -20,6 +20,7 @@ import { HttpEventType, HttpResponse } from "@angular/common/http";
      (click)="delete(params)">
       <i class="fas fa-trash-alt" title="Delete"></i>
     </button>`,
+    standalone: false
 })
 export class FilerendercomponentComponent implements AgRendererComponent {
   params: any;

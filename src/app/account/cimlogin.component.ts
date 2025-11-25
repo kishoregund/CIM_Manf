@@ -11,8 +11,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 // this is for cim admin to create tenants
 @Component({
-  templateUrl: 'cimlogin.component.html'
-  //styleUrls: ["style.css"]
+    templateUrl: 'cimlogin.component.html'
+    //styleUrls: ["style.css"]
+    ,
+    standalone: false
 })
 
 @Injectable({ providedIn: 'root' })

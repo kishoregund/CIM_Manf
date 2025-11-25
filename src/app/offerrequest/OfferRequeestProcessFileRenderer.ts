@@ -7,6 +7,7 @@ import { OfferRequestProcessesService } from "../_services/offer-request-process
 @Component({
     selector: "app-ProcessFileRenderer",
     templateUrl: "./downloadFile.html",
+    standalone: false
 })
 export class OfferRequeestProcessFileRenderer implements OnInit {
     list: any[] = []

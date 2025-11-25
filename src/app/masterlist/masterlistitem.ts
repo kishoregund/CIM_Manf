@@ -15,8 +15,9 @@ import { AgRendererComponent } from 'ag-grid-angular';
 import { UserDetails } from '../_newmodels/UserDetails';
 
 @Component({
-  selector: 'app-masterlistitem',
-  templateUrl: './masterlistitem.html',
+    selector: 'app-masterlistitem',
+    templateUrl: './masterlistitem.html',
+    standalone: false
 })
 export class MasterListItemComponent implements OnInit {
   user: UserDetails;
@@ -353,12 +354,13 @@ export class MasterListItemComponent implements OnInit {
 
 
 @Component({
-  template: `
+    template: `
   <form [formGroup]="form">
       <input class="form-check-input" formControlName="isEscalationSupervisor" type="checkbox">
   </form>
 
-  `
+  `,
+    standalone: false
 })
 export class IsEscationSupervisor implements AgRendererComponent {
   form: FormGroup

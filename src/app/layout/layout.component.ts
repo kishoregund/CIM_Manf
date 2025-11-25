@@ -7,8 +7,9 @@ import { AccountService } from '../_services';
 import { LoaderService } from '../_services/loader.service';
 
 @Component({
-  selector: 'layout',
-  templateUrl: './layout.html',
+    selector: 'layout',
+    templateUrl: './layout.html',
+    standalone: false
 })
 export class LayoutComponent implements OnInit {
   @Input("showNavs") showNavs: boolean;

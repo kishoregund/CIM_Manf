@@ -16,8 +16,9 @@ import { InstrumentAllocationService } from '../_services/instrumentallocation.s
 
 
 @Component({
-  selector: 'app-installocationList',
-  templateUrl: './instrumentallocationlist.html',
+    selector: 'app-installocationList',
+    templateUrl: './instrumentallocationlist.html',
+    standalone: false
 })
 export class InstrumentAllocationListComponent implements OnInit {
   user: UserDetails;

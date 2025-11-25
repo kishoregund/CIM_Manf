@@ -20,8 +20,9 @@ import { FilerendercomponentComponent } from '../instrument/filerendercomponent.
 import { BUBrandModel } from '../_newmodels/BUBrandModel';
 
 @Component({
-  selector: 'app-advancerequestform',
-  templateUrl: './advancerequestform.component.html',
+    selector: 'app-advancerequestform',
+    templateUrl: './advancerequestform.component.html',
+    standalone: false
 })
 export class AdvancerequestformComponent implements OnInit {
 

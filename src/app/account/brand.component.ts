@@ -8,8 +8,9 @@ import { BrandService } from "../_services/brand.service";
 import { BusinessUnitService } from "../_services/businessunit.service";
 
 @Component({
-  selector: "CreateBrand",
-  templateUrl: "./brand.component.html"
+    selector: "CreateBrand",
+    templateUrl: "./brand.component.html",
+    standalone: false
 })
 export class CreateBrandComponent implements OnInit, AfterViewInit {
   Form: FormGroup

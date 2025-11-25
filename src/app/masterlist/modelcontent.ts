@@ -15,8 +15,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 
 @Component({
-  selector: 'app-modelcomponent',
-  templateUrl: './modelcontent.html',
+    selector: 'app-modelcomponent',
+    templateUrl: './modelcontent.html',
+    standalone: false
 })
 export class ModelContentComponent implements OnInit {
   user: UserDetails;

@@ -14,8 +14,9 @@ import { EngActionService } from '../_services/engaction.service';
 import { UserDetails } from '../_newmodels/UserDetails';
 
 @Component({
-  selector: 'app-modelcomponent',
-  templateUrl: './modelengactioncontent.html',
+    selector: 'app-modelcomponent',
+    templateUrl: './modelengactioncontent.html',
+    standalone: false
 })
 export class ModelEngActionContentComponent implements OnInit {
   user: UserDetails;

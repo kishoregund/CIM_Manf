@@ -7,8 +7,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserDetails } from '../_newmodels/UserDetails';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    standalone: false
 })
 export class HomeComponent {
   user: UserDetails;

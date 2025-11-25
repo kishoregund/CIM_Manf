@@ -12,8 +12,9 @@ import { SRRecommendedService } from '../_services/srrecommended.service';
 import { BUBrandModel } from '../_newmodels/BUBrandModel';
 
 @Component({
-  selector: 'app-sparepartsrecommended',
-  templateUrl: './sparepartsrecommended.component.html'
+    selector: 'app-sparepartsrecommended',
+    templateUrl: './sparepartsrecommended.component.html',
+    standalone: false
 })
 
 export class SparepartsrecommendedComponent implements OnInit {

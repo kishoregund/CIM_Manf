@@ -15,8 +15,9 @@ import { CustomerService } from '../_services/customer.service';
 
 
 @Component({
-  selector: 'app-customerls',
-  templateUrl: './customersitelist.html',
+    selector: 'app-customerls',
+    templateUrl: './customersitelist.html',
+    standalone: false
 })
 export class CustomerSiteListComponent implements OnInit {
   user: UserDetails;

@@ -13,6 +13,7 @@ import { BUBrandModel } from "../_newmodels/BUBrandModel";
 @Component({
     selector: 'app-advancerequestform',
     templateUrl: './advancerequestformlist.component.html',
+    standalone: false
 })
 export class AdvancerequestlistformComponent implements OnInit {
 

@@ -20,8 +20,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 // import {moment} from "ngx-bootstrap/chronos/test/chain";
 
 @Component({
-  selector: 'app-sparequotedet',
-  templateUrl: './sparequotedet.component.html'
+    selector: 'app-sparequotedet',
+    templateUrl: './sparequotedet.component.html',
+    standalone: false
 })
 
 export class SparequotedetComponent implements OnInit {

@@ -25,8 +25,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 
 @Component({
-  selector: 'app-instrument',
-  templateUrl: './profile.html',
+    selector: 'app-instrument',
+    templateUrl: './profile.html',
+    standalone: false
 })
 export class ProfileComponent implements OnInit {
   user: UserDetails;

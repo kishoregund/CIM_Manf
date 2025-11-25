@@ -53,8 +53,9 @@ import { InstrumentService } from '../_services/instrument.service';
 import { BUBrandModel } from '../_newmodels/BUBrandModel';
 
 @Component({
-  selector: 'app-customerinstrument',
-  templateUrl: './customerinstrument.html',
+    selector: 'app-customerinstrument',
+    templateUrl: './customerinstrument.html',
+    standalone: false
 })
 export class CustomerInstrumentComponent implements OnInit {
   user: UserDetails;

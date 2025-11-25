@@ -48,8 +48,9 @@ import { ManufacturerService } from '../_services/manufacturer.service';
 import { Guid } from 'guid-typescript';
 
 @Component({
-  selector: 'app-instrument',
-  templateUrl: './instrument.html',
+    selector: 'app-instrument',
+    templateUrl: './instrument.html',
+    standalone: false
 })
 export class InstrumentComponent implements OnInit {
   user: UserDetails;

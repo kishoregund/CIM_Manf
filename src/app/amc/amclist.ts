@@ -18,8 +18,9 @@ import { AmcService } from '../_services/amc.service';
 
 
 @Component({
-  selector: 'app-distributorRgList',
-  templateUrl: './Amclist.html',
+    selector: 'app-distributorRgList',
+    templateUrl: './Amclist.html',
+    standalone: false
 })
 export class AmcListComponent implements OnInit {
   user: UserDetails;

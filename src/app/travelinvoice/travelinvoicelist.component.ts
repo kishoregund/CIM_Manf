@@ -12,6 +12,7 @@ import { BUBrandModel } from "../_newmodels/BUBrandModel";
 @Component({
     selector: 'app-travelexpense',
     templateUrl: './travelinvoicelist.component.html',
+    standalone: false
 })
 
 export class TravelInvoiceListComponent implements OnInit {

@@ -15,8 +15,9 @@ import { OfferRequestListRenderer } from './offerrequestlistrenderer';
 import { UserDetails } from '../_newmodels/UserDetails';
 
 @Component({
-  selector: 'app-Offerrequestlist',
-  templateUrl: './Offerrequestlist.component.html',
+    selector: 'app-Offerrequestlist',
+    templateUrl: './Offerrequestlist.component.html',
+    standalone: false
 })
 
 export class OfferrequestlistComponent implements OnInit {

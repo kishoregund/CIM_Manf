@@ -65,8 +65,9 @@ import { WorkDoneService } from '../_services/workdone.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
-  selector: 'app-servicereport',
-  templateUrl: './serviceReport.html',
+    selector: 'app-servicereport',
+    templateUrl: './serviceReport.html',
+    standalone: false
 })
 
 export class ServiceReportComponent implements OnInit {

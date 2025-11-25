@@ -21,8 +21,9 @@ import { CustomerSiteService } from '../_services/customersite.service';
 declare function CustomerDashboardCharts(): any;
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    standalone: false
 })
 export class DashboardComponent implements OnInit {
   user: UserDetails;

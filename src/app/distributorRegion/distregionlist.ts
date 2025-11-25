@@ -12,8 +12,9 @@ import { DistributorService } from '../_services/distributor.service';
 
 
 @Component({
-  selector: 'app-distributorRgList',
-  templateUrl: './distregionlist.html',
+    selector: 'app-distributorRgList',
+    templateUrl: './distregionlist.html',
+    standalone: false
 })
 export class DistributorRegionListComponent implements OnInit {
   user: UserDetails;

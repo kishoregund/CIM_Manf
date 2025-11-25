@@ -13,8 +13,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 
 @Component({
-  selector: 'app-spareList',
-  templateUrl: './sparepartlist.html',
+    selector: 'app-spareList',
+    templateUrl: './sparepartlist.html',
+    standalone: false
 })
 export class SparePartListComponent implements OnInit {
   user: UserDetails;

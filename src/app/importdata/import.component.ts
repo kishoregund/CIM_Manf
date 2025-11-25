@@ -11,9 +11,10 @@ import { ImportdataService } from '../_services/importdata.service'
 
 
 @Component({
-  selector: 'app-importdata',
-  templateUrl: './import.component.html',
-  styleUrls: ['./import.component.css']
+    selector: 'app-importdata',
+    templateUrl: './import.component.html',
+    styleUrls: ['./import.component.css'],
+    standalone: false
 })
 
 export class ImportDataComponent implements OnInit {

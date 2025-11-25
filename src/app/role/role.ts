@@ -24,8 +24,9 @@ import { RoleService } from '../_services/role.service';
 
 
 @Component({
-  selector: 'app-instrument',
-  templateUrl: './role.html',
+    selector: 'app-instrument',
+    templateUrl: './role.html',
+    standalone: false
 })
 export class RoleComponent implements OnInit {
   user: UserDetails;

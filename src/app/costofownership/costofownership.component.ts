@@ -7,8 +7,9 @@ import { NotificationService } from '../_services';
 import { CustomerdashboardService } from '../_services/customerdashboard.service';
 
 @Component({
-  selector: 'app-costofownership',
-  templateUrl: './costofownership.component.html',
+    selector: 'app-costofownership',
+    templateUrl: './costofownership.component.html',
+    standalone: false
 })
 export class CostofownershipComponent implements OnInit {
   @Input() instrumentId: string;

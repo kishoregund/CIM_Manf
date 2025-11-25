@@ -32,8 +32,9 @@ L10n.load({
 });
 
 @Component({
-  selector: 'app-engscheduler',
-  templateUrl: './engineerscheduler.component.html'
+    selector: 'app-engscheduler',
+    templateUrl: './engineerscheduler.component.html',
+    standalone: false
 })
 
 export class EngschedulerComponent implements OnInit {

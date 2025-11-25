@@ -10,6 +10,7 @@ import { CustomerService } from '../_services/customer.service';
 @Component({
     selector: 'app-importcustomer',
     templateUrl: './ImportCustomer.component.html',
+    standalone: false
 })
 export class ImportCustomerData {
 

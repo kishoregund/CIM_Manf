@@ -59,8 +59,9 @@ import { InstrumentAllocationService } from '../_services/instrumentallocation.s
 
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './serviceRequest.html',
+    selector: 'app-customer',
+    templateUrl: './serviceRequest.html',
+    standalone: false
 })
 
 export class ServiceRequestComponent implements OnInit {

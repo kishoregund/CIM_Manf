@@ -21,8 +21,9 @@ import { DistributorService } from '../_services/distributor.service';
 
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.html',
+    selector: 'app-customer',
+    templateUrl: './customer.html',
+    standalone: false
 })
 export class CustomerComponent implements OnInit {
   user: UserDetails;

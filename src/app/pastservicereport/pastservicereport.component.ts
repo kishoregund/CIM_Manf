@@ -16,8 +16,9 @@ import { FilerendercomponentComponent } from '../instrument/filerendercomponent.
 import { BUBrandModel } from '../_newmodels/BUBrandModel';
 
 @Component({
-  selector: 'app-pastservicereport',
-  templateUrl: './pastservicereport.component.html',
+    selector: 'app-pastservicereport',
+    templateUrl: './pastservicereport.component.html',
+    standalone: false
 })
 
 export class PastservicereportComponent implements OnInit {

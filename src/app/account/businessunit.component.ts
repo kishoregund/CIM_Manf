@@ -10,7 +10,8 @@ import { DistributorService } from "../_services/distributor.service";
 import { first } from "rxjs/operators";
 
 @Component({
-  templateUrl: "./businessunit.component.html"
+    templateUrl: "./businessunit.component.html",
+    standalone: false
 })
 export class CreateBusinessUnitComponent implements OnInit, AfterViewInit {
   Form: FormGroup

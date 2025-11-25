@@ -5,8 +5,9 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ForgotpasswoardComponent } from "./forgotpasswoard.component";
 
 @Component({
-  templateUrl: 'login.component.html',
-  styleUrls: ["style.css"]
+    templateUrl: 'login.component.html',
+    styleUrls: ["style.css"],
+    standalone: false
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;

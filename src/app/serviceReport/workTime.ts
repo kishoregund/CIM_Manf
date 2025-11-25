@@ -19,8 +19,9 @@ import { WorkTimeService } from '../_services/worktime.service';
 
 
 @Component({
-  selector: 'app-workTimecomponent',
-  templateUrl: './workTime.html',
+    selector: 'app-workTimecomponent',
+    templateUrl: './workTime.html',
+    standalone: false
 })
 export class WorkTimeContentComponent implements OnInit {
   user: UserDetails;

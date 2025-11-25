@@ -7,6 +7,7 @@ import { FileRenderProcessesService } from "../_services/filerenderprocesses.ser
 @Component({
     selector: "app-ProcessFileRenderer",
     templateUrl: "./downloadFile.html",
+    standalone: false
 })
 export class ProcessFileRenderer implements OnInit {
     list: any[] = []

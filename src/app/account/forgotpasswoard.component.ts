@@ -7,9 +7,10 @@ import { BsModalService } from "ngx-bootstrap/modal";
 import { first } from "rxjs/operators";
 
 @Component({
-  selector: 'app-forgotpasswoard',
-  templateUrl: './forgotpasswoard.component.html',
-  styleUrls: ["./style.css"]
+    selector: 'app-forgotpasswoard',
+    templateUrl: './forgotpasswoard.component.html',
+    styleUrls: ["./style.css"],
+    standalone: false
 })
 export class ForgotpasswoardComponent implements OnInit {
 

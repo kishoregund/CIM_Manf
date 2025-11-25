@@ -10,9 +10,9 @@ import { EnvService } from '../_services/env/env.service';
 import { UserDetails, UserLoginResponse } from '../_newmodels/UserDetails';
 
 @Component({
-  selector: 'app-nav-menu',
-  templateUrl: './nav-menu.component.html',
-  //styleUrls: ['./nav-menu.component.css']
+    selector: 'app-nav-menu',
+    templateUrl: './nav-menu.component.html',
+    standalone: false
 })
 export class NavMenuComponent {
   user: UserLoginResponse;

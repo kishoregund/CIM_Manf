@@ -8,6 +8,7 @@ import { NotificationService } from '../_services';
 @Component({
     selector: 'app-inportdataofferrequest',
     templateUrl: './importofferrequest.component.html',
+    standalone: false
 })
 
 export class ImportOfferRequestComponent implements OnInit {

@@ -14,8 +14,9 @@ import { BusinessUnitService } from '../_services/businessunit.service';
 import { UserDetails } from '../_newmodels/UserDetails';
 
 @Component({
-  selector: 'app-CIM',
-  templateUrl: './cim.component.html',
+    selector: 'app-CIM',
+    templateUrl: './cim.component.html',
+    standalone: false
 })
 export class CIMComponent implements OnInit {
 

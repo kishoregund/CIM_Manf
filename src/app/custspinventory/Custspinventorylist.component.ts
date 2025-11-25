@@ -13,8 +13,9 @@ import { UserDetails } from "../_newmodels/UserDetails";
 
 
 @Component({
-  selector: "app-Custspinventorylist",
-  templateUrl: "./Custspinventorylist.component.html",
+    selector: "app-Custspinventorylist",
+    templateUrl: "./Custspinventorylist.component.html",
+    standalone: false
 })
 
 export class CustspinventorylistComponent implements OnInit {

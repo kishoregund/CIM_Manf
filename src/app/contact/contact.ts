@@ -24,8 +24,9 @@ import { ManufacturerService } from '../_services/manufacturer.service';
 
 
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.html',
+    selector: 'app-contact',
+    templateUrl: './contact.html',
+    standalone: false
 })
 export class ContactComponent implements OnInit {
   user: UserDetails;

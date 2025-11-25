@@ -42,8 +42,9 @@ import { InstrumentAllocation } from '../_models/instrumentallocation';
 import { BUBrandModel } from '../_newmodels/BUBrandModel';
 
 @Component({
-  selector: 'app-instrumentallocation',
-  templateUrl: './instrumentallocation.html',
+    selector: 'app-instrumentallocation',
+    templateUrl: './instrumentallocation.html',
+    standalone: false
 })
 export class InstrumentAllocationComponent implements OnInit {
   user: UserDetails;

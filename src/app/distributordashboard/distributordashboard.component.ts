@@ -17,9 +17,9 @@ import { BUBrandModel } from '../_newmodels/BUBrandModel';
 declare function DistributorDashboardCharts(): any;
 
 @Component({
-  selector: 'app-distributordashboard',
-  templateUrl: './distributordashboard.component.html',
-  // styleUrls: ['./distributordashboard.component.css']
+    selector: 'app-distributordashboard',
+    templateUrl: './distributordashboard.component.html',
+    standalone: false
 })
 export class DistributordashboardComponent implements OnInit {
   user: UserDetails;

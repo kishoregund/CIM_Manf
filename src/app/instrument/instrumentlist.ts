@@ -15,8 +15,9 @@ import { BUBrandModel } from '../_newmodels/BUBrandModel';
 
 
 @Component({
-  selector: 'app-instuList',
-  templateUrl: './instrumentlist.html',
+    selector: 'app-instuList',
+    templateUrl: './instrumentlist.html',
+    standalone: false
 })
 export class InstrumentListComponent implements OnInit {
   user: UserDetails;

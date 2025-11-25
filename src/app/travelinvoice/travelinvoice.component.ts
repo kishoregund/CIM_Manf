@@ -16,8 +16,9 @@ import { BUBrandModel } from '../_newmodels/BUBrandModel';
 import { FilerendercomponentComponent } from '../instrument/filerendercomponent.component';
 
 @Component({
-  selector: 'app-travelinvoice',
-  templateUrl: './travelinvoice.component.html',
+    selector: 'app-travelinvoice',
+    templateUrl: './travelinvoice.component.html',
+    standalone: false
 })
 
 export class TravelinvoiceComponent implements OnInit {

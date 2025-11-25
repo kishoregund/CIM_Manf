@@ -23,8 +23,9 @@ import { CustomerInstrumentService } from "../_services/customerinstrument.servi
 import { BUBrandModel } from "../_newmodels/BUBrandModel";
 
 @Component({
-  selector: "app-Custspinventory",
-  templateUrl: "./custspinventory.html",
+    selector: "app-Custspinventory",
+    templateUrl: "./custspinventory.html",
+    standalone: false
 })
 
 export class CustSPInventoryComponent implements OnInit {

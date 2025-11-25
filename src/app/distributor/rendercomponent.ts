@@ -3,9 +3,10 @@ import { AgRendererComponent } from 'ag-grid-angular';
 
 
 @Component({
-  template: `
+    template: `
       <a [routerLink]="[params.inRouterLink,params.data.id]" class="nav-link" style="padding-top:0;"> {{params.value}}  </a>
-    `
+    `,
+    standalone: false
 })
 export class RenderComponent implements AgRendererComponent {
   params: any;

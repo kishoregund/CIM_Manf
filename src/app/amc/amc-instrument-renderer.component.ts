@@ -6,12 +6,13 @@ import { AmcinstrumentService } from "../_services/amcinstrument.service";
 import { NotificationService } from "../_services";
 
 @Component({
-  template: `
+    template: `
     <button class="btn btn-link" (click)="delete(params.value)"  [disabled]="!params.deleteaccess" type="button">
       <i class="fas fa-trash-alt" title="Delete"></i>
     </button>
 
-  `
+  `,
+    standalone: false
 })
 export class AmcInstrumentRendererComponent implements AgRendererComponent {
   params: any;

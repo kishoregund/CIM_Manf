@@ -15,7 +15,8 @@ import { UserDetails } from "../_newmodels/UserDetails";
 import { LoginModel } from "../_newmodels/LoginModel";
 
 @Component({
-    templateUrl: "./Existing.component.html"
+    templateUrl: "./Existing.component.html",
+    standalone: false
 })
 export default class ExistingCIM implements OnInit {
 

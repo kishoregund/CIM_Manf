@@ -7,7 +7,8 @@ import { BrandService } from "../_services/brand.service";
 
 @Component({
     selector: "setup",
-    templateUrl: "./setup.component.html"
+    templateUrl: "./setup.component.html",
+    standalone: false
 })
 export default class SetUp implements OnInit {
     Form: FormGroup;

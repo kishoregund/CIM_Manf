@@ -10,6 +10,7 @@ import { DistributorService } from '../_services/distributor.service';
 @Component({
     selector: 'app-inportdataofferrequest',
     templateUrl: './importdistributor.component.html',
+    standalone: false
 })
 
 export class ImportDistributorComponent {

@@ -18,8 +18,9 @@ import { ImportCustomerData } from './ImportCustomer.component';
 
 
 @Component({
-  selector: 'app-distributorRgList',
-  templateUrl: './customerlist.html',
+    selector: 'app-distributorRgList',
+    templateUrl: './customerlist.html',
+    standalone: false
 })
 export class CustomerListComponent implements OnInit {
   user: UserDetails;

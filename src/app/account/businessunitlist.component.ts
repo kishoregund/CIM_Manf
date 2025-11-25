@@ -8,7 +8,8 @@ import { UserDetails } from "../_newmodels/UserDetails";
 
 @Component({
     selector: "CreateBusinessUnit",
-    templateUrl: "./businessunitlist.component.html"
+    templateUrl: "./businessunitlist.component.html",
+    standalone: false
 })
 
 export class BusinessUnitListComponent implements OnInit {

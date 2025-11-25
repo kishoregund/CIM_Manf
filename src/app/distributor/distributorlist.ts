@@ -14,8 +14,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 
 @Component({
-  selector: 'app-distributorList',
-  templateUrl: './distributorlist.html',
+    selector: 'app-distributorList',
+    templateUrl: './distributorlist.html',
+    standalone: false
 })
 export class DistributorListComponent implements OnInit {
   user: UserDetails;

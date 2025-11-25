@@ -8,7 +8,8 @@ import { UserDetails } from "../_newmodels/UserDetails";
 
 @Component({
     selector: "CreateBrand",
-    templateUrl: "./brandlist.component.html"
+    templateUrl: "./brandlist.component.html",
+    standalone: false
 })
 
 export class BrandListComponent implements OnInit {

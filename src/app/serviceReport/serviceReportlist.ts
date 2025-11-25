@@ -23,8 +23,9 @@ import { DistributorService } from '../_services/distributor.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
-  selector: 'app-servicereportlist',
-  templateUrl: './ServiceReportlist.html',
+    selector: 'app-servicereportlist',
+    templateUrl: './ServiceReportlist.html',
+    standalone: false
 })
 export class ServiceReportListComponent implements OnInit {
   user: UserDetails;

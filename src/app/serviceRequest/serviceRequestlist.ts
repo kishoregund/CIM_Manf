@@ -24,8 +24,9 @@ import { BUBrandModel } from '../_newmodels/BUBrandModel';
 
 
 @Component({
-  selector: 'app-distributorRgList',
-  templateUrl: './serviceRequestlist.html',
+    selector: 'app-distributorRgList',
+    templateUrl: './serviceRequestlist.html',
+    standalone: false
 })
 export class ServiceRequestListComponent implements OnInit {
   user: UserDetails;

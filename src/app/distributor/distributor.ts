@@ -15,8 +15,9 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 
 @Component({
-  selector: 'app-distributor',
-  templateUrl: './distributor.html',
+    selector: 'app-distributor',
+    templateUrl: './distributor.html',
+    standalone: false
 })
 export class DistributorComponent implements OnInit {
   user: UserDetails;

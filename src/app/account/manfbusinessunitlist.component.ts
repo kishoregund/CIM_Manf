@@ -8,7 +8,8 @@ import { ManfBusinessUnitService } from "../_services/manfbusinessunit.service";
 
 @Component({
     selector: "CreateManfBusinessUnit",
-    templateUrl: "./manfbusinessunitlist.component.html"
+    templateUrl: "./manfbusinessunitlist.component.html",
+    standalone: false
 })
 
 export class ManfBusinessUnitListComponent implements OnInit {

@@ -19,8 +19,9 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 
 @Component({
-  selector: 'app-masterList',
-  templateUrl: './masterlist.html',
+    selector: 'app-masterList',
+    templateUrl: './masterlist.html',
+    standalone: false
 })
 export class MasterListComponent implements OnInit {
   user: UserDetails;

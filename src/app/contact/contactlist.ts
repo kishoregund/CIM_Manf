@@ -24,8 +24,9 @@ import { ManufacturerSalesRegionService } from '../_services/manufacturerSalesRe
 
 
 @Component({
-  selector: 'app-contactlist',
-  templateUrl: './contactlist.html',
+    selector: 'app-contactlist',
+    templateUrl: './contactlist.html',
+    standalone: false
 })
 export class ContactListComponent implements OnInit {
   user: UserDetails;

@@ -7,9 +7,9 @@ import { UserDetails, UserLoginResponse } from '../_newmodels/UserDetails';
 
 declare function CustomMenu(): any;
 @Component({
-  selector: 'app-nav-sidemenu',
-  templateUrl: './navsidemenu.html',
-
+    selector: 'app-nav-sidemenu',
+    templateUrl: './navsidemenu.html',
+    standalone: false
 })
 export class NavSideMenuComponent implements OnInit {
   user: UserDetails;

@@ -23,7 +23,8 @@ import { SRAssignedHistoryService } from "../_services/srassignedhistory.service
 </div>
 </div>
 </form>
-`
+`,
+    standalone: false
 })
 export class ServiceRComponent implements AgRendererComponent, OnInit {
     params: any;

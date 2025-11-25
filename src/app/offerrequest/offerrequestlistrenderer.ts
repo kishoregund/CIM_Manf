@@ -10,7 +10,8 @@ import { OfferrequestService } from "../_services/Offerrequest.service";
     template: `<a [routerLink]="[params.inRouterLink,params.value]" class="btn btn-link"
                   style="margin-right: 10px; padding: 0;"><i class="fas fa-pen" title="Edit"></i></a>
     <button class="btn btn-link"  [disabled]="!params.deleteaccess && !isLocked" (click)="delete(params)"><i class="fas fa-trash-alt"
-                                                                                         title="Delete"></i></button>`
+                                                                                         title="Delete"></i></button>`,
+    standalone: false
 })
 
 export class OfferRequestListRenderer implements OnInit {
