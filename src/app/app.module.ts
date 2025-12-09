@@ -344,7 +344,7 @@ import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
         }),
         BsDatepickerModule.forRoot(),
         NgMultiSelectDropDownModule.forRoot(),
-        AgGridModule.withComponents([]),
+        AgGridModule,//.withComponents([]),
         ScheduleModule, RecurrenceEditorModule,
         MatSelectModule, MatFormFieldModule, MatInputModule,
         //MatButtonModule, 
