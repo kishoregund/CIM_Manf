@@ -4,7 +4,7 @@ import { CustomerSite, ProfileReadOnly, User } from '../_models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 
 import {
   AccountService,  
@@ -34,7 +34,7 @@ export class CustomerSiteListComponent implements OnInit {
   hasDeleteAccess: boolean = false;
 
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
 
   constructor(
@@ -141,7 +141,7 @@ export class CustomerSiteListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

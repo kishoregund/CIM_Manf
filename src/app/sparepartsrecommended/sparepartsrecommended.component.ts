@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { ProfileReadOnly, User } from "../_models";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ColDef,  GridApi } from "ag-grid-community";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AccountService, ProfileService } from "../_services";
 import { first } from "rxjs/operators";
@@ -24,7 +24,7 @@ export class SparepartsrecommendedComponent implements OnInit {
   submitted = false;
   isSave = false;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
@@ -168,6 +168,6 @@ export class SparepartsrecommendedComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
   }
 }

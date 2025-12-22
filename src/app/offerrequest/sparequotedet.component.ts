@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from "../_models";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ColDef,  GridApi } from "ag-grid-community";
 import { Sparequotedet } from "../_models/sparequotedet";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
@@ -35,7 +35,7 @@ export class SparequotedetComponent implements OnInit {
   isSave = false;
   listid: string;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   closeResult: string;
   statusList: any

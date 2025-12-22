@@ -27,7 +27,7 @@ export class AmcInstrumentRendererComponent implements AgRendererComponent {
     this.params = params;
   }
 
-  // delete(id) {    
+   delete(id) {    
   //   if (this.params.deleteaccess) {
   //     this.AmcInstrumentService.delete(id)
   //       .pipe(first())
@@ -37,7 +37,7 @@ export class AmcInstrumentRendererComponent implements AgRendererComponent {
   //         }
   //       });
   //   }
-  // }
+  }
 
   refresh(): boolean {
     return false;

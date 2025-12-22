@@ -21,7 +21,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColumnApi, GridApi } from 'ag-grid-community';
+import {  GridApi } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ModelEngContentComponent } from './modelengcontent';
 import { ModelEngActionContentComponent } from './modelengactioncontent';
@@ -83,14 +83,12 @@ export class ServiceRequestComponent implements OnInit {
   public columnDefs: any[];
   public ticketcolumnDefs: any[];
   public actionDefs: any[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   PdffileData: FileShare[];
   pdfBase64: string;
-  public pdfcolumnDefs: any[];
-  private pdfcolumnApi: ColumnApi;
-  private pdfapi: GridApi;
-  private historycolumnApi: ColumnApi;
+  public pdfcolumnDefs: any[];  
+  private pdfapi: GridApi;  
   private historyapi: GridApi;
   customerList: Customer[];
   engineerCommentList: EngineerCommentList[] = [];
@@ -100,6 +98,7 @@ export class ServiceRequestComponent implements OnInit {
   customerSitelist: CustomerSite[] = [];
   customerlist: any = [];
   customer: any = [];
+  subRequestTypeId :any;
   serviceTypeList: ListTypeItem[];
   subreqtypelist: ListTypeItem[];
   reqtypelist: ListTypeItem[];
@@ -1535,14 +1534,12 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   pdfonGridReady(params): void {
-    this.pdfapi = params.api;
-    this.pdfcolumnApi = params.columnApi;
+    this.pdfapi = params.api;    
     this.pdfapi.sizeColumnsToFit();
   }
 
   historyready(params): void {
     this.historyapi = params.api;
-    this.historycolumnApi = params.columnApi;
   }
 
   public getAllInstrument(siteId: string) {
@@ -1820,7 +1817,7 @@ export class ServiceRequestComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

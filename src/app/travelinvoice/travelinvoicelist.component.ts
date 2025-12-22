@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ColDef,  GridApi } from "ag-grid-community";
 import { first } from "rxjs/operators";
 import { RenderComponent } from "../distributor/rendercomponent";
 import { ProfileReadOnly, User } from "../_models";
@@ -18,7 +18,7 @@ import { BUBrandModel } from "../_newmodels/BUBrandModel";
 export class TravelInvoiceListComponent implements OnInit {
 
     public columnDefs: ColDef[];
-    private columnApi: ColumnApi;
+    
     private api: GridApi;
     profilePermission: ProfileReadOnly;
     hasReadAccess: boolean = false;
@@ -119,7 +119,7 @@ export class TravelInvoiceListComponent implements OnInit {
 
     onGridReady(params): void {
         this.api = params.api;
-        this.columnApi = params.columnApi;
+        
         this.api.sizeColumnsToFit();
     }
 }

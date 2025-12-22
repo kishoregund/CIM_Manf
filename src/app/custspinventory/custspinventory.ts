@@ -14,7 +14,7 @@ import { CustspinventoryService } from "../_services/custspinventory.service";
 import { Custspinventory } from "../_models/custspinventory";
 import { debounceTime, distinctUntilChanged, first, map } from "rxjs/operators";
 import { ConfigTypeValue, ListTypeItem, ResultMsg, SparePart, User } from "../_models";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ColDef,  GridApi } from "ag-grid-community";
 import { DatePipe } from "@angular/common";
 import { Observable, OperatorFunction } from "rxjs";
 import { UserDetails } from "../_newmodels/UserDetails";
@@ -50,7 +50,7 @@ export class CustSPInventoryComponent implements OnInit {
   listTypeItems: ListTypeItem[];
 
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   historyModel
   sparepartlist: any[] = []
@@ -331,7 +331,7 @@ export class CustSPInventoryComponent implements OnInit {
 
   onGridReady(params: any): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
 
   }

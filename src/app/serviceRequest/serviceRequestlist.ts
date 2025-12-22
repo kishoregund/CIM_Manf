@@ -4,7 +4,7 @@ import { Country, ProfileReadOnly, ServiceRequest, User } from '../_models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 import { environment } from '../../environments/environment';
 import {
   AccountService,
@@ -42,7 +42,7 @@ export class ServiceRequestListComponent implements OnInit {
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   IsCustomerView: boolean = true;
   IsDistributorView: boolean = false;
@@ -350,7 +350,7 @@ export class ServiceRequestListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
   }
 
   getAllSRRecords(data) {

@@ -140,10 +140,10 @@ export class ImportDataComponent implements OnInit {
       }
 
       !isNaN(element.Amount_in_BCY) ? item.get('bcyAmt').setValue(element.Amount_in_BCY)
-        : item.get('bcyAmt').setValue(0)
+        : item.get('bcyAmt').setValue('0')
 
       !isNaN(element.Amount_in_USD) ? item.get('usdAmt').setValue(element.Amount_in_USD)
-        : item.get('usdAmt').setValue(0)
+        : item.get('usdAmt').setValue('0')
 
       if (item.get('expNature').value && item.get('expDetails').value && item.get('expDate').value && item.get('expenseBy').value) permissions.push(item)
 

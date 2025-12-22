@@ -31,7 +31,7 @@ export class ModelEngActionContentComponent implements OnInit {
   @Input() engineerlist;
   @Input() engineerid;
   hasRemote: boolean = false;
-
+  loading:boolean=false;
 
   file: any;
   fileList: [] = [];

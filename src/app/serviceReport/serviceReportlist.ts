@@ -4,7 +4,7 @@ import { Country, Distributor, ProfileReadOnly, ServiceReport, User } from '../_
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 
 import { AccountService, NotificationService, ProfileService } from '../_services';
 import { RenderComponent } from '../distributor/rendercomponent';
@@ -20,7 +20,7 @@ import { ServiceReportService } from '../_services/serviceReport.service';
 import { ServiceRequestService } from '../_services/serviceRequest.service';
 import { DistributorService } from '../_services/distributor.service';
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.vfs = pdfFonts.pdfMake?.vfs;
 
 @Component({
     selector: 'app-servicereportlist',
@@ -38,7 +38,7 @@ export class ServiceReportListComponent implements OnInit {
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   role: any;
   isDist = false;
@@ -235,7 +235,7 @@ export class ServiceReportListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

@@ -4,7 +4,7 @@ import { ListTypeItem, ProfileReadOnly, User } from '../_models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 import { AccountService, AlertService, ListTypeService, NotificationService, ProfileService } from '../_services';
 import { MRenderComponent } from './rendercomponent';
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
@@ -37,7 +37,7 @@ export class MasterListItemComponent implements OnInit {
   hasAddAccess: boolean = false;
   public columnDefs: ColDef[];
   public colReadOnlyDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   bsModalRef: BsModalRef;
   addAccess: boolean = false;
@@ -258,13 +258,13 @@ export class MasterListItemComponent implements OnInit {
 
   onGridReadyRO(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     // this.api.sizeColumnsToFit();
   }
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

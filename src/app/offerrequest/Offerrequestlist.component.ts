@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { first } from 'rxjs/operators';
 import { RenderComponent } from '../distributor/rendercomponent';
@@ -35,7 +35,7 @@ export class OfferrequestlistComponent implements OnInit {
   hasAddAccess: boolean = false;
   hasInternalAccess: boolean = false;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   profilePermission: any;
   zohocode: any;
@@ -165,7 +165,7 @@ export class OfferrequestlistComponent implements OnInit {
   }
   onGridReady(params: any): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

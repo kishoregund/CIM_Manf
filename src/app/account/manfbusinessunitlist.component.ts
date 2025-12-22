@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ColDef,  GridApi } from "ag-grid-community";
 import { Amc, User } from "../_models";
 import { AccountService } from "../_services";
 import { UserDetails } from "../_newmodels/UserDetails";
@@ -19,7 +19,7 @@ export class ManfBusinessUnitListComponent implements OnInit {
     hasAddAccess: boolean = false;
     hasDeleteAccess: boolean = false;
     public columnDefs: any
-    private columnApi: ColumnApi;
+    
     private api: GridApi;
 
     constructor(
@@ -80,7 +80,7 @@ export class ManfBusinessUnitListComponent implements OnInit {
 
     onGridReady(params): void {
         this.api = params.api;
-        this.columnApi = params.columnApi;
+        
         this.api.sizeColumnsToFit();
     }
 }

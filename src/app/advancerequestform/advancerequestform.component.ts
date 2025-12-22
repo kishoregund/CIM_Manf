@@ -2,7 +2,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColumnApi, GridApi } from 'ag-grid-community';
+import {  GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { Currency, ProfileReadOnly, ServiceRequest, User } from '../_models';
 import {
@@ -46,7 +46,7 @@ export class AdvancerequestformComponent implements OnInit {
 
   public columnDefs: any[];
   public columnDefsAttachments: any[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
 
   file: any;
@@ -455,7 +455,7 @@ export class AdvancerequestformComponent implements OnInit {
 
   onGridReadyAttachments(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

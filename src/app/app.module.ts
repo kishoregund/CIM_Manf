@@ -1,11 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule, DatePipe, DecimalPipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { BrowserModule, provideClientHydration  } from '@angular/platform-browser';
+import { CommonModule, DatePipe, DecimalPipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
-import { Ng2TelInputModule } from 'ng2-tel-input';
+//import { Ng2TelInputModule } from 'ng2-tel-input';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -67,7 +67,7 @@ import { WorkdoneContentComponent } from './serviceReport/workdonecontent';
 import { WorkTimeContentComponent } from './serviceReport/workTime';
 import { ServiceReportComponent } from './serviceReport/serviceReport';
 import { ServiceReportListComponent } from './serviceReport/serviceReportlist';
-import { SignaturePadModule } from 'angular2-signaturepad';
+//import { SignaturePadModule } from 'angular2-signaturepad';
 // import { StaydetailsListComponent } from './Staydetails/staydetailslist/staydetailslist.component';
 // import { StaydetailsComponent } from './Staydetails/staydetails/staydetails.component';
 // import { VisadetailsListComponent } from './Visadetails/visadetailslist/visadetailslist.component';
@@ -170,10 +170,10 @@ import { TenantListComponent } from './tenant/tenantlist.component';
 import { InstrumentAllocationComponent } from './instrumentallocation/instrumentallocation';
 import { InstrumentAllocationListComponent } from './instrumentallocation/instrumentallocationlist';
 
-import { MatSelectModule } from '@angular/material/select';
+import { MatLabel, MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-//import { MatButtonModule } from '@angular/material/button;
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
@@ -327,7 +327,7 @@ import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
         ChangeCIM,
         ExistingCIM
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    bootstrap: [AppComponent], imports: [BrowserModule, ReactiveFormsModule ,
         CommonModule,
         ReactiveFormsModule,
         FormsModule,
@@ -335,8 +335,8 @@ import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
         BrowserAnimationsModule,
         NgSelectModule,
         NgbModule,
-        Ng2TelInputModule,
-        SignaturePadModule,
+        //Ng2TelInputModule,
+        //SignaturePadModule,
         ModalModule.forRoot(),
         ToastrModule.forRoot({
             timeOut: 2000,
@@ -347,8 +347,8 @@ import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
         AgGridModule,//.withComponents([]),
         ScheduleModule, RecurrenceEditorModule,
         MatSelectModule, MatFormFieldModule, MatInputModule,
-        //MatButtonModule, 
-        MatIconModule, MatTableModule, MatDividerModule], providers: [EnvServiceProvider, DecimalPipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        MatButtonModule, MatLabel,
+        MatIconModule, MatTableModule, MatDividerModule], providers: [EnvServiceProvider, provideClientHydration(), DecimalPipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         { provide: BsDatepickerConfig, useFactory: ConfigBsDatepicker },
         { provide: Date, useFactory: GetParsedDate },

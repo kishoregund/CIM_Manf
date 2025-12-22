@@ -3,7 +3,7 @@ import { HttpEventType } from "@angular/common/http";
 import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ColumnApi, GridApi } from "ag-grid-community";
+import {  GridApi } from "ag-grid-community";
 import { Guid } from "guid-typescript";
 import { first } from "rxjs/operators";
 import { GetParsedDate } from "../_helpers/Providers";
@@ -68,7 +68,7 @@ export class AmcComponent implements OnInit {
   custSiteList: any;
 
   public columnDefs: any;
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   hasId: boolean = false;
 
@@ -833,7 +833,8 @@ export class AmcComponent implements OnInit {
         var indexOfSelectedRow = this.instrumentList.indexOf(rowData);
         this.instrumentList.splice(indexOfSelectedRow, 1)
         if (rowData.amcId == null && cellValue == rowData.id) {
-          this.api.setRowData(this.instrumentList)
+          //this.api.setRowData(this.instrumentList)
+          this.api.setGridOption('rowData', this.instrumentList);
         }
         else {
           this.AmcInstrumentService
@@ -916,7 +917,8 @@ export class AmcComponent implements OnInit {
 
         this.instrumentList = this.instrumentList || [];
         this.instrumentList.push(data);
-        this.api.setRowData(this.instrumentList)
+        //this.api.setRowData(this.instrumentList)
+        this.api.setGridOption('rowData', this.instrumentList);
       })
 
   }
@@ -1042,7 +1044,7 @@ export class AmcComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
   }
 
   onCellValueChanged(event) {
@@ -1069,7 +1071,8 @@ export class AmcComponent implements OnInit {
       d[0].amount = rowAmount;
       d[0].rate = Number(data.rate)
       d[0].qty = Number(data.qty)
-      this.api.setRowData(this.instrumentList);
+      //this.api.setRowData(this.instrumentList);
+      this.api.setGridOption('rowData', this.instrumentList);
 
       let zeroRate = 0;
       this.instrumentList.forEach(x => zeroRate += x.amount);

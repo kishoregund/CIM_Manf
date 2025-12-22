@@ -4,7 +4,7 @@ import { ListTypeItem, ResultMsg, ProfileReadOnly, User, ConfigTypeValue } from 
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 
 import {
   AccountService, AlertService, ListTypeService, NotificationService, ProfileService, ConfigTypeValueService
@@ -30,7 +30,7 @@ export class ModelContentComponent implements OnInit {
   id: string;
   listid: string;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   closeResult: string;
   @Input() public itemId;
@@ -212,7 +212,7 @@ export class ModelContentComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

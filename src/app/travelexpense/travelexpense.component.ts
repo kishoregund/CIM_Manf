@@ -2,7 +2,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { GetParsedDate } from '../_helpers/Providers';
 import { ProfileReadOnly, ServiceRequest, Currency, User, Customer } from '../_models';
@@ -44,7 +44,7 @@ export class TravelexpenseComponent implements OnInit {
 
   public columnDefs: ColDef[];
   public columnDefsAttachments: any[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
 
   file: any;
@@ -414,7 +414,7 @@ export class TravelexpenseComponent implements OnInit {
 
   onGridReadyAttachments(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

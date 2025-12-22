@@ -3,7 +3,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { ProfileReadOnly, ServiceRequest, Currency, Customer, User } from '../_models';
 import { AlertService, FileshareService, AccountService, ProfileService, ListTypeService, CurrencyService, NotificationService } from '../_services';
@@ -45,7 +45,7 @@ export class TravelinvoiceComponent implements OnInit {
 
   public columnDefs: ColDef[];
   public columnDefsAttachments: any[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
 
   file: any;
@@ -285,14 +285,14 @@ export class TravelinvoiceComponent implements OnInit {
     this.servicerequest = this.servicerequest.filter(x => x.assignedTo == engId)
   }
 
-  // getengineers(id: string) {
+   getengineers(id: string) {
   //   this.distributorservice.getDistributorRegionContacts(id, "Engineer")
   //     .pipe(first())
   //     .subscribe((Engdata: any) => {
   //       this.distId = id
   //       this.engineer = Engdata.data;
   //     });
-  // }
+   }
 
   getfil(x) {
     this.file = x;
@@ -391,7 +391,7 @@ export class TravelinvoiceComponent implements OnInit {
 
   onGridReadyAttachments(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

@@ -4,7 +4,7 @@ import { User, Country, SparePart, ProfileReadOnly } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService, SparePartService, NotificationService, ProfileService } from '../_services';
 //import { RenderComponent } from '../distributor/rendercomponent';
@@ -28,7 +28,7 @@ export class SparePartListComponent implements OnInit {
   type: string = "D";
   countries: Country[];
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
@@ -178,7 +178,7 @@ export class SparePartListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

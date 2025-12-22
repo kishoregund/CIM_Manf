@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ColDef, ColumnApi, GridApi } from "ag-grid-community";
+import { ColDef,  GridApi } from "ag-grid-community";
 import { FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AccountService, NotificationService, ProfileService } from "../_services";
@@ -33,7 +33,7 @@ export class CustspinventorylistComponent implements OnInit {
   hasAddAccess: boolean = false;
   hasInternalAccess: boolean = false;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   profilePermission: any;
   showGrid: boolean;
@@ -166,7 +166,7 @@ export class CustspinventorylistComponent implements OnInit {
 
   onGridReady(params: any): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
 
   }

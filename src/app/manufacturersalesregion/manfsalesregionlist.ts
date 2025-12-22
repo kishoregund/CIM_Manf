@@ -4,7 +4,7 @@ import { User, Country, ProfileReadOnly } from '../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 
 import { AccountService, ProfileService } from '../_services';
 import { UserDetails } from '../_newmodels/UserDetails';
@@ -33,7 +33,7 @@ export class ManufacturerSalesRegionListComponent implements OnInit {
   manufacturerName: any;
 
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
 
   constructor(
@@ -129,7 +129,7 @@ export class ManufacturerSalesRegionListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

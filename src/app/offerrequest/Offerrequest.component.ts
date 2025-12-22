@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColumnApi, GridApi } from 'ag-grid-community';
+import {  GridApi } from 'ag-grid-community';
 import { Guid } from 'guid-typescript';
 import { first } from 'rxjs/operators';
 import { Currency, Distributor, ResultMsg, User } from '../_models';
@@ -55,7 +55,7 @@ export class OfferrequestComponent implements OnInit {
   currencyList: Currency[];
   public columnDefs: any[];
   public columnDefsAttachments: any[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   hasId: boolean;
   distributorList: Distributor[];
@@ -1043,19 +1043,19 @@ debugger;
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
   }
 
   onGridReadyAttachments(params): void {
     debugger;
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 
   onProcessGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     // this.api.sizeColumnsToFit();
   }
 
@@ -1176,7 +1176,7 @@ debugger;
 
   onGridReadySPDet(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     // this.api.sizeColumnsToFit();
   }
 

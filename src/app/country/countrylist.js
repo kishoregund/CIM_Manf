@@ -114,7 +114,7 @@ var CountryListComponent = /** @class */ (function () {
     };
     CountryListComponent.prototype.onGridReady = function (params) {
         this.api = params.api;
-        this.columnApi = params.columnApi;
+        
         this.api.sizeColumnsToFit();
     };
     CountryListComponent = __decorate([

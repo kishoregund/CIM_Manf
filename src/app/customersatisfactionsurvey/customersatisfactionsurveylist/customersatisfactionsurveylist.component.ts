@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { EnvService } from 'src/app/_services/env/env.service';
 import { RenderComponent } from '../../distributor/rendercomponent';
@@ -28,7 +28,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
   submitted = false;
   isSave = false;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
@@ -165,7 +165,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 }

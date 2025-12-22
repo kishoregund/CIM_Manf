@@ -4,7 +4,7 @@ import { User, Customer, Country, Instrument, Profile, UserProfile, ProfileReadO
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 
 import { AccountService, AlertService, CountryService,  NotificationService, ProfileService, UserProfileService } from '../_services';
 //InstrumentService,
@@ -29,7 +29,7 @@ export class UserProfileListComponent implements OnInit {
   type: string = "D";
   countries: Country[];
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   profilePermission: ProfileReadOnly;
   hasAddAccess: boolean = false;
@@ -163,7 +163,7 @@ export class UserProfileListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

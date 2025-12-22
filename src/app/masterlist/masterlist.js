@@ -95,7 +95,7 @@ var MasterListComponent = /** @class */ (function () {
     };
     MasterListComponent.prototype.onGridReady = function (params) {
         this.api = params.api;
-        this.columnApi = params.columnApi;
+        
         this.api.sizeColumnsToFit();
     };
     MasterListComponent = __decorate([

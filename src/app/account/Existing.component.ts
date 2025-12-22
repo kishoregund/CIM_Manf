@@ -88,7 +88,7 @@ export default class ExistingCIM implements OnInit {
     }
 
     //[KG]
-    // async OnCompanyChange() {
+     async OnCompanyChange() {
     //     let data = this.f.company.value;
 
     //     var buReq: any = await this.buService.GetByCustomCompanyId(data).toPromise();
@@ -130,7 +130,7 @@ export default class ExistingCIM implements OnInit {
 
     //             this.notificationService.showInfo("Setup is completed", "Setup");
     //         });
-    // }
+    }
 
     public get f() {
         return this.Form.controls;

@@ -21,11 +21,13 @@ import {
   workDone,
   workTime
 } from '../_models';
-import { SignaturePad } from 'angular2-signaturepad';
+//import { SignaturePad } from 'angular2-signaturepad';
+import { SignaturePadComponent } from '@almothafar/angular-signature-pad';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, first, map } from 'rxjs/operators';
-import { ColumnApi, GridApi } from 'ag-grid-community';
+import {  GridApi } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { WorkdoneContentComponent } from './workdonecontent';
 import { WorkTimeContentComponent } from './workTime';
@@ -62,7 +64,7 @@ import { SRConsumedService } from '../_services/srconsumed.service';
 import { FilerendercomponentComponent } from '../instrument/filerendercomponent.component';
 import { WorkDoneService } from '../_services/workdone.service';
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.vfs = pdfFonts.pdfMake?.vfs;
 
 @Component({
     selector: 'app-servicereport',
@@ -99,7 +101,7 @@ export class ServiceReportComponent implements OnInit {
   public columnworkdefs: any[];
   public spcolumnDefs: any[];
   public spRecomandDefs: any[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   workTime: workTime[] = [];
   servicerequest: ServiceRequest;
@@ -109,8 +111,8 @@ export class ServiceReportComponent implements OnInit {
   spconsumedlist: any[] = [];
   selectedConfigType: ConfigTypeValue[] = [];
   signatureImg: string;
-  @ViewChild('sigpad1') signaturePad: SignaturePad;
-  @ViewChild('sigpad2') signaturePadcust: SignaturePad;
+  @ViewChild('sigpad1') signaturePad: SignaturePadComponent;
+  @ViewChild('sigpad2') signaturePadcust: SignaturePadComponent;
   bsModalRef: BsModalRef;
   bsActionModalRef: BsModalRef;
   allcontactlist: Contact[];
@@ -121,7 +123,7 @@ export class ServiceReportComponent implements OnInit {
   PdffileData: FileShare[];
   pdfBase64: string;
   public pdfcolumnDefs: any[];
-  private pdfcolumnApi: ColumnApi;
+  
   private pdfapi: GridApi;
   signaturePadOptions: Object = {
     'minWidth': 2,
@@ -209,7 +211,6 @@ export class ServiceReportComponent implements OnInit {
   ngAfterViewInit() {
     // this.signaturePad is now available
     if (!this.isCompleted) {
-
       this.signaturePad?.set('minWidth', 2);
       this.signaturePad?.clear();
       this.signaturePadcust?.set('minWidth', 2);
@@ -1177,7 +1178,7 @@ export class ServiceReportComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     // this.api.sizeColumnsToFit();
   }
 
@@ -1530,7 +1531,6 @@ export class ServiceReportComponent implements OnInit {
 
   pdfonGridReady(params): void {
     this.pdfapi = params.api;
-    this.pdfcolumnApi = params.columnApi;
     this.pdfapi.sizeColumnsToFit();
   }
 

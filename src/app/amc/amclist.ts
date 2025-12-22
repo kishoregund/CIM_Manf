@@ -4,7 +4,7 @@ import { Amc, Country, ProfileReadOnly, User } from '../_models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -36,7 +36,7 @@ export class AmcListComponent implements OnInit {
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   showGrid: boolean = true;
   isDist: boolean;
@@ -167,7 +167,7 @@ export class AmcListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

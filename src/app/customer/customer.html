@@ -1,4 +1,4 @@
-<layout>
+
   <div class="right_col" role="main">
     <div class="container">
 
@@ -88,7 +88,7 @@
             <div class="col-sm-4">
               <label for="defDistId">Regional Distributors<span class="text-danger">*</span></label>
               <select formControlName="defDistRegionId" class="form-select"
-                (change)="onDistributorRegion($event.target.value)"
+                (change)="onDistributorRegion()"                 
                 [ngClass]="{ 'is-invalid': f.defDistRegionId.touched && f.defDistRegionId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of distRegionsList" value="{{distributor.id}}">
@@ -101,7 +101,7 @@
             </div>
             <div class="col-sm-4">
               <label for="defDistId">Principal Distributor<span class="text-danger">*</span></label>
-              <select formControlName="defDistId" class="form-select" (change)="onDefDistchanged($event.target.value)"
+              <select formControlName="defDistId" class="form-select"
                 [ngClass]="{ 'is-invalid': f.defDistId.touched && f.defDistId.errors }">
                 <!--<option value="0">--All--</option>-->
                 <option *ngFor="let distributor of defaultdistributors" value={{distributor.id}}>
@@ -219,4 +219,3 @@
       </div>
     </div>
   </div>
-</layout>

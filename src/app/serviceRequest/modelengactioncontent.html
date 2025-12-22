@@ -15,7 +15,7 @@
               <div class="col-sm-6 form-group">
                 <label for="engineername">Engineer<span class="text-danger">*</span></label>
                 <select formControlName="engineerId" readonly disabled="disabled" class="form-select"
-                  [ngClass]="{ 'is-invalid': submitted && f.engineerId.errors }">
+                  [ngClass]="{ 'is-invalid': f.engineerId.touched  && f.engineerId.errors }">
                   <!--<option value="0">--All--</option>-->
                   <option *ngFor="let c of engineerlist" value={{c.id}}>
                     {{c.firstName}} {{c.lastName}}

@@ -1,4 +1,4 @@
-<layout>
+
   <div class="right_col" role="main">
     <div class="container">
       <!-- Tabs navs -->
@@ -73,7 +73,7 @@
 
             <div class="col-md-4 col-sm-4">
               <label for="countries">Country<span class="text-danger">*</span></label>
-              <select [data]="countries" formControlName="countries" class="form-select"
+              <select  formControlName="countries" class="form-select"
                 [ngClass]="{ 'is-invalid': f.countries.touched && f.countries.errors }">
                 <option *ngFor="let i of countries" value="{{i.id}}">{{i.iso_3}} - {{i.name}}</option>
               </select>
@@ -196,4 +196,3 @@
       </div>
     </div>
   </div>
-</layout>

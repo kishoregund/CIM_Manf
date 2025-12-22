@@ -4,7 +4,7 @@ import { User, Distributor, Country, ProfileReadOnly } from '../_models';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, GridApi, ColumnApi } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 
 import { AccountService, NotificationService, ProfileService } from '../_services';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -32,7 +32,7 @@ export class DistributorListComponent implements OnInit {
   hasAddAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   bsModalRef: BsModalRef;
 
@@ -119,7 +119,7 @@ export class DistributorListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
 
     this.api.sizeColumnsToFit();
   }

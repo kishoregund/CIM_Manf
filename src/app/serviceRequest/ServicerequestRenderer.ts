@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AgRendererComponent } from "ag-grid-angular";
 import { first } from "rxjs/operators";
 import { ListTypeItem, ProfileReadOnly, ServiceRequest, ticketsAssignedHistory } from "../_models";
@@ -9,8 +9,8 @@ import { ServiceRequestService } from "../_services/serviceRequest.service";
 import { SRAssignedHistoryService } from "../_services/srassignedhistory.service";
 
 @Component({
-    template: `
-    
+    imports: [ReactiveFormsModule],
+    template: `    
     <form [formGroup]="Form" (ngSubmit)="onSubmit()">
 <div class="row">
 <div class="col-md-10">
@@ -24,7 +24,7 @@ import { SRAssignedHistoryService } from "../_services/srassignedhistory.service
 </div>
 </form>
 `,
-    standalone: false
+    standalone: true
 })
 export class ServiceRComponent implements AgRendererComponent, OnInit {
     params: any;

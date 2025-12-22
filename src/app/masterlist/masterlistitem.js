@@ -145,7 +145,7 @@ var MasterListItemComponent = /** @class */ (function () {
     };
     MasterListItemComponent.prototype.onGridReady = function (params) {
         this.api = params.api;
-        this.columnApi = params.columnApi;
+        
         this.api.sizeColumnsToFit();
     };
     MasterListItemComponent.prototype.onRowClicked = function (e) {

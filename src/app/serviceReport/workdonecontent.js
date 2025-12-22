@@ -178,7 +178,7 @@ var ModelContentComponent = /** @class */ (function () {
     };
     ModelContentComponent.prototype.onGridReady = function (params) {
         this.api = params.api;
-        this.columnApi = params.columnApi;
+        
         this.api.sizeColumnsToFit();
     };
     __decorate([

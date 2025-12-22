@@ -4,7 +4,7 @@ import { Contact, Country, ProfileReadOnly, User } from '../_models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 
 import {
   AccountService,
@@ -41,7 +41,7 @@ export class ContactListComponent implements OnInit {
   detailId: string;
   countries: Country[];
   public columnDefs: ColDef[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   profilePermission: ProfileReadOnly;
   hasReadAccess: boolean = false;
@@ -296,7 +296,7 @@ export class ContactListComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 

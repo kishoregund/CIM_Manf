@@ -2,7 +2,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import { ColDef,  GridApi } from 'ag-grid-community';
 import { first } from 'rxjs/operators';
 import { ProfileReadOnly, User } from '../_models';
 import { AccountService, FileshareService, ListTypeService, NotificationService, ProfileService } from '../_services';
@@ -50,7 +50,7 @@ export class PastservicereportComponent implements OnInit {
   brandList: any;
   public columnDefs: ColDef[];
   public columnDefsAttachments: any[];
-  private columnApi: ColumnApi;
+  
   private api: GridApi;
   formData: any;
   buBrandModel: BUBrandModel;
@@ -363,7 +363,7 @@ export class PastservicereportComponent implements OnInit {
 
   onGridReadyAttachments(params): void {
     this.api = params.api;
-    this.columnApi = params.columnApi;
+    
     this.api.sizeColumnsToFit();
   }
 
