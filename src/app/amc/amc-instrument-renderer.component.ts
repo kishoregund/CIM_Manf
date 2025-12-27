@@ -8,7 +8,7 @@ import { NotificationService } from "../_services";
 @Component({
     template: `
     <button class="btn btn-link" (click)="delete(params.value)"  [disabled]="!params.deleteaccess" type="button">
-      <i class="fas fa-trash-alt" title="Delete"></i>
+      <i class="fa-solid fa-trash-alt" title="Delete"></i>
     </button>
 
   `,

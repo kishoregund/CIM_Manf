@@ -1,4 +1,4 @@
-
+<layout>
   <div class="right_col" role="main">
     <div class="container">
 
@@ -11,30 +11,30 @@
 
           <div class="controls" style="display: flex;">
             <a (click)="Back()" class="nav-link">
-              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              <i class="fa-solid fa-arrow-left" style="color: #5ba146;" title="Back"></i>
             </a>
             <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
-              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+              <i class="fa-solid fa-pen" style="color: #5ba146;" title="Edit"></i>
             </a>
 
             <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
-              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+              <i class="fa-solid fa-times" style="color: #5ba146;" title="Cancel"></i>
             </a>
 
             <a class="nav-link" (click)="onSubmit()"
               *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)  && !isCompleted">
-              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+              <i class="fa-solid fa-save" style="color: #5ba146;" title="Save"></i>
             </a>
 
             <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
-              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+              <i class="fa-solid fa-trash" style="color: #5ba146;" title="Delete"></i>
             </a>
 
             <div class="dropdown"
               *ngIf="((hasAddAccess==true || hasUpdateAccess==true) && isEng == true && !isCompleted && custsign != null && custsign!= blankSignaturePad) || engsign != null && engsign != blankSignaturePad">
               <button class="btn btn-nav-link" (click)="ToggleDropdown('dropdownMenuButton1')" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-ellipsis-v" style="color: #5ba146;"></i>
+                <i class="fa-solid fa-ellipsis-v" style="color: #5ba146;"></i>
               </button>
               <ul class="dropdown-menu" id="dropdownMenuButton1">
 
@@ -272,7 +272,7 @@
 
               <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode && isEng" class="btn"
                 style="margin: 10px;" (click)="open(ServiceReportId)">
-                <i class="fas fa-plus" title="Add"></i>
+                <i class="fa-solid fa-plus" title="Add"></i>
               </button>
 
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
@@ -286,7 +286,7 @@
 
               <button type="button" [disabled]="this.isCompleted" *ngIf="isEditMode && isEng" class="btn"
                 style="margin: 10px;" (click)="opentime(ServiceReportId)">
-                <i class="fas fa-plus" title="Add"></i>
+                <i class="fa-solid fa-plus" title="Add"></i>
               </button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onworktimeRowClicked($event)"
@@ -483,3 +483,4 @@
       </div>
     </div>
   </div>
+</layout>

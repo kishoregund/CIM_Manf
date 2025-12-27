@@ -177,7 +177,7 @@ export class PastservicereportlistComponent implements OnInit {
                         class="btn btn-link"
                         (click)="download()"
                         *ngIf="params.value">
-                    <i class="fas fa-download" title="Download"></i>
+                    <i class="fa-solid fa-download" title="Download"></i>
                 </button>`,
     standalone: false
 })

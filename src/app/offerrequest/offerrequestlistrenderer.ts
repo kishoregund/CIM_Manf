@@ -8,8 +8,8 @@ import { OfferrequestService } from "../_services/Offerrequest.service";
 
 @Component({
     template: `<a [routerLink]="[params.inRouterLink,params.value]" class="btn btn-link"
-                  style="margin-right: 10px; padding: 0;"><i class="fas fa-pen" title="Edit"></i></a>
-    <button class="btn btn-link"  [disabled]="!params.deleteaccess && !isLocked" (click)="delete(params)"><i class="fas fa-trash-alt"
+                  style="margin-right: 10px; padding: 0;"><i class="fa-solid fa-pen" title="Edit"></i></a>
+    <button class="btn btn-link"  [disabled]="!params.deleteaccess && !isLocked" (click)="delete(params)"><i class="fa-solid fa-trash-alt"
                                                                                          title="Delete"></i></button>`,
     standalone: false
 })

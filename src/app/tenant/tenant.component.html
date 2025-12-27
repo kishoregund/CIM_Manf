@@ -9,31 +9,31 @@
                     </div>
                     <div class="controls" style="display: flex;">
                         <a (click)="Back()" class="nav-link">
-                            <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+                            <i class="fa-solid fa-arrow-left" style="color: #5ba146;" title="Back"></i>
                         </a>
                         <a class="nav-link" (click)="EditMode()" *ngIf="!isEditMode && !isNewMode">
-                            <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+                            <i class="fa-solid fa-pen" style="color: #5ba146;" title="Edit"></i>
                         </a>
 
                         <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
-                            <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+                            <i class="fa-solid fa-times" style="color: #5ba146;" title="Cancel"></i>
                         </a>
 
                         <a class="nav-link" (click)="onSubmit()" *ngIf="(isNewMode)">
-                            <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+                            <i class="fa-solid fa-save" style="color: #5ba146;" title="Save"></i>
                         </a>
                         <a class="nav-link" (click)="Upgrade()" *ngIf="(isEditMode)">
-                            <i class="fas fa-paper-plane" style="color: #5ba146;" title="Upgrade"></i>
+                            <i class="fa-solid fa-paper-plane" style="color: #5ba146;" title="Upgrade"></i>
                         </a>
                         <a class="nav-link" (click)="Deactivate()" *ngIf="(isEditMode)">
-                            <i class="fas fa-ban" style="color: #5ba146;" title="Deactivate"></i>
+                            <i class="fa-solid fa-ban" style="color: #5ba146;" title="Deactivate"></i>
                         </a>
                         <a class="nav-link" (click)="Activate()" *ngIf="(isEditMode)">
                             <i class="far fa-check-circle" style="color: #5ba146;" title="Activate"></i>
                         </a>
                         <!-- 
                         <a class="nav-link" (click)="DeleteRecord()" *ngIf="(id != null) && hasDeleteAccess">
-                            <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+                            <i class="fa-solid fa-trash" style="color: #5ba146;" title="Delete"></i>
                         </a> -->
                     </div>
                 </div>
@@ -113,3 +113,4 @@
             </div>
         </div>
     </div>
+</layout>

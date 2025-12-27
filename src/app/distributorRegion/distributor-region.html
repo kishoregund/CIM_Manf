@@ -1,4 +1,4 @@
-
+<layout>
   <div class="right_col" role="main">
     <div class="container">
       <!-- Tabs navs -->
@@ -22,24 +22,24 @@
 
           <div class="controls" style="display: flex;">
             <a (click)="Back()" class="nav-link" *ngIf="!isNewSetup">
-              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              <i class="fa-solid fa-arrow-left" style="color: #5ba146;" title="Back"></i>
             </a>
             <a class="nav-link" (click)="EditMode()"
               *ngIf="hasUpdateAccess && !isEditMode && !isNewMode && !isNewSetup">
-              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+              <i class="fa-solid fa-pen" style="color: #5ba146;" title="Edit"></i>
             </a>
 
             <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode) && !isNewSetup">
-              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+              <i class="fa-solid fa-times" style="color: #5ba146;" title="Cancel"></i>
             </a>
 
             <a class="nav-link" (click)="onSubmit()"
               *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
-              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+              <i class="fa-solid fa-save" style="color: #5ba146;" title="Save"></i>
             </a>
 
             <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess  && !isNewMode && !isNewSetup">
-              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+              <i class="fa-solid fa-trash" style="color: #5ba146;" title="Delete"></i>
             </a>
           </div>
         </div>
@@ -196,3 +196,4 @@
       </div>
     </div>
   </div>
+</layout>

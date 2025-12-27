@@ -859,7 +859,7 @@ debugger;
       cellRenderer: (params) => {
         return `
         <button class="btn btn-link" [disabled]="!params.deleteaccess" type="button">
-        <i class="fas fa-trash-alt" title="Delete"></i>
+        <i class="fa-solid fa-trash-alt" title="Delete"></i>
       </button>
         `
       },

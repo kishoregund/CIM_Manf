@@ -1,4 +1,4 @@
-
+<layout>
   <div class="right_col" role="main">
     <div class="container">
       <div class="page-title">
@@ -8,16 +8,16 @@
             <h3>Spare Parts Quote List</h3>
             <div class="d-flex">
               <a *ngIf="!showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
-                <i class="fas fa-arrow-left" title="Grid"></i>
+                <i class="fa-solid fa-arrow-left" title="Grid"></i>
               </a>
               <!-- <a *ngIf="showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
-                <i class="fas fa-search" title="Search"></i>
+                <i class="fa-solid fa-search" title="Search"></i>
               </a> -->
               <a (click)="Add()" class="nav-link" style="font-size: 1.25rem;" *ngIf="hasAddAccess==true">
-                <i class="fas fa-plus" style="color: #5ba146;" title="Add"></i>
+                <i class="fa-solid fa-plus" style="color: #5ba146;" title="Add"></i>
               </a>
               <!-- <a (click)="ImportData()" class="nav-link" style="font-size: 1.25rem;" *ngIf="hasAddAccess==true">
-                <i class="fas fa-file-excel" style="color: #5ba146;" title="Add"></i>
+                <i class="fa-solid fa-file-excel" style="color: #5ba146;" title="Add"></i>
               </a> -->
             </div>
           </div>
@@ -39,3 +39,4 @@
       </div>
     </div>
   </div>
+</layout>

@@ -1,4 +1,4 @@
-
+<layout>
   <div class="right_col" role="main">
     <div class="container">
 
@@ -11,24 +11,24 @@
 
           <div class="controls" style="display: flex;">
             <a (click)="Back()" class="nav-link">
-              <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              <i class="fa-solid fa-arrow-left" style="color: #5ba146;" title="Back"></i>
             </a>
             <a class="nav-link" (click)="EditMode()"
               *ngIf="hasUpdateAccess && !isEditMode && !isNewMode &&  !isCompleted">
-              <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+              <i class="fa-solid fa-pen" style="color: #5ba146;" title="Edit"></i>
             </a>
 
             <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode) && !isCompleted">
-              <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+              <i class="fa-solid fa-times" style="color: #5ba146;" title="Cancel"></i>
             </a>
 
             <a class="nav-link" (click)="onSubmit()"
               *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode) && !isCompleted">
-              <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+              <i class="fa-solid fa-save" style="color: #5ba146;" title="Save"></i>
             </a>
 
             <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
-              <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+              <i class="fa-solid fa-trash" style="color: #5ba146;" title="Delete"></i>
             </a>
           </div>
         </div>
@@ -287,15 +287,15 @@
                   <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode" class="d-flex w-100">
                     <div class="d-flex w-50 flex-column">
                       <button type="button" class="btn" [disabled]="first" (click)="StageMoveUp(item.stageIndex)">
-                        <i class="fas fa-arrow-up"></i>
+                        <i class="fa-solid fa-arrow-up"></i>
                       </button>
                       <button type="button" class="btn" [disabled]="last" (click)="StageMoveDown(item.stageIndex)">
-                        <i class="fas fa-arrow-down"></i>
+                        <i class="fa-solid fa-arrow-down"></i>
                       </button>
                     </div>
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
                       class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
-                      <i class="fas fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                      <i class="fa-solid fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
                     </button>
                   </td>
 
@@ -324,7 +324,7 @@
                     <div class="d-flex justify-content-center">
                       <button type="button" *ngIf="hasUpdateAccess" [disabled]="submitted" (click)="submitStageData()"
                         style="background-color: transparent; color: #5ba146; border: none;">
-                        <i class="fas fa-save" style="font-size: 20px;"></i>
+                        <i class="fa-solid fa-save" style="font-size: 20px;"></i>
                       </button>
                     </div>
                   </td>
@@ -445,7 +445,7 @@
       </div>
     </div>
   </div>
-
+</layout>
 
 <style>
   th>button {

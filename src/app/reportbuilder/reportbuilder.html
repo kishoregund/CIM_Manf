@@ -1,124 +1,126 @@
-<!-- dynamic-query.component.html -->
-<div class="container">
-  <h2>Report Builder</h2>
+<layout>
+  <!-- dynamic-query.component.html -->
+  <div class="container">
+    <h2>Report Builder</h2>
 
-  <!-- Screens multi-select -->
-  <mat-form-field appearance="outline" class="full">
-    <mat-label>Screens</mat-label>
-    <mat-select [formControl]="screensCtrl" multiple>
-      <mat-option *ngFor="let s of screens" [value]="s.key">
-        {{ s.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+    <!-- Screens multi-select -->
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Screens</mat-label>
+      <mat-select [formControl]="screensCtrl" multiple>
+        <mat-option *ngFor="let s of screens" [value]="s.key">
+          {{ s.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <!-- Columns multi-select (from selected screens) -->
-  <mat-form-field appearance="outline" class="full">
-    <mat-label>Columns</mat-label>
-    <mat-select [formControl]="columnsCtrl" multiple>
-      <mat-option *ngFor="let c of availableColumns" [value]="columnKey(c)">
-        {{ c.screenLabel }} — {{ c.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <!-- Dynamic filters -->
-  <div class="filters">
-    <h3>Filters</h3>
-    <div class="filter-row" *ngFor="let f of filters; let i = index">
-      <mat-form-field appearance="outline" class="screen-col">
-        <mat-label>Screen</mat-label>
-        <mat-select [(ngModel)]="f.screenKey" (selectionChange)="onFilterScreenChange(i)">
-          <mat-option *ngFor="let s of selectedScreens" [value]="s.key">{{ s.label }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="screen-col">
-        <mat-label>Column</mat-label>
-        <mat-select [(ngModel)]="f.columnKey">
-          <mat-option *ngFor="let c of columnsByScreen(f.screenKey)" [value]="c.key">{{ c.label }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="op-col">
-        <mat-label>Operator</mat-label>
-        <mat-select [(ngModel)]="f.operator">
-          <mat-option *ngFor="let op of operators" [value]="op">{{ op }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <ng-container [ngSwitch]="valueMode(f.operator)">
-        <mat-form-field *ngSwitchCase="'single'" appearance="outline" class="value-col">
-          <mat-label>Value</mat-label>
-          <input matInput [(ngModel)]="f.value">
-        </mat-form-field>
-
-        <div *ngSwitchCase="'between'" class="between">
-          <mat-form-field appearance="outline" class="value-col">
-            <mat-label>From</mat-label>
-            <input matInput [(ngModel)]="f.valueStart">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="value-col">
-            <mat-label>To</mat-label>
-            <input matInput [(ngModel)]="f.valueEnd">
-          </mat-form-field>
-        </div>
-
-        <mat-form-field *ngSwitchCase="'in'" appearance="outline" class="value-col">
-          <mat-label>Values (comma-separated)</mat-label>
-          <input matInput [(ngModel)]="f.valueCsv">
-        </mat-form-field>
-
-        <div *ngSwitchCase="'none'" class="value-col info">No value required</div>
-      </ng-container>
-
-      <button mat-icon-button color="warn" (click)="removeFilter(i)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-
-    <button mat-stroked-button color="primary" (click)="addFilter()">Add filter</button>
-  </div>
-
-  <!-- Order by and Limit -->
-  <div class="order-limit">
-    <mat-form-field appearance="outline">
-      <mat-label>Order by</mat-label>
-      <mat-select [(ngModel)]="orderByColumn">
+    <!-- Columns multi-select (from selected screens) -->
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Columns</mat-label>
+      <mat-select [formControl]="columnsCtrl" multiple>
         <mat-option *ngFor="let c of availableColumns" [value]="columnKey(c)">
           {{ c.screenLabel }} — {{ c.label }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Direction</mat-label>
-      <mat-select [(ngModel)]="orderByDirection">
-        <mat-option value="ASC">ASC</mat-option>
-        <mat-option value="DESC">DESC</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <!-- Dynamic filters -->
+    <div class="filters">
+      <h3>Filters</h3>
+      <div class="filter-row" *ngFor="let f of filters; let i = index">
+        <mat-form-field appearance="outline" class="screen-col">
+          <mat-label>Screen</mat-label>
+          <mat-select [(ngModel)]="f.screenKey" (selectionChange)="onFilterScreenChange(i)">
+            <mat-option *ngFor="let s of selectedScreens" [value]="s.key">{{ s.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Limit</mat-label>
-      <input matInput type="number" [(ngModel)]="limit" min="1">
-    </mat-form-field>
+        <mat-form-field appearance="outline" class="screen-col">
+          <mat-label>Column</mat-label>
+          <mat-select [(ngModel)]="f.columnKey">
+            <mat-option *ngFor="let c of columnsByScreen(f.screenKey)" [value]="c.key">{{ c.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="op-col">
+          <mat-label>Operator</mat-label>
+          <mat-select [(ngModel)]="f.operator">
+            <mat-option *ngFor="let op of operators" [value]="op">{{ op }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <ng-container [ngSwitch]="valueMode(f.operator)">
+          <mat-form-field *ngSwitchCase="'single'" appearance="outline" class="value-col">
+            <mat-label>Value</mat-label>
+            <input matInput [(ngModel)]="f.value">
+          </mat-form-field>
+
+          <div *ngSwitchCase="'between'" class="between">
+            <mat-form-field appearance="outline" class="value-col">
+              <mat-label>From</mat-label>
+              <input matInput [(ngModel)]="f.valueStart">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="value-col">
+              <mat-label>To</mat-label>
+              <input matInput [(ngModel)]="f.valueEnd">
+            </mat-form-field>
+          </div>
+
+          <mat-form-field *ngSwitchCase="'in'" appearance="outline" class="value-col">
+            <mat-label>Values (comma-separated)</mat-label>
+            <input matInput [(ngModel)]="f.valueCsv">
+          </mat-form-field>
+
+          <div *ngSwitchCase="'none'" class="value-col info">No value required</div>
+        </ng-container>
+
+        <button mat-icon-button color="warn" (click)="removeFilter(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <button mat-stroked-button color="primary" (click)="addFilter()">Add filter</button>
+    </div>
+
+    <!-- Order by and Limit -->
+    <div class="order-limit">
+      <mat-form-field appearance="outline">
+        <mat-label>Order by</mat-label>
+        <mat-select [(ngModel)]="orderByColumn">
+          <mat-option *ngFor="let c of availableColumns" [value]="columnKey(c)">
+            {{ c.screenLabel }} — {{ c.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Direction</mat-label>
+        <mat-select [(ngModel)]="orderByDirection">
+          <mat-option value="ASC">ASC</mat-option>
+          <mat-option value="DESC">DESC</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Limit</mat-label>
+        <input matInput type="number" [(ngModel)]="limit" min="1">
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="accent" (click)="runQuery()">Run query</button>
+
+    <mat-divider></mat-divider>
+
+    <!-- Results -->
+    <div class="results" *ngIf="rows?.length">
+      <table mat-table [dataSource]="rows" class="mat-elevation-z2">
+        <ng-container *ngFor="let col of selectedColumnDefs" [matColumnDef]="col.alias">
+          <th mat-header-cell *matHeaderCellDef>{{ col.header }}</th>
+          <td mat-cell *matCellDef="let row">{{ row[col.alias] }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="selectedColumnAliases"></tr>
+        <tr mat-row *matRowDef="let row; columns: selectedColumnAliases;"></tr>
+      </table>
+    </div>
   </div>
-
-  <button mat-raised-button color="accent" (click)="runQuery()">Run query</button>
-
-  <mat-divider></mat-divider>
-
-  <!-- Results -->
-  <div class="results" *ngIf="rows?.length">
-    <table mat-table [dataSource]="rows" class="mat-elevation-z2">
-      <ng-container *ngFor="let col of selectedColumnDefs" [matColumnDef]="col.alias">
-        <th mat-header-cell *matHeaderCellDef>{{ col.header }}</th>
-        <td mat-cell *matCellDef="let row">{{ row[col.alias] }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="selectedColumnAliases"></tr>
-      <tr mat-row *matRowDef="let row; columns: selectedColumnAliases;"></tr>
-    </table>
-  </div>
-</div>
+</layout>

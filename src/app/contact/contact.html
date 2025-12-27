@@ -1,4 +1,4 @@
-
+<layout>
   <div class="right_col" role="main">
     <div class="container">
       <div class="clearfix"></div>
@@ -13,32 +13,32 @@
 
             <div class="controls" style="display: flex;">
               <a (click)="Back()" class="nav-link">
-                <i class="fas fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+                <i class="fa-solid fa-arrow-left" style="color: #5ba146;" title="Back"></i>
               </a>
               <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode && !isUserActive">
-                <i class="fas fa-pen" style="color: #5ba146;" title="Edit"></i>
+                <i class="fa-solid fa-pen" style="color: #5ba146;" title="Edit"></i>
               </a>
 
               <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode) ">
-                <i class="fas fa-times" style="color: #5ba146;" title="Cancel"></i>
+                <i class="fa-solid fa-times" style="color: #5ba146;" title="Cancel"></i>
               </a>
 
               <a class="nav-link" (click)="onSubmit(false)"
                 *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
-                <i class="fas fa-save" style="color: #5ba146;" title="Save"></i>
+                <i class="fa-solid fa-save" style="color: #5ba146;" title="Save"></i>
               </a>
 
               <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
-                <i class="fas fa-trash" style="color: #5ba146;" title="Delete"></i>
+                <i class="fa-solid fa-trash" style="color: #5ba146;" title="Delete"></i>
               </a>
               <button (click)="addUser()"
                 *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && !isUser && userType != 'CS'" class="nav-link btn">
-                <i class="fas fa-user" style="color: #5ba146;" title="Add User"></i>
+                <i class="fa-solid fa-user" style="color: #5ba146;" title="Add User"></i>
               </button>
               <div *ngIf="role != this.environment.custRoleCode"> 
                 <button (click)="deactivateUser()" [disabled]="!isUserActive"
                   *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && isUser && userType != 'CS'" class="nav-link btn">
-                  <i class="fas fa-user-times" style="color: #5ba146;" title="Deactivate User"></i>
+                  <i class="fa-solid fa-user-times" style="color: #5ba146;" title="Deactivate User"></i>
                 </button>
               </div>
             </div>
@@ -268,3 +268,4 @@
       </div>
     </div>
   </div>
+</layout>

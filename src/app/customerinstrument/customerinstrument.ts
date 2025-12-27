@@ -1027,7 +1027,7 @@ export class CustomerInstrumentComponent implements OnInit {
         lockPosition: "left",
         cellRenderer: (params) => {
           if (this.hasDeleteAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fa-solid fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
           }
         }
       },
@@ -1121,7 +1121,7 @@ export class CustomerInstrumentComponent implements OnInit {
         lockPosition: "left",
         cellRenderer: (params) => {
           if (this.hasDeleteAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fas fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fa-solid fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
           }
         }
       },

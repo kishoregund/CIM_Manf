@@ -1,10 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ColDef,  GridApi } from "ag-grid-community";
+import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import { GridApi } from "ag-grid-community";
 import { Amc, User } from "../_models";
 import { AccountService } from "../_services";
 import { BusinessUnitService } from "../_services/businessunit.service";
 import { UserDetails } from "../_newmodels/UserDetails";
+
+// Register as an array 
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 @Component({
     selector: "CreateBusinessUnit",
@@ -19,7 +23,7 @@ export class BusinessUnitListComponent implements OnInit {
     hasAddAccess: boolean = false;
     hasDeleteAccess: boolean = false;
     public columnDefs: any
-    
+
     private api: GridApi;
 
     constructor(
@@ -39,11 +43,11 @@ export class BusinessUnitListComponent implements OnInit {
 
 
         this.BusinessUnitService.GetAll().pipe()
-        .subscribe((data: any) => {
-            console.log(data);
-            this.BusinessUnitList = data.data;
-            this.columnDefs = this.createColumnDefs();
-        });        
+            .subscribe((data: any) => {
+                console.log(data);
+                this.BusinessUnitList = data.data;
+                this.columnDefs = this.createColumnDefs();
+            });
     }
 
     Add() {
@@ -75,7 +79,7 @@ export class BusinessUnitListComponent implements OnInit {
                 tooltipField: "businessUnitName",
                 width: "680"
             },
-             {
+            {
                 headerName: 'Distributor',
                 field: 'distributorName',
                 filter: true,
@@ -88,7 +92,6 @@ export class BusinessUnitListComponent implements OnInit {
 
     onGridReady(params): void {
         this.api = params.api;
-        
         this.api.sizeColumnsToFit();
     }
 }

@@ -13,12 +13,12 @@ import { HttpEventType, HttpResponse } from "@angular/common/http";
       class="btn btn-link"
       (click)="download(params)"
     >
-      <i class="fas fa-download" title="Download"></i>
+      <i class="fa-solid fa-download" title="Download"></i>
     </button>
 
     <button class="btn btn-link" *ngIf="params.deleteaccess" type="button"
      (click)="delete(params)">
-      <i class="fas fa-trash-alt" title="Delete"></i>
+      <i class="fa-solid fa-trash-alt" title="Delete"></i>
     </button>`,
     standalone: false
 })

@@ -1,6 +1,6 @@
 ﻿<div *ngFor="let alert of alerts" class="{{cssClass(alert)}}">
     <a class="close btn" (click)="removeAlert(alert)">
-        <i class="fas fa-times" style="color: #5ba146;" title="Close"></i>
+        <i class="fa-solid fa-times" style="color: #5ba146;" title="Close"></i>
     </a>
     <span [innerHTML]="alert.message"></span>
 </div>

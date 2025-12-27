@@ -12,11 +12,11 @@ import { EnvService } from '../_services/env/env.service';
 
 @Component({
     template: `
-    <button *ngIf="!isMaster" class="btn btn-link" data-action-type="remove" (click)="delete(params)"><i class="fas fa-trash-alt" title="Delete"></i></button>    
-    <button *ngIf="!isMaster" class="btn btn-link" [disabled]="!params.hasUpdateAccess" data-action-type="edit"><i class="fas fas fa-pen" title="Edit Value"
+    <button *ngIf="!isMaster" class="btn btn-link" data-action-type="remove" (click)="delete(params)"><i class="fa-solid fa-trash-alt" title="Delete"></i></button>    
+    <button *ngIf="!isMaster" class="btn btn-link" [disabled]="!params.hasUpdateAccess" data-action-type="edit"><i class="fa-solid fas fa-pen" title="Edit Value"
                                                                                                 data-action-type="edit"></i></button>
 `
-    // <button class="btn btn-link" *ngIf="hasAddAccess" [disabled]="!hasAddAccess" data-action-type="add"><i class="fas fa-plus-circle" title="Add Value" data-action-type="add"></i></button>
+    // <button class="btn btn-link" *ngIf="hasAddAccess" [disabled]="!hasAddAccess" data-action-type="add"><i class="fa-solid fa-plus-circle" title="Add Value" data-action-type="add"></i></button>
     ,
     standalone: false
 })

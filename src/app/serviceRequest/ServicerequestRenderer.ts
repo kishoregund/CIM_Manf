@@ -19,7 +19,7 @@ import { SRAssignedHistoryService } from "../_services/srassignedhistory.service
         </select>
 </div>   
 <div class="col-md-2">
-<button type="submit" *ngIf="hasUpdate && this.isGenerateReport == false" class="btn"> <i class="fas fa-save" title="save"></i></button>
+<button type="submit" *ngIf="hasUpdate && this.isGenerateReport == false" class="btn"> <i class="fa-solid fa-save" title="save"></i></button>
 </div>
 </div>
 </form>
