@@ -1106,6 +1106,10 @@ export class ServiceRequestComponent implements OnInit {
       if (this.serviceRequest.breakoccurDetailsId == null) {
         this.serviceRequest.breakoccurDetailsId = this.emptyGuid;
       }
+      
+      if (this.serviceRequest.assignedTo == "" || this.serviceRequest.assignedTo == null) {
+        this.serviceRequest.assignedTo = this.emptyGuid;
+      }
 
       if (this.IsEngineerView && this.serviceRequest.isCritical) this.serviceRequest.isCritical = false;
       if (this.serviceRequestform.get('subRequestTypeId').value.length > 0) {

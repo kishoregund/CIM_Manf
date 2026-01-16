@@ -17,13 +17,14 @@ import { DistributorService } from '../_services/distributor.service';
 import { ServiceRequestService } from '../_services/serviceRequest.service';
 import { UserDetails } from '../_newmodels/UserDetails';
 import { CustomerSiteService } from '../_services/customersite.service';
+import { Router } from '@angular/router';
 
 declare function CustomerDashboardCharts(): any;
 
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    standalone: false
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  standalone: false
 })
 export class DashboardComponent implements OnInit {
   user: UserDetails;
@@ -54,7 +55,7 @@ export class DashboardComponent implements OnInit {
   datepipe: any = new DatePipe("en-US");
   logindata: any;
   distId: any;
-  siteId: string;  
+  siteId: string;
   customerId: any;
   serviceTypeList: ListTypeItem[];
   serviceRequest: any;
@@ -77,6 +78,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
+    private router: Router,
     private distributorService: DistributorService,
     private serviceRequestService: ServiceRequestService,
     private notificationService: NotificationService,
@@ -127,7 +129,7 @@ export class DashboardComponent implements OnInit {
     this.offerRequestService.getAll().pipe(first())
       .subscribe((OfReqData: any) => this.shipmentInProcess = OfReqData.data?.filter(x => !x.isCompleted && x.isShipment)?.length)
 
-    
+
     this.custSpInventoryService.getAll(this.user.contactId, this.emptyGuid).pipe(first())
       .subscribe((spInv: any) => this.spInventory = spInv.data)
   }
@@ -221,7 +223,7 @@ export class DashboardComponent implements OnInit {
           if (x.isCompleted == false) pendingRequestLabels.push(x.visitTypeName)
           else label.push(x.visitTypeName)
         })
-debugger;
+        debugger;
         label = [... new Set(label)]
         pendingRequestLabels = [... new Set(pendingRequestLabels)]
 
@@ -314,12 +316,12 @@ debugger;
       sDate: [""],
       eDate: [""],
       serReqNo: [""],
-      distId:  this.emptyGuid,
-      custId:  this.emptyGuid,
+      distId: this.emptyGuid,
+      custId: this.emptyGuid,
       statusId: this.emptyGuid,
       stageId: this.emptyGuid,
       siteId: this.emptyGuid,
-      assignedTo:  this.emptyGuid,
+      assignedTo: this.emptyGuid,
       serReqDate: [''],
       visitType: [''],
       companyName: [''],
@@ -338,7 +340,7 @@ debugger;
       breakdownType: [''],
       isRecurring: [false],
       recurringComments: [''],
-      breakoccurDetailsId:  this.emptyGuid,
+      breakoccurDetailsId: this.emptyGuid,
       alarmDetails: [''],
       resolveAction: [''],
       currentInstruStatus: [''],
@@ -380,7 +382,7 @@ debugger;
           this.serviceRequestform.get('visitType').setValue(data.data.find(x => x.itemCode == "BRKDW")?.listTypeItemId)
       });
 
-      this.listTypeItemService.getById('SRSAT').pipe(first())
+    this.listTypeItemService.getById('SRSAT').pipe(first())
       .subscribe({
         next: (data: any) => {
           this.serviceRequestform.get('stageId').setValue(data.data.find(x => x.itemCode == "NTSTD")?.listTypeItemId);
@@ -413,14 +415,25 @@ debugger;
         this.serviceRequestService.save(this.serviceRequest).pipe(first())
           .subscribe({
             next: (data: any) => {
+
               if (data.isSuccessful) {
+
                 setTimeout(() => {
                   this.ngOnInit();
-                  this.notificationService.showSuccess("Service Request raised successfully", "Success")
+                  this.notificationService.showSuccess("Service Request raised successfully", "Success");
+
+                  this.router.navigate(
+                    ["servicerequest/" + data.data],
+                    {
+                      queryParams: {
+                        isNSNav: true
+                      },
+                      queryParamsHandling: 'merge',
+                    });
+
                 }, 1000);
               }
-              else
-              {  this.notificationService.showError(data.messages[0], "Error")}
+              else { this.notificationService.showError(data.messages[0], "Error") }
             }
           })
       }

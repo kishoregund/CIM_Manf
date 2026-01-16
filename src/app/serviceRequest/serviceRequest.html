@@ -114,8 +114,8 @@
             </div>
             <div class="col-md-3 col-sm-3">
               <label for="serReqDate">Date<span class="text-danger">*</span></label>
-              <input [ngClass]="{ 'is-invalid':  f.serReqDate.touched && f.serReqDate.errors }" readonly
-                class="form-control" formControlName="serReqDate" type="text" />
+              <input [ngClass]="{ 'is-invalid':  f.serReqDate.touched && f.serReqDate.errors }"
+                bsDatepicker class="form-control" formControlName="serReqDate" type="text" />
               <div *ngIf=" f.serReqDate.touched && f.serReqDate.errors" class="invalid-feedback">
                 <div *ngIf="f.serReqDate.errors.required">Date is required</div>
               </div>
