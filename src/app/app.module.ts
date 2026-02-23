@@ -67,6 +67,7 @@ import { WorkdoneContentComponent } from './serviceReport/workdonecontent';
 import { WorkTimeContentComponent } from './serviceReport/workTime';
 import { ServiceReportComponent } from './serviceReport/serviceReport';
 import { ServiceReportListComponent } from './serviceReport/serviceReportlist';
+import { NgSignaturePadOptions, SignaturePadComponent } from '@almothafar/angular-signature-pad';
 //import { SignaturePadModule } from 'angular2-signaturepad';
 // import { StaydetailsListComponent } from './Staydetails/staydetailslist/staydetailslist.component';
 // import { StaydetailsComponent } from './Staydetails/staydetails/staydetails.component';
@@ -336,7 +337,7 @@ import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
         NgSelectModule,
         NgbModule,
         //Ng2TelInputModule,
-        //SignaturePadModule,
+        SignaturePadComponent, 
         ModalModule.forRoot(),
         ToastrModule.forRoot({
             timeOut: 2000,

@@ -22,7 +22,8 @@ import {
   workTime
 } from '../_models';
 //import { SignaturePad } from 'angular2-signaturepad';
-import { SignaturePadComponent } from '@almothafar/angular-signature-pad';
+//import { SignaturePadComponent } from '@almothafar/angular-signature-pad';
+import { SignaturePadComponent, NgSignaturePadOptions } from '@almothafar/angular-signature-pad';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -69,7 +70,7 @@ pdfMake.vfs = pdfFonts.pdfMake?.vfs;
 @Component({
     selector: 'app-servicereport',
     templateUrl: './serviceReport.html',
-    standalone: false
+    standalone: false,
 })
 
 export class ServiceReportComponent implements OnInit {
@@ -111,8 +112,8 @@ export class ServiceReportComponent implements OnInit {
   spconsumedlist: any[] = [];
   selectedConfigType: ConfigTypeValue[] = [];
   signatureImg: string;
-  @ViewChild('sigpad1') signaturePad: SignaturePadComponent;
-  @ViewChild('sigpad2') signaturePadcust: SignaturePadComponent;
+  @ViewChild('sigpad1') signaturePad!: SignaturePadComponent;
+  @ViewChild('sigpad2') signaturePadcust!: SignaturePadComponent;
   bsModalRef: BsModalRef;
   bsActionModalRef: BsModalRef;
   allcontactlist: Contact[];
@@ -125,11 +126,12 @@ export class ServiceReportComponent implements OnInit {
   public pdfcolumnDefs: any[];
   
   private pdfapi: GridApi;
-  signaturePadOptions: Object = {
+  signaturePadOptions: NgSignaturePadOptions = {
     'minWidth': 2,
-    'canvasWidth': 500,
-    'canvasHeight': 100
+    'canvasWidth': 300,
+    'canvasHeight': 150
   };
+
   custsign: any;
   engsign: any;
   private transaction: number;
