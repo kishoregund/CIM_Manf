@@ -16,7 +16,7 @@ export function GetParsedDate(date: string | Date): Date {
     parts = date.split("/");
 
     var dt = new Date(parseInt(parts[2], 10),
-        parseInt(parts[1], 10),// - 1, // commented to fix the -1 date issue.
+        parseInt(parts[1], 10) - 1, // commented to fix the -1 date issue.
         parseInt(parts[0], 10));
     return dt;
 
