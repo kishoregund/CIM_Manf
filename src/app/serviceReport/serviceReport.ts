@@ -96,6 +96,7 @@ export class ServiceReportComponent implements OnInit {
   hasUpdateAccess = false;
   hasDeleteAccess = false;
   hasAddAccess = false;
+  isShown = false;
   pdfPath: any;
   // public defaultdistributors: any[] = [{ key: "1", value: "Ashish" }, { key: "2", value: "CEO" }];
   public columnDefs: any[];
@@ -528,7 +529,8 @@ export class ServiceReportComponent implements OnInit {
 
 
   ToggleDropdown(id: string) {
-    document.getElementById(id).classList.toggle("show")
+     this.isShown = !this.isShown;
+    //document.getElementById(id).classList.toggle("show")
   }
 
   CancelEdit() {

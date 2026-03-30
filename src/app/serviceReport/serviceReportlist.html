@@ -6,14 +6,14 @@
 
           <div class="d-flex" style="align-items: center; justify-content: space-between;">
             <h3>Service Report List</h3>
-            <div class="d-flex">
+            <!-- <div class="d-flex">
               <a *ngIf="!showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
                 <i class="fa-solid fa-arrow-left" title="Grid"></i>
               </a>
               <a *ngIf="showGrid && isDist" (click)="toggleFilter()" style="font-size: 1.25rem;" class="nav-link">
                 <i class="fa-solid fa-search" title="Search"></i>
               </a>
-            </div>
+            </div> -->
           </div>
 
         </div>
@@ -21,10 +21,10 @@
       <hr />
       <div class="clearfix"></div>
 
-
+<!-- 
       <app-distributorfilter (showData)="ShowData($event)" *ngIf="!showGrid && isDist" (nData)="DataFilter($event)"
         controller="ServiceReports">
-      </app-distributorfilter>
+      </app-distributorfilter> -->
 
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine custom-ag-grid" (rowClicked)="EditRecord()"

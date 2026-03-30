@@ -1253,6 +1253,10 @@ body::-webkit-scrollbar-thumb:hover {
   background-image: url('../../assets/img/add-30.png');
 }
 
+.icon-vermenu {
+  background-image: url('../../assets/img/menu-vertical-30.png');
+}
+
 /* Change header background and text */
 .custom-ag-grid .ag-header {
   background-color: #5ba146;   /* dark header */
