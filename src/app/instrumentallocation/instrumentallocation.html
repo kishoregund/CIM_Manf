@@ -8,25 +8,25 @@
             <h3>Instrument Allocation</h3>
           </div>
 
-          <div class="controls" style="display: flex;">
+          <div class="controls menulinkExt">
             <a (click)="Back()" class="nav-link">
-              <i class="fa-solid fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              <span class="icon-btn icon-back" title="Back"></span>
             </a>
             <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
-              <i class="fa-solid fa-pen" style="color: #5ba146;" title="Edit"></i>
+              <span class="icon-btn icon-edit" title="Edit"></span>
             </a>
 
             <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
-              <i class="fa-solid fa-times" style="color: #5ba146;" title="Cancel"></i>
+              <span class="icon-btn icon-cancel" title="Cancel"></span>
             </a>
 
             <a class="nav-link" (click)="onSubmit()"
               *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
-              <i class="fa-solid fa-save" style="color: #5ba146;" title="Save"></i>
+              <span class="icon-btn icon-save" title="Save"></span>
             </a>
 
             <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
-              <i class="fa-solid fa-trash" style="color: #5ba146;" title="Delete"></i>
+              <span class="icon-btn icon-delete" title="Delete"></span>
             </a>
           </div>
         </div>

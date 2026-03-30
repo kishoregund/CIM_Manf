@@ -36,18 +36,18 @@
 
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
         <ag-grid-angular style="width: 100%; height: 500px;" *ngIf="IsDistributorView==true && IsAdminView==false"
-          class="ag-theme-alpine" (gridReady)="onGridReady($event)" (rowClicked)="EditRecord()"  [columnDefs]="columnDefs" [rowData]="srDistList"
+          class="ag-theme-alpine custom-ag-grid" (gridReady)="onGridReady($event)" (rowClicked)="EditRecord()"  [columnDefs]="columnDefs" [rowData]="srDistList"
           rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
 
         <ag-grid-angular style="width: 100%; height: 600px;" *ngIf="IsCustomerView==true && IsAdminView==false"
-          class="ag-theme-alpine" (gridReady)="onGridReady($event)" (rowClicked)="EditRecord()"  [columnDefs]="columnDefs" [rowData]="srCustList"
+          class="ag-theme-alpine custom-ag-grid" (gridReady)="onGridReady($event)" (rowClicked)="EditRecord()"  [columnDefs]="columnDefs" [rowData]="srCustList"
           rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
 
         <ag-grid-angular style="width: 100%; height: 500px;" *ngIf="IsEngineerView==true && IsAdminView==false"
-          class="ag-theme-alpine" (gridReady)="onGridReady($event)" (rowClicked)="EditRecord()"  [columnDefs]="columnDefs" [rowData]="srEngList"
+          class="ag-theme-alpine custom-ag-grid" (gridReady)="onGridReady($event)" (rowClicked)="EditRecord()"  [columnDefs]="columnDefs" [rowData]="srEngList"
           rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
 
-        <ag-grid-angular style="width: 100%; height: 500px;" *ngIf="IsAdminView==true" class="ag-theme-alpine"
+        <ag-grid-angular style="width: 100%; height: 500px;" *ngIf="IsAdminView==true" class="ag-theme-alpine custom-ag-grid"
           (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" (rowClicked)="EditRecord()"  [rowData]="srAdminList" rowSelection="single"
           pagination="true" paginationPageSize=10></ag-grid-angular>
       </div>

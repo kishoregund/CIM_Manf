@@ -9,25 +9,25 @@
             <h3>Service Report</h3>
           </div>
 
-          <div class="controls" style="display: flex;">
+          <div class="controls menulinkExt">
             <a (click)="Back()" class="nav-link">
-              <i class="fa-solid fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              <span class="icon-btn icon-back" title="Back"></span>
             </a>
             <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
-              <i class="fa-solid fa-pen" style="color: #5ba146;" title="Edit"></i>
+              <span class="icon-btn icon-edit" title="Edit"></span>
             </a>
 
             <a class="nav-link" (click)="CancelEdit()" *ngIf="isEditMode || isNewMode">
-              <i class="fa-solid fa-times" style="color: #5ba146;" title="Cancel"></i>
+              <span class="icon-btn icon-cancel" title="Cancel"></span>
             </a>
 
             <a class="nav-link" (click)="onSubmit()"
               *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)  && !isCompleted">
-              <i class="fa-solid fa-save" style="color: #5ba146;" title="Save"></i>
+              <span class="icon-btn icon-save" title="Save"></span>
             </a>
 
             <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
-              <i class="fa-solid fa-trash" style="color: #5ba146;" title="Delete"></i>
+              <span class="icon-btn icon-delete" title="Delete"></span>
             </a>
 
             <div class="dropdown"
@@ -277,7 +277,7 @@
 
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClicked($event)"
-                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine custom-ag-grid"
                   (gridReady)="onGridReady($event)" [columnDefs]="columnworkdefs" [rowData]="workdonelist"
                   rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
@@ -290,7 +290,7 @@
               </button>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onworktimeRowClicked($event)"
-                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine"
+                  (cellValueChanged)="onCellValueChanged($event)" class="ag-theme-alpine custom-ag-grid"
                   (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="workTime" rowSelection="single"
                   pagination="true" paginationPageSize=10></ag-grid-angular>
               </div>
@@ -311,7 +311,7 @@
               </div>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClickedCon($event)"
-                  (cellValueChanged)="onRowClickedCon($event)" class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  (cellValueChanged)="onRowClickedCon($event)" class="ag-theme-alpine custom-ag-grid" (gridReady)="onGridReady($event)"
                   [columnDefs]="spcolumnDefs" [rowData]="spconsumedlist" rowSelection="single" pagination="true"
                   paginationPageSize=10></ag-grid-angular>
               </div>
@@ -332,7 +332,7 @@
               </div>
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular style="width: 100%; height: 500px;" (rowClicked)="onRowClickedPre($event)"
-                  class="ag-theme-alpine" (gridReady)="onGridReady($event)"
+                  class="ag-theme-alpine custom-ag-grid" (gridReady)="onGridReady($event)"
                   (cellValueChanged)="onCellValueChangedPre($event)" [columnDefs]="spRecomandDefs"
                   [rowData]="sparePartRecommended" rowSelection="single" pagination="true" paginationPageSize=10>
                 </ag-grid-angular>
@@ -472,7 +472,7 @@
 
           <div class="row" *ngIf="ServiceReportId != null">
             <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
-              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine"
+              <ag-grid-angular style="width: 100%; height: 250px;" class="ag-theme-alpine custom-ag-grid"
                 (gridReady)="pdfonGridReady($event)" (rowClicked)="onPdfRowClicked($event)" [columnDefs]="pdfcolumnDefs"
                 [rowData]="PdffileData" rowSelection="single" pagination="true" paginationPageSize=5></ag-grid-angular>
             </div>

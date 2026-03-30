@@ -27,7 +27,7 @@
       <div class="clearfix"></div>
    
       <div class="col-md-12 col-sm-12" *ngIf="showGrid">
-        <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine" (rowClicked)="EditRecord()"
+        <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine custom-ag-grid" (rowClicked)="EditRecord()"
           (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="instrumentAllocationList" rowSelection="single"
           pagination="true" paginationPageSize=10></ag-grid-angular>
       </div>

@@ -8,26 +8,26 @@
             <h3>Master List Item</h3>
           </div>
 
-          <div class="controls" style="display: flex;">
+          <div class="controls menulinkExt">
             <a (click)="Back()" class="nav-link">
-              <i class="fa-solid fa-arrow-left" style="color: #5ba146;" title="Back"></i>
+              <span class="icon-btn icon-back" title="Back"></span>
             </a>
 
             <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode">
-              <i class="fa-solid fa-pen" style="color: #5ba146;" title="Edit"></i>
+              <span class="icon-btn icon-edit" title="Edit"></span>
             </a>
 
             <a class="nav-link" (click)="CancelEdit()" *ngIf="(isEditMode || isNewMode)">
-              <i class="fa-solid fa-times" style="color: #5ba146;" title="Cancel"></i>
+              <span class="icon-btn icon-cancel" title="Cancel"></span>
             </a>
 
             <a class="nav-link" (click)="onSubmit()"
               *ngIf="(hasUpdateAccess || hasAddAccess) && (isEditMode || isNewMode)">
-              <i class="fa-solid fa-save" style="color: #5ba146;" title="Save"></i>
+              <span class="icon-btn icon-save" title="Save"></span>
             </a>
 
             <!-- <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess">
-              <i class="fa-solid fa-trash" style="color: #5ba146;" title="Delete"></i>
+              <span class="icon-btn icon-delete" title="Delete"></span>
             </a> -->
           </div>
         </div>
@@ -82,11 +82,11 @@
           <div class="col-md-12 col-sm-12">
             <br />
             <ag-grid-angular *ngIf="isEditMode" (rowClicked)="onRowClicked($event)" style="width: 100%; height: 500px;"
-              class="ag-theme-alpine" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="itemList"
+              class="ag-theme-alpine custom-ag-grid" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="itemList"
               rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
 
             <ag-grid-angular *ngIf="!isEditMode" (rowClicked)="onRowClicked($event)" style="width: 100%; height: 500px;"
-              class="ag-theme-alpine" (gridReady)="onGridReadyRO($event)" [columnDefs]="colReadOnlyDefs"
+              class="ag-theme-alpine custom-ag-grid" (gridReady)="onGridReadyRO($event)" [columnDefs]="colReadOnlyDefs"
               [rowData]="itemList" rowSelection="single" pagination="true" paginationPageSize=10></ag-grid-angular>
           </div>
         </div>
