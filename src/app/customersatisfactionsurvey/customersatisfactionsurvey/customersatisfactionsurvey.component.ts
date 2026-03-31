@@ -24,11 +24,12 @@ import { DistributorService } from "src/app/_services/distributor.service";
 import { ServiceRequestService } from "src/app/_services/serviceRequest.service";
 import { ServiceReportService } from "src/app/_services/serviceReport.service";
 import { CustomersatisfactionsurveyService } from 'src/app/_services/customersatisfactionsurvey.service';
+import { BUBrandModel } from "src/app/_newmodels/BUBrandModel";
 
 @Component({
-    selector: "app-customersatisfactionsurvey",
-    templateUrl: "./customersatisfactionsurvey.component.html",
-    standalone: false
+  selector: "app-customersatisfactionsurvey",
+  templateUrl: "./customersatisfactionsurvey.component.html",
+  standalone: false
 })
 export class CustomersatisfactionsurveyComponent implements OnInit {
   form: FormGroup;
@@ -45,7 +46,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
-
+  buBrandModel: BUBrandModel;
   user: UserDetails;
   code = "ACCOM";
 
@@ -139,7 +140,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       comments: [""],
     });
 
-    
+
     this.id = this.route.snapshot.paramMap.get("id");
     this.servicereportid = this.route.snapshot.queryParams?.servicereportid
 
@@ -148,8 +149,6 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     await this.GetDistAndEng();
 
-
-    debugger;
     if (this.role == this.environment.engRoleCode) {
       this.eng = true
       this.form.get('engineerId').setValue(this.user.contactId)
@@ -162,17 +161,16 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
           this.distributorservice.getDistributorRegionContacts(data.data.distId, "Engineer")
             .subscribe((engData: any) => {
               this.engineer = engData.data;
-              this.servicerequestservice.GetServiceRequestByDist(data.data.distId)
-                .subscribe((sreqData: any) => {
-                  this.servicerequest = sreqData.data.filter(x => x.assignedTo == data.data.engineerId && !x.isReportGenerated)
-                  setTimeout(() => {
-                    this.formData = data.data;
-                    this.form.patchValue(this.formData);
-                  }, 100);
-                });
-
             });
 
+          this.servicerequestservice.GetServiceRequestByDist(data.data.distId)
+            .subscribe((sreqData: any) => {
+              this.servicerequest = sreqData.data.filter(x => x.assignedTo == data.data.engineerId && !x.isReportGenerated)
+              setTimeout(() => {
+                this.formData = data.data;
+                this.form.patchValue(this.formData);
+              }, 100);
+            });
         });
 
       this.form.disable()
@@ -183,6 +181,11 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     }
 
     if (this.servicereportid != null) {
+
+      var serreqdata: any = await this.servicerequestservice.GetServiceRequestBySRPId(this.servicereportid).toPromise();
+      this.servicerequest = serreqdata.data;//.data.filter(x => x.assignedTo == this.user.contactId && !x.isReportGenerated);
+
+
       let data: any = await this.serviceReportService.getById(this.servicereportid).toPromise();
       let serreq = data.data.serviceRequest
       if (!this.isEng) await this.getengineers(serreq.distId)
@@ -198,6 +201,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
         this.form.get('email').setValue(serreq.email)
       }, 200);
     }
+
   }
 
   async GetDistAndEng() {
@@ -210,9 +214,6 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     var engdata: any = await this.distributorservice.getDistributorRegionContacts(this.distId, "Engineer").toPromise()
     this.engineer = engdata.data
-
-    var serreqdata: any = await this.servicerequestservice.GetServiceRequestBySRPId(this.servicereportid).toPromise();
-    this.servicerequest = serreqdata.data;//.data.filter(x => x.assignedTo == this.user.contactId && !x.isReportGenerated);
 
   }
 

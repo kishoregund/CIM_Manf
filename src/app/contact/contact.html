@@ -33,12 +33,12 @@
               </a>
               <button (click)="addUser()"
                 *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && !isUser && userType != 'CS'" class="nav-link btn">
-                <i class="fa-solid fa-user" style="color: #5ba146;" title="Add User"></i>
+                <span class="icon-btn icon-user" title="Add User"></span>
               </button>
               <div *ngIf="role != this.environment.custRoleCode"> 
                 <button (click)="deactivateUser()" [disabled]="!isUserActive"
                   *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && isUser && userType != 'CS'" class="nav-link btn">
-                  <i class="fa-solid fa-user-times" style="color: #5ba146;" title="Deactivate User"></i>
+                  <span class="icon-btn icon-deauser" title="Deactivate User"></span>
                 </button>
               </div>
             </div>

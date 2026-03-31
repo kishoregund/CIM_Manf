@@ -1257,6 +1257,18 @@ body::-webkit-scrollbar-thumb:hover {
   background-image: url('../../assets/img/menu-vertical-30.png');
 }
 
+.icon-user {
+  background-image: url('../../assets/img/user-50.png');
+}
+
+.icon-deauser {
+  background-image: url('../../assets/img/delete-user-50.png');
+}
+
+.icon-critical {
+  background-image: url('../../assets/img/electricity-24.png');
+}
+
 /* Change header background and text */
 .custom-ag-grid .ag-header {
   background-color: #5ba146;   /* dark header */
