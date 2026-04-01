@@ -158,22 +158,18 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     if (this.id != null) {
       this.CustomersatisfactionsurveyService.getById(this.id)
         .subscribe((data: any) => {
-          this.distributorservice.getDistributorRegionContacts(data.data.distId, "Engineer")
-            .subscribe((engData: any) => {
-              this.engineer = engData.data;
-            });
 
-          this.servicerequestservice.GetServiceRequestByDist(data.data.distId)
-            .subscribe((sreqData: any) => {
-              this.servicerequest = sreqData.data.filter(x => x.assignedTo == data.data.engineerId && !x.isReportGenerated)
-              setTimeout(() => {
-                this.formData = data.data;
-                this.form.patchValue(this.formData);
-              }, 100);
-            });
+
+          setTimeout(() => {
+            this.formData = data.data;
+            this.form.patchValue(this.formData);
+            this.form.get("serviceRequestId").setValue(data.data.servicerequestId)
+          }, 100);
+
+
         });
 
-      this.form.disable()
+      //this.form.disable()
     }
     else {
       this.isNewMode = true
@@ -214,6 +210,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
     var engdata: any = await this.distributorservice.getDistributorRegionContacts(this.distId, "Engineer").toPromise()
     this.engineer = engdata.data
+
+    var serreqdata: any = await this.servicerequestservice.GetServiceRequestByDist(this.distId).toPromise()
+    this.servicerequest = serreqdata.data.filter(x => !x.isReportGenerated)
 
   }
 

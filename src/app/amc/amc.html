@@ -1,4 +1,25 @@
 <layout>
+
+<style>
+  th>button {
+    padding: 6px 9px;
+  }
+
+  thead {
+    background-color: #68bb59;
+    color: white;
+  }
+
+  tbody {
+    border: 0.5px solid rgb(202 170 170);
+  }
+
+  td>textarea {
+    width: 300px;
+  }
+</style>          
+
+
   <div class="right_col" role="main">
     <div class="container">
 
@@ -240,9 +261,6 @@
               rowSelection="single" pagination="true" paginationPageSize="10">
             </ag-grid-angular>
           </div>
-
-          
-
           <div formGroupName="amcItemsForm" class="offerRequestProccess"  *ngIf="hasId" >
             <div class="page-title">
               <div class="title_left">
@@ -273,7 +291,7 @@
                     <div *ngIf="IsDistributorView && (hasDeleteAccess || hasUpdateAccess) && !isCompleted && isEditMode">
                       <button type="button" *ngIf="hasDeleteAccess && !(item.serviceRequestId)" (click)="DeleteItem(item)"
                         class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
-                        <i class="fa-solid fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                        <span class="icon-btn icon-delete" title="Delete"></span>
                       </button>
                   </div>                   
                   </td>
@@ -297,7 +315,7 @@
                     <div class="d-flex justify-content-center" *ngIf="IsDistributorView && (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)">
                       <button type="button" *ngIf=" (hasUpdateAccess && isEditMode) || (hasAddAccess && isNewMode)"
                         (click)="onItemAdd()" style="background-color: transparent; color: #5ba146; border: none;">
-                        <i class="fa-solid fa-save" style="font-size: 20px;"></i>
+                        <span class="icon-btn icon-save" title="Save"></span>
                       </button>
                     </div>
                   </td>
@@ -360,7 +378,7 @@
                   <th>Stage</th>
                   <th>Comments</th>
                   <th>Date</th>
-                  <th>Download File <i class="mx-2 fas fa-download"></i></th>
+                  <th>Download File <span style="margin-left: 15px;" class="icon-btn icon-download" title="download"></span></th>
                 </tr>
               </thead>
               <tbody>
@@ -368,15 +386,15 @@
                   <td *ngIf="(hasDeleteAccess || hasUpdateAccess )&& !isCompleted && isEditMode" class="d-flex w-100">
                     <div class="d-flex w-50 flex-column">
                       <button type="button" class="btn" [disabled]="first" (click)="StageMoveUp(item.stageIndex)">
-                        <i class="fa-solid fa-arrow-up"></i>
+                        <span class="icon-btn icon-uparrow" title="up"></span>
                       </button>
                       <button type="button" class="btn" [disabled]="last" (click)="StageMoveDown(item.stageIndex)">
-                        <i class="fa-solid fa-arrow-down"></i>
+                        <span class="icon-btn icon-downarrow" title="down"></span>
                       </button>
                     </div>
                     <button type="button" *ngIf="hasDeleteAccess" (click)="deleteProcess(item.id)"
                       class="w-50 align-baseline" style="background-color: transparent;color: #5ba146;border: none;">
-                      <i class="fa-solid fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                      <span class="icon-btn icon-save" title="delete"></span>
                     </button>
                   </td>
 
@@ -399,15 +417,14 @@
               </tbody>
               <tfoot *ngIf="hasUpdateAccess && !isCompleted && isEditMode" style="
                   background: whitesmoke;
-                  border: 0.5px solid rgb(202 170 170);
-                ">
+                  border: 0.5px solid rgb(202 170 170);">
                 <tr>
 
                   <td>
                     <div class="d-flex justify-content-center">
                       <button type="button" *ngIf="hasUpdateAccess" [disabled]="submitted" (click)="submitStageData()"
                         style="background-color: transparent; color: #5ba146; border: none;">
-                        <i class="fa-solid fa-save" style="font-size: 20px;"></i>
+                        <span class="icon-btn icon-save" title="Save"></span>
                       </button>
                     </div>
                   </td>
@@ -485,22 +502,3 @@
     </div>
   </div>
 </layout>
-
-<style>
-  th>button {
-    padding: 6px 9px;
-  }
-
-  thead {
-    background-color: #68bb59;
-    color: white;
-  }
-
-  tbody {
-    border: 0.5px solid rgb(202 170 170);
-  }
-
-  td>textarea {
-    width: 300px;
-  }
-</style>

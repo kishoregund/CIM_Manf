@@ -15,7 +15,8 @@
               <a (click)="Back()" class="nav-link">
                 <span class="icon-btn icon-back" title="Back"></span>
               </a>
-              <a class="nav-link" (click)="EditMode()" *ngIf="hasUpdateAccess && !isEditMode && !isNewMode && !isUserActive">
+              <a class="nav-link" (click)="EditMode()"
+                *ngIf="hasUpdateAccess && !isEditMode && !isNewMode && !isUserActive">
                 <span class="icon-btn icon-edit" title="Edit"></span>
               </a>
 
@@ -31,15 +32,17 @@
               <a class="nav-link" (click)="DeleteRecord()" *ngIf="hasDeleteAccess && !isNewMode">
                 <span class="icon-btn icon-delete" title="Delete"></span>
               </a>
-              <button (click)="addUser()"
-                *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && !isUser && userType != 'CS'" class="nav-link btn">
+              <a (click)="addUser()"
+                *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && !isUser && userType != 'CS'"
+                class="nav-link btn">
                 <span class="icon-btn icon-user" title="Add User"></span>
-              </button>
-              <div *ngIf="role != this.environment.custRoleCode"> 
-                <button (click)="deactivateUser()" [disabled]="!isUserActive"
-                  *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && isUser && userType != 'CS'" class="nav-link btn">
+              </a>
+              <div *ngIf="role != this.environment.custRoleCode">
+                <a (click)="deactivateUser()" [disabled]="!isUserActive"
+                  *ngIf="(hasUpdateAccess || hasAddAccess) && id != null && !isEditMode && isUser && userType != 'CS'"
+                  class="nav-link btn">
                   <span class="icon-btn icon-deauser" title="Deactivate User"></span>
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -87,9 +90,9 @@
             </div>
             <div class="row">
               <div class="col-md-4 col-sm-4">
-                <label for="primaryContactNo">Primary Mobile Phone Number<span class="text-danger">*</span></label><br />
-                <input type="tel" phoneInput formControlName="primaryContactNo" class="form-control"
-                  maxlength="20" 
+                <label for="primaryContactNo">Primary Mobile Phone Number<span
+                    class="text-danger">*</span></label><br />
+                <input type="tel" phoneInput formControlName="primaryContactNo" class="form-control" maxlength="20"
                   [ngClass]="{ 'is-invalid': f.primaryContactNo.touched && f.primaryContactNo.errors }" />
                 <!--<input type="tel" formControlName="primaryContactNo" class="form-control"
                      maxlength="10" [ngClass]="{ 'is-invalid': f.place.touched && f.primaryContactNo.errors }" />-->
@@ -112,7 +115,7 @@
               </div>
               <div class="col-md-4 col-sm-4">
                 <label for="secondaryContactNo">Secondory Phone Number<span class="text-danger">*</span></label><br />
-                <input type="tel"  formControlName="secondaryContactNo" class="form-control" maxlength="20" 
+                <input type="tel" formControlName="secondaryContactNo" class="form-control" maxlength="20"
                   [ngClass]="{ 'is-invalid': f.secondaryContactNo.touched && f.secondaryContactNo.errors }" />
                 <div *ngIf="f.secondaryContactNo.touched && f.secondaryContactNo.errors" style="display: block;"
                   class="invalid-feedback">
@@ -126,7 +129,7 @@
             <div class="row">
               <div class="col-md-4 col-sm-4">
                 <label for="whatsappNo">WhatsApp No<span class="text-danger">*</span></label><br />
-                <input type="tel"  formControlName="whatsappNo" class="form-control" maxlength="20" 
+                <input type="tel" formControlName="whatsappNo" class="form-control" maxlength="20"
                   [ngClass]="{ 'is-invalid': f.whatsappNo.touched && f.whatsappNo.errors }" />
                 <div *ngIf="f.whatsappNo.touched && f.whatsappNo.errors" style="display: block;"
                   class="invalid-feedback">
@@ -140,7 +143,8 @@
                 <label for="secondaryEmail">Secondory E-Mail<span class="text-danger">*</span></label>
                 <input type="email" formControlName="secondaryEmail" class="form-control"
                   [ngClass]="{ 'is-invalid': f.secondaryEmail.touched && f.secondaryEmail.errors }" />
-                <div *ngIf="f.secondaryEmail.touched && f.secondaryEmail.errors" style="display: block;" class="invalid-feedback">
+                <div *ngIf="f.secondaryEmail.touched && f.secondaryEmail.errors" style="display: block;"
+                  class="invalid-feedback">
                   <div *ngIf="f.secondaryEmail.errors?.required">Secondory Email is required</div>
                   <div *ngIf="f.secondaryEmail.errors?.pattern">Please provide valid email</div>
                 </div>
@@ -160,13 +164,13 @@
                 </div>
               </div>
 
-              <div class="col-md-4 col-sm-4 mt-3" >
+              <div class="col-md-4 col-sm-4 mt-3">
                 <label for="isActive">
                   <input id="isActive" type="checkbox" disabled formControlName="isActive">
-                  Active 
+                  Active
                 </label>
               </div>
-              
+
               <div class="col-md-4 col-sm-4 mt-3" *ngIf="type == 'DR'">
                 <label for="isFieldEngineer">
                   <input id="isFieldEngineer" type="checkbox" formControlName="isFieldEngineer">
@@ -183,16 +187,16 @@
             <div class="clearfix"></div>
             <hr />
 
-              <div class="row">
-                <div class="col-sm-4">
-                  <label for="street">Street<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="street" class="form-control"
-                    [ngClass]="{ 'is-invalid':f.street.touched && f.street.errors }" />
-                  <div *ngIf="f.street.touched && f.street.errors" class="invalid-feedback">
-                    <div *ngIf="f.street.errors.required">Street is required</div>
-                  </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="street">Street<span class="text-danger">*</span></label>
+                <input type="text" formControlName="street" class="form-control"
+                  [ngClass]="{ 'is-invalid':f.street.touched && f.street.errors }" />
+                <div *ngIf="f.street.touched && f.street.errors" class="invalid-feedback">
+                  <div *ngIf="f.street.errors.required">Street is required</div>
                 </div>
-                <!-- <div class="col-sm-4">
+              </div>
+              <!-- <div class="col-sm-4">
                   <label for="area">Area<span class="text-danger">*</span></label>
                   <input type="text" formControlName="area" class="form-control"
                     [ngClass]="{ 'is-invalid': f.area.touched && f.area.errors }" />
@@ -200,69 +204,69 @@
                     <div *ngIf="f.area.errors.required">Area is required</div>
                   </div>
                 </div> -->
-                <div class="col-sm-4">
-                  <label for="city">City<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="city" class="form-control"
-                    [ngClass]="{ 'is-invalid': f.city.touched && f.city.errors }" />
-                  <div *ngIf="f.city.touched && f.city.errors" class="invalid-feedback">
-                    <div *ngIf="f.city.errors.required">City is required</div>
-                  </div>
+              <div class="col-sm-4">
+                <label for="city">City<span class="text-danger">*</span></label>
+                <input type="text" formControlName="city" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.city.touched && f.city.errors }" />
+                <div *ngIf="f.city.touched && f.city.errors" class="invalid-feedback">
+                  <div *ngIf="f.city.errors.required">City is required</div>
                 </div>
-                <div class="col-sm-4">
-                  <label for="place">State<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="place" class="form-control"
-                    [ngClass]="{ 'is-invalid': f.place.touched && f.place.errors }" />
-                  <div *ngIf="f.place.touched && f.place.errors" class="invalid-feedback">
-                    <div *ngIf="f.place.errors.required">Place is required</div>
-                  </div>
-                </div>
-
-                <div class="col-sm-4">
-                  <label for="addrCountryId">Country<span class="text-danger">*</span></label>
-                  <select formControlName="addrCountryId" class="form-select"
-                    [ngClass]="{ 'is-invalid': f.addrCountryId.touched && f.addrCountryId.errors }">
-                    <!--<option value="0">--All--</option>-->
-                    <option *ngFor="let country of countries" value={{country.id}}>
-                      {{country.iso_3}} - {{country.name}}
-                    </option>
-                  </select>
-                  <div *ngIf="f.addrCountryId.touched && f.addrCountryId.errors" class="invalid-feedback">
-                    <div *ngIf="f.addrCountryId.errors.required">Country is required</div>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <label for="zip">Zip<span class="text-danger">*</span></label>
-                  <input type="text" maxlength="10" formControlName="zip" class="form-control"
-                    [ngClass]="{ 'is-invalid': f.zip.touched && f.zip.errors }" />
-
-                  <div *ngIf="f.zip.touched && f.zip.errors" class="invalid-feedback">
-                    <div *ngIf="f.zip.errors.required">Zip is required</div>
-                    <div *ngIf="f.zip.errors?.minlength">Min length is 4</div>
-                    <div *ngIf="f.zip.errors?.maxlength">Max length is 15</div>
-                    <div *ngIf="f.zip.errors?.pattern">Invalid Pin Code.</div>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <label for="geoLat">Latitude</label>
-                  <input type="number" formControlName="geoLat" class="form-control" value="0"
-                    [ngClass]="{ 'is-invalid': f.geoLat.touched && f.geoLat.errors }" />
-                  <div *ngIf="f.geoLat.touched && f.geoLat.errors" class="invalid-feedback">
-                    <div *ngIf="f.geoLat.errors.required">Latitude is required</div>
-                    <div *ngIf="f.geoLat.errors.max || f.geoLat.errors.min">Invalid Latitude</div>
-
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <label for="geoLong">Longitude</label>
-                  <input type="number" formControlName="geoLong" class="form-control" value="0"
-                    [ngClass]="{ 'is-invalid': f.geoLong.touched && f.geoLong.errors }" />
-                  <div *ngIf="f.geoLong.touched && f.geoLong.errors" class="invalid-feedback">
-                    <div *ngIf="f.geoLong.errors.required">Longitude is required</div>
-                    <div *ngIf="f.geoLong.errors.max || f.geoLong.errors.min">Invalid Longitude</div>
-                  </div>
-                </div>
-
               </div>
+              <div class="col-sm-4">
+                <label for="place">State<span class="text-danger">*</span></label>
+                <input type="text" formControlName="place" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.place.touched && f.place.errors }" />
+                <div *ngIf="f.place.touched && f.place.errors" class="invalid-feedback">
+                  <div *ngIf="f.place.errors.required">Place is required</div>
+                </div>
+              </div>
+
+              <div class="col-sm-4">
+                <label for="addrCountryId">Country<span class="text-danger">*</span></label>
+                <select formControlName="addrCountryId" class="form-select"
+                  [ngClass]="{ 'is-invalid': f.addrCountryId.touched && f.addrCountryId.errors }">
+                  <!--<option value="0">--All--</option>-->
+                  <option *ngFor="let country of countries" value={{country.id}}>
+                    {{country.iso_3}} - {{country.name}}
+                  </option>
+                </select>
+                <div *ngIf="f.addrCountryId.touched && f.addrCountryId.errors" class="invalid-feedback">
+                  <div *ngIf="f.addrCountryId.errors.required">Country is required</div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="zip">Zip<span class="text-danger">*</span></label>
+                <input type="text" maxlength="10" formControlName="zip" class="form-control"
+                  [ngClass]="{ 'is-invalid': f.zip.touched && f.zip.errors }" />
+
+                <div *ngIf="f.zip.touched && f.zip.errors" class="invalid-feedback">
+                  <div *ngIf="f.zip.errors.required">Zip is required</div>
+                  <div *ngIf="f.zip.errors?.minlength">Min length is 4</div>
+                  <div *ngIf="f.zip.errors?.maxlength">Max length is 15</div>
+                  <div *ngIf="f.zip.errors?.pattern">Invalid Pin Code.</div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="geoLat">Latitude</label>
+                <input type="number" formControlName="geoLat" class="form-control" value="0"
+                  [ngClass]="{ 'is-invalid': f.geoLat.touched && f.geoLat.errors }" />
+                <div *ngIf="f.geoLat.touched && f.geoLat.errors" class="invalid-feedback">
+                  <div *ngIf="f.geoLat.errors.required">Latitude is required</div>
+                  <div *ngIf="f.geoLat.errors.max || f.geoLat.errors.min">Invalid Latitude</div>
+
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label for="geoLong">Longitude</label>
+                <input type="number" formControlName="geoLong" class="form-control" value="0"
+                  [ngClass]="{ 'is-invalid': f.geoLong.touched && f.geoLong.errors }" />
+                <div *ngIf="f.geoLong.touched && f.geoLong.errors" class="invalid-feedback">
+                  <div *ngIf="f.geoLong.errors.required">Longitude is required</div>
+                  <div *ngIf="f.geoLong.errors.max || f.geoLong.errors.min">Invalid Longitude</div>
+                </div>
+              </div>
+
+            </div>
           </form>
         </div>
       </div>

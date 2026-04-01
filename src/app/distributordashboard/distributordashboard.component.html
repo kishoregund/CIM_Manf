@@ -8,14 +8,14 @@
             <a type="button" (click)="CriticalSerReq()" class="btn"
               style="background-color: transparent;padding: 0;margin: -15px 25px 0 0; border: none; color: #e24520;">
               <p *ngIf="criticalSerReq > 0" class="criticalCount">{{criticalSerReq}}</p>
-              <span [ngClass]="{ 'flash': criticalSerReq > 0 }"  class="icon-btn icon-user" title="Critical Service Requests"></span>
+              <span [ngClass]="{ 'flash': criticalSerReq > 0 }"  class="icon-btn icon-critical" title="Critical Service Requests"></span>
               <!-- <i [ngClass]="{ 'flash': criticalSerReq > 0 }" style="font-size: 20px; margin-top: 18px; 
               z-index: 999;
               transform: rotate(23deg);" class="fas fa-bolt" title="Critical Service Requests"></i> -->
             </a>
           </div>
           <button bsDaterangepicker (bsValueChange)="dateRange($event)" class="btn mx-3">
-            <i class="fa-solid fa-calendar fs-5"></i>
+            <span class="icon-btn icon-calendar" title="Calendar"></span>
           </button>
           <a (click)="CalenderChange(90)" #3MNTHS class="btn btn-secondary btn-cim-secondary">3
             Months</a>

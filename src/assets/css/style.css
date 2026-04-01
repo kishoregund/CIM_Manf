@@ -1214,15 +1214,15 @@ body::-webkit-scrollbar-thumb:hover {
 
 .menulinkExt{
   display: flex;
-  align-items: 
-  center;gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
 
 .icon-btn {
   display: inline-block;
   width: 25px;
-  height: 20px;
+  height: 25px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;  
@@ -1267,6 +1267,26 @@ body::-webkit-scrollbar-thumb:hover {
 
 .icon-critical {
   background-image: url('../../assets/img/electricity-24.png');
+}
+
+.icon-calendar {
+  background-image: url('../../assets/img/calendar-50.png');
+}
+
+.icon-uparrow {
+  background-image: url('../../assets/img/up-arrow-24.png');
+}
+
+.icon-downarrow {
+  background-image: url('../../assets/img/down-arrow-24.png');
+}
+
+.icon-download {
+  background-image: url('../../assets/img/download-24.png');
+}
+
+.icon-copy {
+  background-image: url('../../assets/img/copy-48.png');
 }
 
 /* Change header background and text */

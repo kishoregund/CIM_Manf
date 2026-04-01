@@ -213,7 +213,7 @@ export class ServiceReportListComponent implements OnInit {
         cellRenderer: (params) => {
           debugger;
           if (params.data?.isCompleted)
-            return `<button class="btn btn-link" type="button" data-action-type="download"><i class="fa-solid fa-download" data-action-type="download" title="download"></i></button>`;
+            return `<button class="btn btn-link" type="button" data-action-type="download"> <span style="margin-left: 15px;" class="icon-btn icon-download" data-action-type="download" title="download"></span></button>`;
           else return "";
         }
       }
