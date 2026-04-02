@@ -7,9 +7,9 @@ import { UserDetails, UserLoginResponse } from '../_newmodels/UserDetails';
 
 declare function CustomMenu(): any;
 @Component({
-    selector: 'app-nav-sidemenu',
-    templateUrl: './navsidemenu.html',
-    standalone: false
+  selector: 'app-nav-sidemenu',
+  templateUrl: './navsidemenu.html',
+  standalone: false
 })
 export class NavSideMenuComponent implements OnInit {
   user: UserDetails;
@@ -104,9 +104,7 @@ export class NavSideMenuComponent implements OnInit {
 
       this.isAdmin = this.user.isAdmin;
       //this.isSuperAdmin = this.user.isSuperAdmin;
-      if(this.user.contactType == "CS")
-        this.isCustomer = true;
-
+      
       if (this.profile != null) {
         if (this.profile.permissions.filter(x => x.screenCode == 'SDIST').length > 0) {
           this.hasDistributor = this.profile.permissions.filter(x => x.screenCode == 'SDIST')[0].create == true
@@ -399,7 +397,15 @@ export class NavSideMenuComponent implements OnInit {
         this.haspastservicereport = true;
         this.hasInstrumentallocation = true;
       }
-
+      if (this.user.contactType == "CS"){
+        this.isCustomer = true;
+        this.hascustomersatisfactionsurveylist = false;
+      }
+      else if (this.user.contactType == "DR"){
+        this.isCustomer = false;
+        this.hascustomersatisfactionsurveylist = true;
+      }
+      
       if (this.hasMaster || this.hasProfile || this.hasUserProfile) {// || this.user.isSuperAdmin) {
         this.hasAdministrator = true;
       }
@@ -409,7 +415,7 @@ export class NavSideMenuComponent implements OnInit {
         this.hasMasters = true;
       }
 
-      if (this.hasSearch || this.hasexport || this.hasAuditTrail || this.hascustomersatisfactionsurveylist || this.haspastservicereport) {
+      if (this.hasSearch || this.hasexport || this.hasAuditTrail || this.haspastservicereport) {
         this.hasUtilities = true;
       }
 

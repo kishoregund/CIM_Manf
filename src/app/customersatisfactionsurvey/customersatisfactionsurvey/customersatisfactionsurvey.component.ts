@@ -156,20 +156,23 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     }
 
     if (this.id != null) {
-      this.CustomersatisfactionsurveyService.getById(this.id)
-        .subscribe((data: any) => {
+
+      var data: any = await this.CustomersatisfactionsurveyService.getById(this.id).toPromise();
+      // this.CustomersatisfactionsurveyService.getById(this.id)
+      //   .subscribe((data: any) => {
 
 
-          setTimeout(() => {
-            this.formData = data.data;
-            this.form.patchValue(this.formData);
-            this.form.get("serviceRequestId").setValue(data.data.servicerequestId)
-          }, 100);
+      setTimeout(() => {
+        this.formData = data.data;
+        this.form.patchValue(this.formData);
+        this.form.get("serviceRequestId").setValue(data.data.serviceRequestId)
+        this.serviceRequestId = data.data.serviceRequestId;
+      }, 100);
 
 
-        });
+      //});
 
-      //this.form.disable()
+      this.form.disable()
     }
     else {
       this.isNewMode = true
@@ -212,7 +215,7 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     this.engineer = engdata.data
 
     var serreqdata: any = await this.servicerequestservice.GetServiceRequestByDist(this.distId).toPromise()
-    this.servicerequest = serreqdata.data.filter(x => !x.isReportGenerated)
+    this.servicerequest = serreqdata.data.filter(x => x.isReportGenerated)
 
   }
 

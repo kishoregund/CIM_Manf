@@ -74,34 +74,36 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
       role = role[0]?.itemCode;
     }
 
+    // customer satisfaction survey list should be visible to only distributors.
     this.Service.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
-          if (!this.user.isAdmin) {
-            this.distributorService.getByConId(this.user.contactId)
-              .pipe(first())
-              .subscribe({
-                next: (data1: any) => {
-                  if (role == this.environment.distRoleCode) {
-                    if(data.data != null)
-                      this.List = data.data.filter(x => x.distId == data1.data[0].id)
-                    else
-                      this.List = data.data;
-                  } else if (role == this.environment.engRoleCode) {
-                    if(data.data != null)
-                      this.List = data.data.filter(x => x.engineerId == this.user.contactId)
-                    else 
-                      this.List = data.data;
-                  } else {
-                    this.List = data.data;
-                  }
-                }
+          // if (!this.user.isAdmin) {
+            
+          //   this.distributorService.getByConId(this.user.contactId)
+          //     .pipe(first())
+          //     .subscribe({
+          //       next: (data1: any) => {
+          //         if (role == this.environment.distRoleCode) {
+          //           if(data.data != null)
+          //             this.List = data.data.filter(x => x.distId == data1.data[0].id)
+          //           else
+          //             this.List = data.data;
+          //         } else if (role == this.environment.engRoleCode) {
+          //           if(data.data != null)
+          //             this.List = data.data.filter(x => x.engineerId == this.user.contactId)
+          //           else 
+          //             this.List = data.data;
+          //         } else {
+          //           this.List = data.data;
+          //         }
+          //       }
 
-              })
-          } else {
+          //     })
+          // } else {
             this.List = data.data
-          }
+          //}
         },
         error: (error) => {
 
@@ -150,14 +152,14 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
         sortable: true,
         tooltipField: "code",
       },
-      {
-        headerName: "Name",
-        field: "name",
-        filter: true,
-        editable: false,
-        sortable: true,
-        tooltipField: "Name",
-      },
+      // {
+      //   headerName: "Name",
+      //   field: "name",
+      //   filter: true,
+      //   editable: false,
+      //   sortable: true,
+      //   tooltipField: "Name",
+      // },
 
 
     ];
