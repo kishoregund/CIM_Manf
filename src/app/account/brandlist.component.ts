@@ -16,6 +16,7 @@ export class BrandListComponent implements OnInit {
 
     user: UserDetails;
     BrandList: any;
+    loading = false;
     hasAddAccess: boolean = false;
     hasDeleteAccess: boolean = false;
     public columnDefs: any
@@ -38,10 +39,16 @@ export class BrandListComponent implements OnInit {
         }
 
         debugger;
-        var data: any = await this.BrandService.GetAll().toPromise()
-
-        this.BrandList = data.data;
-        this.columnDefs = this.createColumnDefs();
+        this.loading = true;
+        try {
+            var data: any = await this.BrandService.GetAll().toPromise()
+            this.BrandList = data.data;
+            this.columnDefs = this.createColumnDefs();
+        } catch (error) {
+            console.error('Error loading brands:', error);
+        } finally {
+            this.loading = false;
+        }
     }
 
     Add() {

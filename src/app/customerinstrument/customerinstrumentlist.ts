@@ -82,10 +82,17 @@ export class CustomerInstrumentListComponent implements OnInit {
     debugger;
     this.buBrandModel = new BUBrandModel();
     this.buBrandModel.businessUnitId = this.user.selectedBusinessUnitId; 
-    this.buBrandModel.brandId = this.user.selectedBrandId; 
+    this.buBrandModel.brandId = this.user.selectedBrandId;
+    this.loading = true;
     this.custInstrumentService.getAll(this.buBrandModel).pipe(first())
-      .subscribe((data: any) => {
-        this.customerinstrumentList = data.data;
+      .subscribe({
+        next: (data: any) => {
+          this.customerinstrumentList = data.data;
+          this.loading = false;
+        },
+        error: (error) => {
+          this.loading = false;
+        }
       });
     this.columnDefs = this.createColumnDefs();
   }

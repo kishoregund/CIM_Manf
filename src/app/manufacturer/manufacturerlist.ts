@@ -67,14 +67,21 @@ export class ManufacturerListComponent implements OnInit {
     }
     
     // this.manufacturerId = this.route.snapshot.paramMap.get('id');
+    this.loading = true;
     this.manufacturerService.getAll()
-      .pipe(first()).subscribe((data: any)=> {
-        this.manufacturerModel = data.data;
-        if(this.user.isManfSubscribed && this.manufacturerModel.length > 0)
-        {
-          this.hasAddAccess = false;
+      .pipe(first()).subscribe({
+        next: (data: any) => {
+          this.manufacturerModel = data.data;
+          if(this.user.isManfSubscribed && this.manufacturerModel.length > 0) {
+            this.hasAddAccess = false;
+          }
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading manufacturer data:', error);
+          this.manufacturerModel = [];
+          this.loading = false;
         }
-
       });
 
       this.columnDefs = this.createColumnDefs();

@@ -65,14 +65,17 @@ export class CurrencyListComponent implements OnInit {
     }
 
     // this.distributorId = this.route.snapshot.paramMap.get('id');
+    this.loading = true;
     this.currencyService.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.currencyList = data.data;
+          this.loading = false;
         },
         error: error => {
-
+          console.error('Error loading currency data:', error);
+          this.currencyList = [];
           this.loading = false;
         }
       });

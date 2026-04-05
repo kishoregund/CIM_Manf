@@ -64,15 +64,18 @@ export class CountryListComponent implements OnInit {
       this.hasReadAccess = true;
     }
     // this.distributorId = this.route.snapshot.paramMap.get('id');
+    this.loading = true;
     this.countryService.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           //debugger;
           this.countryList = data.data;
+          this.loading = false;
         },
         error: error => {
-
+          console.error('Error loading country data:', error);
+          this.countryList = [];
           this.loading = false;
         }
       });

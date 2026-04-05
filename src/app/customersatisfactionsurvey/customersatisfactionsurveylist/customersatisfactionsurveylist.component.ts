@@ -75,6 +75,7 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
     }
 
     // customer satisfaction survey list should be visible to only distributors.
+    this.loading = true;
     this.Service.getAll()
       .pipe(first())
       .subscribe({
@@ -104,9 +105,9 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
           // } else {
             this.List = data.data
           //}
+          this.loading = false;
         },
         error: (error) => {
-
           this.loading = false;
         },
       });

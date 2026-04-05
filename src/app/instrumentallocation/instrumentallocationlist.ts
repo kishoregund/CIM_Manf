@@ -79,10 +79,17 @@ export class InstrumentAllocationListComponent implements OnInit {
     else if (role == this.environment.custRoleCode) this.isCust = true;
     else if (role == this.environment.manfRoleCode) this.isManf = true;
 
+    this.loading = true;
     this.instrumentAllocationService.getAll().pipe(first())
-      .subscribe((data: any) => {
-        debugger;
-        this.instrumentAllocationList = data.data
+      .subscribe({
+        next: (data: any) => {
+          debugger;
+          this.instrumentAllocationList = data.data;
+          this.loading = false;
+        },
+        error: (error) => {
+          this.loading = false;
+        }
       });
     this.columnDefs = this.createColumnDefs();
   }

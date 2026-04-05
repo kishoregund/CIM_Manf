@@ -61,16 +61,16 @@ export class DistributorRegionListComponent implements OnInit {
 
 
     this.distributorId = this.route.snapshot.paramMap.get('id');
+    this.loading = true;
     this.distributorService.getById(this.distributorId)
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           this.distributorName = data.data?.distname
           this.distributorModel = data.data?.regions || [];
+          this.loading = false;
         },
         error: () => {
-          //this.alertService.error(error);
-
           this.loading = false;
         }
       });

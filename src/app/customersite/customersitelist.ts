@@ -66,6 +66,7 @@ export class CustomerSiteListComponent implements OnInit {
     }
 
     this.customerId = this.route.snapshot.paramMap.get('id');
+    this.loading = true;
     this.customerService.getById(this.customerId)
       .pipe(first())
       .subscribe({
@@ -93,7 +94,11 @@ export class CustomerSiteListComponent implements OnInit {
           else {
             this.customerSite = data.data.sites;
           }
+          this.loading = false;
         },
+        error: (error) => {
+          this.loading = false;
+        }
       });
     this.columnDefs = this.createColumnDefs();
   }

@@ -67,11 +67,20 @@ export class DistributorListComponent implements OnInit {
     }
     this.columnDefs = this.createColumnDefs();
     // this.distributorId = this.route.snapshot.paramMap.get('id');
+    this.loading = true;
     this.distributorService.getAll()
-      .pipe(first()).subscribe((data: any) => {
-        this.distributorModel = data.data;
-        if (!this.user.isManfSubscribed && this.distributorModel.length > 0) {
-          this.hasAddAccess = false;
+      .pipe(first()).subscribe({
+        next: (data: any) => {
+          this.distributorModel = data.data;
+          if (!this.user.isManfSubscribed && this.distributorModel.length > 0) {
+            this.hasAddAccess = false;
+          }
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading distributor data:', error);
+          this.distributorModel = [];
+          this.loading = false;
         }
       });
   }

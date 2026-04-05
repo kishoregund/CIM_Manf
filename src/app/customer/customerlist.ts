@@ -76,8 +76,19 @@ export class CustomerListComponent implements OnInit {
 
     this.IsDist = role == this.environment.distRoleCode
 
+    this.loading = true;
     this.customerService.getAllByUserId(this.user.userId).pipe(first())
-      .subscribe((data: any) => this.customerList = data.data)
+      .subscribe({
+        next: (data: any) => {
+          this.customerList = data.data;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading customer data:', error);
+          this.customerList = [];
+          this.loading = false;
+        }
+      })
 
     //[KG] - commented below - need the names to display as created by the user. used above
     // this.customerService.getAllByConId(this.user.contactId).pipe(first())

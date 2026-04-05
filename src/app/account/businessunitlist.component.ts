@@ -20,6 +20,7 @@ export class BusinessUnitListComponent implements OnInit {
 
     user: UserDetails;
     BusinessUnitList: any;
+    loading = false;
     hasAddAccess: boolean = false;
     hasDeleteAccess: boolean = false;
     public columnDefs: any
@@ -42,11 +43,18 @@ export class BusinessUnitListComponent implements OnInit {
         }
 
 
+        this.loading = true;
         this.BusinessUnitService.GetAll().pipe()
-            .subscribe((data: any) => {
+            .subscribe({
+              next: (data: any) => {
                 console.log(data);
                 this.BusinessUnitList = data.data;
                 this.columnDefs = this.createColumnDefs();
+                this.loading = false;
+              },
+              error: (error) => {
+                this.loading = false;
+              }
             });
     }
 

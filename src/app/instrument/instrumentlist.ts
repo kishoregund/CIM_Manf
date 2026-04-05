@@ -80,10 +80,19 @@ export class InstrumentListComponent implements OnInit {
     this.buBrandModel = new BUBrandModel();
     this.buBrandModel.businessUnitId = this.user.selectedBusinessUnitId;
     this.buBrandModel.brandId = this.user.selectedBrandId;
+    this.loading = true;
     this.instrumentService.getAll(this.buBrandModel).pipe(first())
-      .subscribe((data: any) => {
-        debugger;
-        this.instrumentList = data.data
+      .subscribe({
+        next: (data: any) => {
+          debugger;
+          this.instrumentList = data.data;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading instrument data:', error);
+          this.instrumentList = [];
+          this.loading = false;
+        }
       });
     this.columnDefs = this.createColumnDefs();
   }

@@ -70,7 +70,7 @@
         <hr />
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine custom-ag-grid" (rowClicked)="EditRecord()"
           (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="contactList" rowSelection="single"
-          pagination="true" paginationPageSize=10></ag-grid-angular>
+          pagination="true" paginationPageSize=10 [loading]="loading" overlayNoRowsTemplate="No records found"></ag-grid-angular>
       </div>
     </div>
   </div>

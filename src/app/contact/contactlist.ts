@@ -122,11 +122,13 @@ export class ContactListComponent implements OnInit {
       this.columnDefs = this.createColumnDefs();
     }
     if (this.type == "D") {
+      this.loading = true;
       this.distributorService.getById(this.masterId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.contactList = data.data?.contacts || [];
+            this.loading = false;
           },
           error: error => {
             this.loading = false;
@@ -135,11 +137,13 @@ export class ContactListComponent implements OnInit {
     }
     else if (this.type == "DR") {
       debugger;
+      this.loading = true;
       this.distRegionService.getById(this.detailId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.contactList = data.data?.regionContacts || [];
+            this.loading = false;
           },
           error: error => {
             this.loading = false;
@@ -148,11 +152,13 @@ export class ContactListComponent implements OnInit {
       // this.contact.contactMapping.mappedFor = "REG";
     }
     else if (this.type == "C") {
+      this.loading = true;
       this.customerService.getById(this.masterId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.contactList = data.data?.contacts || [];
+            this.loading = false;
           },
           error: error => {
             this.loading = false;
@@ -161,11 +167,13 @@ export class ContactListComponent implements OnInit {
     }
     else if (this.type == "CS") {
       //this.contact.contactMapping.mappedFor = "SITE";
+      this.loading = true;
       this.customerSiteService.getById(this.detailId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             this.contactList = data.data?.siteContacts || [];
+            this.loading = false;
           },
           error: error => {
             this.loading = false;
@@ -173,12 +181,14 @@ export class ContactListComponent implements OnInit {
         });
     }
     else if (this.type == "MSR") {
+      this.loading = true;
       this.manfSalesRegionService.getById(this.detailId)
         .pipe(first())
         .subscribe({
           next: (data: any) => {
             debugger;
             this.contactList = data.data?.salesRegionContacts || [];
+            this.loading = false;
           },
           error: error => {
             this.loading = false;

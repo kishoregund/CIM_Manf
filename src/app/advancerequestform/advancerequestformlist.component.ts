@@ -29,6 +29,7 @@ export class AdvancerequestlistformComponent implements OnInit {
     bsModalRef: BsModalRef;
     buBrandModel: BUBrandModel;
     List: any;
+    loading = false;
     constructor(
         private router: Router,
         private accountService: AccountService,
@@ -65,8 +66,17 @@ export class AdvancerequestlistformComponent implements OnInit {
         this.buBrandModel = new BUBrandModel();
         this.buBrandModel.businessUnitId = this.user.selectedBusinessUnitId;
         this.buBrandModel.brandId = this.user.selectedBrandId;
+        this.loading = true;
         this.Service.getAll(this.buBrandModel).pipe(first())
-            .subscribe((data: any) => this.List = data.data)
+            .subscribe({
+              next: (data: any) => {
+                this.List = data.data;
+                this.loading = false;
+              },
+              error: (error) => {
+                this.loading = false;
+              }
+            });
 
         this.columnDefs = this.createColumnDefs();
     }

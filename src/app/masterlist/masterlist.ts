@@ -68,12 +68,14 @@ export class MasterListComponent implements OnInit {
       this.hasUpdateAccess = true;
       this.hasReadAccess = true;
     }
+    this.loading = true;
     this.masterlistService.getAll()
       .pipe(first())
       .subscribe({
         next: (data: any) => {
           // debugger;
           this.masterList = data.data;
+          this.loading = false;
           // data.data.forEach((value1) => {
           //   this.listTypeService.getByListId(value1.id)
           //     .pipe(first())

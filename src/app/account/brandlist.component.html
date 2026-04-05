@@ -20,7 +20,7 @@
             <div class="col-md-12 col-sm-12">
                 <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine custom-ag-grid" (rowClicked)="EditRecord()"
                     (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [rowData]="BrandList"
-                    rowSelection="single" pagination="true" paginationPageSize=10>
+                    rowSelection="single" pagination="true" paginationPageSize=10 [loading]="loading" overlayNoRowsTemplate="No records found">
                 </ag-grid-angular>
             </div>
         </div>

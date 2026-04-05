@@ -72,11 +72,18 @@ export class CustspinventorylistComponent implements OnInit {
     if (role == this.environment.distRoleCode) this.isDist = true;
     else {
       this.toggleFilter();
+      this.loading = true;
       this.Service.getAll(this.user.contactId, this.user.entityParentId)
         .pipe(first())
-        .subscribe((data: any) =>
-          this.model = data.data
-        );
+        .subscribe({
+          next: (data: any) => {
+            this.model = data.data;
+            this.loading = false;
+          },
+          error: (error) => {
+            this.loading = false;
+          }
+        });
     }
 
     this.columnDefs = this.createColumnDefs();

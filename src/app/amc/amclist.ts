@@ -74,15 +74,26 @@ export class AmcListComponent implements OnInit {
 
     if (role == this.environment.distRoleCode) this.isDist = true;
 
+    this.loading = true;
     this.AmcService.getAll()
-      .pipe(first()).subscribe((data: any) => {
-        this.AmcList = data.data; //?.filter(x => !x.isCompleted)
-        if (this.AmcList == null || this.AmcList.length <= 0) return;
-        this.AmcList.forEach(x => {
-          x.isActive = x.isActive ? "Yes" : "No";
-          x.period = x.sDate + " - " + x.eDate
-        });
-
+      .pipe(first()).subscribe({
+        next: (data: any) => {
+          this.AmcList = data.data; //?.filter(x => !x.isCompleted)
+          if (this.AmcList == null || this.AmcList.length <= 0) {
+            this.loading = false;
+            return;
+          }
+          this.AmcList.forEach(x => {
+            x.isActive = x.isActive ? "Yes" : "No";
+            x.period = x.sDate + " - " + x.eDate
+          });
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading AMC data:', error);
+          this.AmcList = [];
+          this.loading = false;
+        }
       });
 
     this.columnDefs = this.createColumnDefs();
