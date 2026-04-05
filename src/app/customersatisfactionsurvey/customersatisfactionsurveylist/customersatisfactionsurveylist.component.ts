@@ -152,14 +152,14 @@ export class CustomersatisfactionsurveylistComponent implements OnInit {
         sortable: true,
         tooltipField: "code",
       },
-      // {
-      //   headerName: "Name",
-      //   field: "name",
-      //   filter: true,
-      //   editable: false,
-      //   sortable: true,
-      //   tooltipField: "Name",
-      // },
+      {
+        headerName: "Name",
+        field: "name",
+        filter: true,
+        editable: false,
+        sortable: true,
+        tooltipField: "Name",
+      },
 
 
     ];

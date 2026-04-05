@@ -48,8 +48,7 @@ export class FilerendercomponentComponent implements AgRendererComponent {
             this.refresh(params);
 
             this.notificationService.showSuccess("File Deleted", "Success");
-            const selectedData = params.api.getSelectedRows();
-            params.api.applyTransaction({ remove: selectedData });
+            params.api.applyTransaction({ remove: [params.data] });
           }
         },
         error: (error) => {
@@ -71,9 +70,9 @@ export class FilerendercomponentComponent implements AgRendererComponent {
     const a = document.createElement("a");
     a.setAttribute("style", "display:block;");
     document.body.appendChild(a);
-    a.download = this.params.id;
+    a.download = this.params.data.displayName;
     a.href = URL.createObjectURL(downloadedFile);
-    a.innerHTML = this.params.fileUrl;
+    a.innerHTML = this.params.data.displayName;
     a.target = "_blank";
     a.click();
     document.body.removeChild(a);

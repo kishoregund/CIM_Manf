@@ -33,7 +33,7 @@
             <div *ngIf="IsEngineerView==true && accepted && !isGenerateReport" class="dropdown">
               <button class="btn btn-nav-link" (click)="ToggleDropdown('dropdownMenuButton1')" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-solid fa-ellipsis-v" style="color: #5ba146;"></i>
+                <span class="icon-btn icon-vermenu" title="menu"></span>
               </button>
               <ul class="dropdown-menu" id="dropdownMenuButton1">
                 <li><a class="dropdown-item" (click)="generatereport()">Generate report</a></li>
@@ -428,7 +428,7 @@
               </div>
             </div>
 
-            <div class="col-md-9 row" *ngIf="isNotUnderAmc && IsDistributorView">
+            <div class="col-md-9 row" *ngIf="isNotUnderAmc && IsDistributorView && hasCommercialPermission">
               <div class="col-md-4 col-sm-4">
                 <label>Exchange Rate</label><br>
                 <select formControlName="baseCurrency" disabled style="width: 30%;display: inline-block;"

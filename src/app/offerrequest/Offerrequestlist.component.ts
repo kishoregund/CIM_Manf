@@ -22,7 +22,7 @@ import { UserDetails } from '../_newmodels/UserDetails';
 
 export class OfferrequestlistComponent implements OnInit {
   form: FormGroup;
-  model: Offerrequest;
+  model: Offerrequest[] = [];
   loading = false;
   submitted = false;
   isSave = false;
@@ -78,8 +78,19 @@ export class OfferrequestlistComponent implements OnInit {
     }
     if (this.role == this.environment.distRoleCode) this.isDist = true;
 
+    this.loading = true;
     this.Service.getAll().pipe(first())
-      .subscribe((data: any) => this.model = data.data);//?.filter(x => !x.isCompleted));
+      .subscribe({
+        next: (data: any) => {
+          this.model = data.data;//?.filter(x => !x.isCompleted);
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading data:', error);
+          this.model = [];
+          this.loading = false;
+        }
+      });
     this.columnDefs = this.createColumnDefs();
   }
 

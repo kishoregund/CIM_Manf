@@ -330,7 +330,7 @@ export class RoleComponent implements OnInit {
 
     if (property == "commercial") {
       for (let i of permission.controls) {
-        if (i.value.screenCode == "SINST" || i.value.screenCode == "OFREQ" || i.value.screenCode == "SAMC")
+        if (i.value.screenCode == "SINST" || i.value.screenCode == "OFREQ" || i.value.screenCode == "SAMC"|| i.value.screenCode == "SRREQ")
           i.get(property).setValue(!i.get(property).value)
       }
       return

@@ -10,6 +10,37 @@
     <div class="col-md-12 col-sm-12 expItems">
 
         <form [formGroup]="form">
+            <style>
+                th>button {
+                    padding: 6px 9px;
+                }
+
+                thead {
+                    background-color: #5ba146;
+                    color: white;
+                }
+
+                tbody {
+                    border: 0.5px solid rgb(202 170 170);
+                }
+
+                td>textarea {
+                    width: 200px;
+                }
+
+                input[type=text],
+                input[type=number],
+                .ddl {
+                    width: 150px;
+                }
+
+                .expItems {
+                    min-width: 100%;
+                    max-width: fit-content;
+                    overflow-x: auto;
+                }
+            </style>
+
             <p style="color: red;">*Upload File Size should not exceed 10MB.</p>
             <table class="table">
                 <thead>
@@ -23,7 +54,7 @@
                         <th>Amount(USD)*</th>
                         <th>Expense Incurred By*</th>
                         <th>Remarks*</th>
-                        <th>Download File <i class="mx-2 fas fa-download"></i></th>
+                        <th>Download File <span class="icon-btn icon-download" title="Download"></span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,7 +63,7 @@
                             <button type="button" *ngIf="hasDeleteAccess && !isDisabled"
                                 (click)="deleteProcess(item.id)"
                                 style="background-color: transparent;color: #5ba146;border: none;">
-                                <i class="fa-solid fa-trash-alt" title="Delete" style="font-size: 19px;"></i>
+                                <span class="icon-btn icon-delete" title="Delete"></span>
                             </button>
                         </td>
 
@@ -168,34 +199,3 @@
         </form>
     </div>
 </div>
-
-<style>
-    th>button {
-        padding: 6px 9px;
-    }
-
-    thead {
-        background-color: #5ba146;
-        color: white;
-    }
-
-    tbody {
-        border: 0.5px solid rgb(202 170 170);
-    }
-
-    td>textarea {
-        width: 200px;
-    }
-
-    input[type=text],
-    input[type=number],
-    .ddl {
-        width: 150px;
-    }
-
-    .expItems {
-        min-width: 100%;
-        max-width: fit-content;
-        overflow-x: auto;
-    }
-</style>

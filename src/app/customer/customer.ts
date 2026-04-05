@@ -106,10 +106,10 @@ export class CustomerComponent implements OnInit {
     }
 
 
-    this.customerform.get("countryId")
-      .valueChanges.subscribe((data) => {
-        this.f.addrCountryId.setValue(data);
-      })
+    // this.customerform.get("countryId")
+    //   .valueChanges.subscribe((data) => {
+    //     this.f.addrCountryId.setValue(data);
+    //   })
 
     this.countryService.getAll()
       .subscribe((data: any) => {
@@ -265,7 +265,7 @@ export class CustomerComponent implements OnInit {
       this.customer.id = this.customerId;
       this.customerService.update(this.customerId, this.customer)
         .pipe(first()).subscribe((data: any) => {
-          if (data.isSuccessfulc) {
+          if (data.isSuccessful) {
             this.notificationService.showSuccess(data.messages[0], "Success");
             this.router.navigate(["customerlist"], {
               queryParams: {

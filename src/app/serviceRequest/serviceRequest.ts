@@ -39,7 +39,7 @@ import {
   UploadService
 } from '../_services';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { FilerendercomponentComponent } from '../offerrequest/filerendercomponent.component';
+import { FilerendercomponentComponent } from '../instrument/filerendercomponent.component';
 import { EnvService } from '../_services/env/env.service';
 import { GetParsedDate } from '../_helpers/Providers';
 import { UserDetails } from '../_newmodels/UserDetails';
@@ -154,6 +154,7 @@ export class ServiceRequestComponent implements OnInit {
   lstCurrency: any[] = [];
   baseCurrId: any;
   isNotUnderAmc: any;
+  hasCommercialPermission: boolean = false;
   buBrandModel: BUBrandModel;
   emptyGuid = '00000000-0000-0000-0000-000000000000';
   constructor(
@@ -220,6 +221,7 @@ export class ServiceRequestComponent implements OnInit {
         this.hasAddAccess = profilePermission[0].create;
         this.hasDeleteAccess = profilePermission[0].delete;
         this.hasUpdateAccess = profilePermission[0].update;
+        this.hasCommercialPermission = profilePermission[0].commercial;
       }
     }
 
@@ -1505,7 +1507,7 @@ export class ServiceRequestComponent implements OnInit {
         editable: false,
         lockPosition: "left",
         sortable: false,
-        cellRendererFramework: FilerendercomponentComponent,
+        cellRenderer: FilerendercomponentComponent,
         cellRendererParams: {
           deleteaccess: this.hasDeleteAccess && this.isGenerateReport == false,
           id: this.serviceRequestId
@@ -1591,12 +1593,12 @@ export class ServiceRequestComponent implements OnInit {
         hide: this.isGenerateReport,
         cellRenderer: (params) => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fa-solid fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" title="Delete"></span></button>`
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fa-solid fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fa-solid fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" title="Delete"></span></button>
+          <button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-edit" title="Edit Value" data-action-type="edit"></span></button>`
           } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fa-solid fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-edit" title="Edit Value" data-action-type="edit"></span></button>`
           }
         }
       },
@@ -1665,12 +1667,12 @@ export class ServiceRequestComponent implements OnInit {
         lockPosition: "left",
         cellRenderer: (params) => {
           if (this.hasDeleteAccess && !this.hasUpdateAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fa-solid fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" title="Delete"></span></button>`
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fa-solid fa-trash-alt" data-action-type="remove" title="Delete"></i></button>
-          <button type="button" class="btn btn-link" data-action-type="edit" ><i class="fa-solid fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" title="Delete"></span></button>
+          <button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-edit" title="Edit Value" data-action-type="edit"></span></button>`
           } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button type="button" class="btn btn-link" data-action-type="edit" ><i class="fa-solid fas fa-pen" title="Edit Value" data-action-type="edit"></i></button>`
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-edit" title="Edit Value" data-action-type="edit"></span></button>`
           }
         }
       },
@@ -1716,7 +1718,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false,
         cellRenderer: (params) => {
           if (params.value != null) {
-            return `<button type="button" class="btn btn-link" data-action-type="download" ><i class="fa-solid fas fa-download" title="Edit Value" data-action-type="download"></i></button>`
+            return `<button type="button" class="btn btn-link" data-action-type="download" ><span class="icon-btn icon-download" title="Download" data-action-type="download"></span></button>`
           } else {
             return ``
           }
@@ -1769,7 +1771,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false,
         cellRenderer: (params) => {
           if (params.value != null) {
-            return `<button type="button" class="btn btn-link" data-action-type="download" ><i class="fa-solid fas fa-download" title="Edit Value" data-action-type="download"></i></button>`
+            return `<button type="button" class="btn btn-link" data-action-type="download" ><span class="icon-btn icon-download" title="Download" data-action-type="download"></span></button>`
           } else {
             return ``
           }

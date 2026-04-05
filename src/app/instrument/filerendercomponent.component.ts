@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { first } from "rxjs/operators";
-import { AgRendererComponent } from "ag-grid-angular";
+import { ICellRendererAngularComp } from "ag-grid-angular";
 import {
   NotificationService,
   FileshareService,
@@ -13,16 +13,16 @@ import { HttpEventType, HttpResponse } from "@angular/common/http";
       class="btn btn-link"
       (click)="download(params)"
     >
-      <i class="fa-solid fa-download" title="Download"></i>
+      <span class="icon-btn icon-download" title="Download"></span>
     </button>
 
     <button class="btn btn-link" *ngIf="params.deleteaccess" type="button"
      (click)="delete(params)">
-      <i class="fa-solid fa-trash-alt" title="Delete"></i>
+      <span class="icon-btn icon-delete" title="Delete"></span>
     </button>`,
     standalone: false
 })
-export class FilerendercomponentComponent implements AgRendererComponent {
+export class FilerendercomponentComponent implements ICellRendererAngularComp {
   params: any;
   constructor(
     private fileService: FileshareService,
@@ -48,8 +48,7 @@ export class FilerendercomponentComponent implements AgRendererComponent {
             this.refresh(params);
 
             this.notificationService.showSuccess("File Deleted", "Success");
-            const selectedData = params.api.getSelectedRows();
-            params.api.applyTransaction({ remove: selectedData });
+            params.api.applyTransaction({ remove: [params.data] });
           }
         },
         error: (error) => {
@@ -71,9 +70,9 @@ export class FilerendercomponentComponent implements AgRendererComponent {
     const a = document.createElement("a");
     a.setAttribute("style", "display:block;");
     document.body.appendChild(a);
-    a.download = this.params.id;
+    a.download = this.params.data.displayName;
     a.href = URL.createObjectURL(downloadedFile);
-    a.innerHTML = this.params.fileUrl;
+    a.innerHTML = this.params.data.displayName;
     a.target = "_blank";
     a.click();
     document.body.removeChild(a);

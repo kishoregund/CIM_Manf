@@ -1318,3 +1318,24 @@ body::-webkit-scrollbar-thumb:hover {
   --ag-row-hover-color: #f0f0f0;
 }
 
+
+
+th button {
+    padding: 0.375rem 0.75rem;
+}
+
+thead {
+    background-color: #5ba146;
+}
+
+tbody {
+    border: 1px solid rgb(202 170 170);
+}
+
+textarea, input, select {
+    width: 150px;
+}
+
+.expItems {
+    overflow: auto;
+}

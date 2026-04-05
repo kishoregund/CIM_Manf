@@ -18,7 +18,7 @@ import {
   ProfileService
 } from '../_services';
 import { OfferrequestService } from '../_services/Offerrequest.service';
-import { FilerendercomponentComponent } from './filerendercomponent.component';
+import { FilerendercomponentComponent } from '../instrument/filerendercomponent.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SparequotedetComponent } from './sparequotedet.component';
 import { OfferRequestProcessesService } from '../_services/offer-request-processes.service';
