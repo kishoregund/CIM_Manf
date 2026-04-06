@@ -38,6 +38,7 @@ import { CustomerInstrumentService } from "../_services/customerinstrument.servi
 @Component({
     selector: "app-Amc",
     templateUrl: "./Amc.html",
+    styleUrls: ["./amc.component.css"],
     standalone: false
 })
 export class AmcComponent implements OnInit {

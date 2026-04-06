@@ -477,7 +477,7 @@ export class ServiceReportComponent implements OnInit {
         this.columnDefs = this.createColumnDefsRO();
         this.spcolumnDefs = this.createColumnspDefsRO();
         this.spRecomandDefs = this.createColumnspreDefsRO();
-        this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
+        this.pdfcolumnDefs = this.pdfcreateColumnDefs();
       }, 100);
     }
     else {
@@ -1549,7 +1549,7 @@ export class ServiceReportComponent implements OnInit {
         lockPosition: "left",
         cellRendererFramework: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess && this.isEditMode,
+          deleteaccess: this.hasDeleteAccess && this.isEditMode && !this.isCompleted,
           id: this.ServiceReportId
         },
       },

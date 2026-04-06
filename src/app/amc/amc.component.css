@@ -1,0 +1,16 @@
+th > button {
+  padding: 6px 9px;
+}
+
+.table thead {
+  background-color: #5ba146;
+  color: white;
+}
+
+.table tbody {
+  border: 0.5px solid rgb(202 170 170);
+}
+
+td > textarea {
+  width: 300px;
+}
