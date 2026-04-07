@@ -1,6 +1,6 @@
 (function (window) {
     window.__env = window.__env || {};
-    window.__env.apiUrl = 'https://localhost:7225/api';
+    window.__env.apiUrl = 'https://localhost:44363/api';
     window.__env.uiUrl = 'https://localhost:44378/';
 
     // window.__env.apiUrl = 'https://service.avantgardeinc.com/api/api';

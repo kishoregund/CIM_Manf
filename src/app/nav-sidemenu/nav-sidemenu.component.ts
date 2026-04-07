@@ -90,8 +90,10 @@ export class NavSideMenuComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.accountService.userSubject.subscribe((data) => this.userLogin = data);
-    this.isRoot = this.userLogin.token.isRoot;
+    this.userLogin = this.accountService.userSubject.value;
+    if (this.userLogin && this.userLogin.token) {
+      this.isRoot = this.userLogin.token.isRoot;
+    }
     if (!this.isRoot)
       this.user = this.accountService.userValue;
 

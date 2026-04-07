@@ -1547,7 +1547,7 @@ export class ServiceReportComponent implements OnInit {
         editable: false,
         sortable: false,
         lockPosition: "left",
-        cellRendererFramework: FilerendercomponentComponent,
+        cellRenderer: FilerendercomponentComponent,
         cellRendererParams: {
           deleteaccess: this.hasDeleteAccess && this.isEditMode && !this.isCompleted,
           id: this.ServiceReportId
