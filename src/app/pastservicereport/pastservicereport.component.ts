@@ -128,7 +128,7 @@ export class PastservicereportComponent implements OnInit {
       this.form.disable();
 
       this.form.disable();
-      this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
+      this.columnDefsAttachments = this.createColumnDefsAttachments()
     }
     else {
       this.isNewMode = true
@@ -178,7 +178,7 @@ export class PastservicereportComponent implements OnInit {
 
   CancelEdit() {
     if (!confirm("Are you sure you want to discard changes?")) return;
-    this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
+    this.columnDefsAttachments = this.createColumnDefsAttachments()
     if (this.id != null) this.form.patchValue(this.formData);
     else this.form.reset();
     this.form.disable()
@@ -342,7 +342,7 @@ export class PastservicereportComponent implements OnInit {
         editable: false,
         lockPosition: "left",
         sortable: false,
-        cellRendererFramework: FilerendercomponentComponent,
+        cellRenderer: FilerendercomponentComponent,
         cellRendererParams: {
           deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.id

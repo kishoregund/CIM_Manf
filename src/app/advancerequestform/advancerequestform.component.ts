@@ -243,7 +243,7 @@ export class AdvancerequestformComponent implements OnInit {
             });
         });
       this.form.disable()
-      this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
+      this.columnDefsAttachments = this.createColumnDefsAttachments()
     } else {
       this.isNewMode = true;
       this.FormcontrolDisable()
@@ -289,7 +289,7 @@ export class AdvancerequestformComponent implements OnInit {
     if (this.id != null) this.form.patchValue(this.formData);
     else this.form.reset();
     this.form.disable()
-    this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
+    this.columnDefsAttachments = this.createColumnDefsAttachments()
     this.isEditMode = false;
     this.isNewMode = false;
     this.notificationService.SetNavParam();
@@ -398,9 +398,9 @@ export class AdvancerequestformComponent implements OnInit {
         editable: false,
         lockPosition: "left",
         sortable: false,
-        cellRendererFramework: FilerendercomponentComponent,
+        cellRenderer: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess,
+          deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.id
         },
       },

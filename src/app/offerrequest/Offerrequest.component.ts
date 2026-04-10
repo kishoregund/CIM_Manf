@@ -418,7 +418,7 @@ export class OfferrequestComponent implements OnInit {
       this.form.disable();
 
       this.columnDefs = this.createColumnDefsRO();
-      this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();
+      this.columnDefsAttachments = this.createColumnDefsAttachments();
     }
     else {
       this.FormControlDisable()      
@@ -606,7 +606,7 @@ export class OfferrequestComponent implements OnInit {
     }
     this.form.disable();
     this.columnDefs = this.createColumnDefsRO();
-    this.columnDefsAttachments = this.createColumnDefsAttachmentsRO();
+    this.columnDefsAttachments = this.createColumnDefsAttachments();
     this.isEditMode = false;
     this.isNewMode = false;
     this.api.redrawRows();
@@ -1105,7 +1105,7 @@ debugger;
         editable: false,
         sortable: false,
         lockPosition: "left",
-        cellRendererFramework: FilerendercomponentComponent,
+        cellRenderer: FilerendercomponentComponent,
         cellRendererParams: {
           deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.id

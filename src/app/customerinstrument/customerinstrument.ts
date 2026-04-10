@@ -51,6 +51,7 @@ import { CustomerService } from '../_services/customer.service';
 import { CustomerInstrument } from '../_models/customerinstrument';
 import { InstrumentService } from '../_services/instrument.service';
 import { BUBrandModel } from '../_newmodels/BUBrandModel';
+import { FilerendercomponentComponent } from '../instrument/filerendercomponent.component';
 
 @Component({
   selector: 'app-customerinstrument',
@@ -527,7 +528,7 @@ export class CustomerInstrumentComponent implements OnInit {
             this.PdffileData = data.data
         });
       setTimeout(() => this.custInstrumentform.disable(), 1000);
-      this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
+      this.pdfcolumnDefs = this.pdfcreateColumnDefs();
       this.columnDefs = this.createColumnDefsRO();
 
     }
@@ -644,7 +645,7 @@ export class CustomerInstrumentComponent implements OnInit {
     this.custInstrumentform.disable()
     this.isEditMode = false;
     this.isNewMode = false;
-    this.pdfcolumnDefs = this.pdfcreateColumnDefsRO();
+    this.pdfcolumnDefs = this.pdfcreateColumnDefs();
     this.columnDefs = this.createColumnDefsRO();
     this.notificationService.SetNavParam();
     this.contactList = []
@@ -1586,9 +1587,9 @@ export class CustomerInstrumentComponent implements OnInit {
         editable: false,
         lockPosition: "left",
         sortable: false,
-        //        cellRendererFramework: FilerendercomponentComponent,
+        cellRenderer: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess,
+          deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.id
         },
       },

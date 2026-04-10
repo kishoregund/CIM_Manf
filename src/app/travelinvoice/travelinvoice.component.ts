@@ -197,7 +197,7 @@ export class TravelinvoiceComponent implements OnInit {
             });
         })
       this.form.disable();
-      this.columnDefsAttachments = this.createColumnDefsAttachmentsRO()
+      this.columnDefsAttachments = this.createColumnDefsAttachments()
 
     }
     else {
@@ -331,7 +331,7 @@ export class TravelinvoiceComponent implements OnInit {
         editable: false,
         lockPosition: "left",
         sortable: false,
-        cellRendererFramework: FilerendercomponentComponent,
+        cellRenderer: FilerendercomponentComponent,
         cellRendererParams: {
           deleteaccess: this.hasDeleteAccess && this.isEditMode,
           id: this.id

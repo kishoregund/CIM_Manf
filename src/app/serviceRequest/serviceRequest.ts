@@ -1509,7 +1509,7 @@ export class ServiceRequestComponent implements OnInit {
         sortable: false,
         cellRenderer: FilerendercomponentComponent,
         cellRendererParams: {
-          deleteaccess: this.hasDeleteAccess && this.isGenerateReport == false,
+          deleteaccess: this.hasDeleteAccess && this.isEditMode && this.isGenerateReport == false,
           id: this.serviceRequestId
         },
       },
