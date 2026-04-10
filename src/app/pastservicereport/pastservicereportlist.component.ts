@@ -22,7 +22,7 @@ import { UserDetails } from '../_newmodels/UserDetails';
 })
 export class PastservicereportlistComponent implements OnInit {
     form: FormGroup;
-    model: Offerrequest;
+    model: any[] = [];
     loading = false;
     submitted = false;
     isSave = false;
@@ -79,7 +79,21 @@ export class PastservicereportlistComponent implements OnInit {
         if (this.role == this.environment.distRoleCode) this.isDist = true;
 
         this.Service.getAll().pipe(first())
-            .subscribe((data: any) => this.model = data.data);
+            .subscribe(
+                (data: any) => {
+                    this.model = data.data || [];
+                    if (this.api) {
+                        this.api.hideOverlay();
+                    }
+                },
+                (error: any) => {
+                    console.error('Error loading past service reports:', error);
+                    this.model = [];
+                    if (this.api) {
+                        this.api.hideOverlay();
+                    }
+                }
+            );
         this.columnDefs = this.createColumnDefs();
     }
 
@@ -167,6 +181,10 @@ export class PastservicereportlistComponent implements OnInit {
     onGridReady(params: any): void {
         this.api = params.api;
         this.api.sizeColumnsToFit();
+        // Hide the loading overlay if data is already loaded
+        if (this.model && this.model.length >= 0) {
+            this.api.hideOverlay();
+        }
     }
 
 }
