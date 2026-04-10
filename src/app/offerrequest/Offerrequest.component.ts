@@ -723,11 +723,12 @@ debugger;
 
         this.processFile = null;
         this.notificationService.filter("itemadded");
-        if (data.data != null) {
-          data.data.forEach(element => {
-            element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
-          });
-        }
+        // if (data.data != null) {
+        //   data.data.forEach(element => {
+        //     element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
+        //   });
+        // }
+        
         this.rowData = data.data
         this.totalStages = this.rowData?.length | 0;
 
@@ -859,7 +860,7 @@ debugger;
       cellRenderer: (params) => {
         return `
         <button class="btn btn-link" [disabled]="!params.deleteaccess" type="button">
-        <i class="fa-solid fa-trash-alt" title="Delete"></i>
+        <span class="icon-btn icon-delete" title="Delete"></span>
       </button>
         `
       },

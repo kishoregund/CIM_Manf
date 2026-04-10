@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from "@angular/common/http";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from "@angular/core";
 import { first } from "rxjs/operators";
 import { FileshareService } from "../_services";
 import { FileRenderProcessesService } from "../_services/filerenderprocesses.service";
@@ -9,7 +9,7 @@ import { FileRenderProcessesService } from "../_services/filerenderprocesses.ser
     templateUrl: "./downloadFile.html",
     standalone: false
 })
-export class ProcessFileRenderer implements OnInit {
+export class ProcessFileRenderer implements OnInit, OnChanges {
     list: any[] = []
     @Input() parameters: any;
 
@@ -18,14 +18,31 @@ export class ProcessFileRenderer implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        debugger;
-        this.FileShareService.list(this.parameters.id)
-            .pipe(first())
-            .subscribe((data: any) => { 
-                debugger;
-                this.list = data.data;
-            });
+        this.loadFileList();
+    }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['parameters'] && this.parameters) {
+            this.loadFileList();
+        }
+    }
+
+    private loadFileList(): void {
+        debugger;
+        if (this.parameters && this.parameters.id) {
+            this.FileShareService.list(this.parameters.id)
+                .pipe(first())
+                .subscribe(
+                    (data: any) => { 
+                        debugger;
+                        this.list = data.data || [];
+                    },
+                    (error: any) => {
+                        console.error('Error loading files:', error);
+                        this.list = [];
+                    }
+                );
+        }
     }
 
     download(params: any, name: any) {

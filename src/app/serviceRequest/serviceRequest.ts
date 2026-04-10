@@ -1281,7 +1281,6 @@ export class ServiceRequestComponent implements OnInit {
       this.servicereport.serviceRequestId = this.serviceRequestId;
       this.servicereport.customer = this.serviceRequestform.get('companyName').value;
       this.servicereport.srOf = this.user.firstName + '' + this.user.lastName + '/' + this.countries.find(x => x.id == this.serviceRequestform.get('country').value)?.name + '/' + this.datepipe.transform(GetParsedDate(this.serviceRequestform.get('serReqDate').value), 'yyyy-MM-dd');
-      this.servicereport.country = this.countries.find(x => x.id == this.serviceRequestform.get('country')?.value)?.name;
       this.servicereport.problem = this.breakdownlist.find(x => x.listTypeItemId == this.serviceRequestform.get('breakoccurDetailsId').value)?.itemName + '-' + this.serviceRequestform.get('alarmDetails')?.value;
       this.servicereport.instrumentId = this.serviceRequestform.get('machinesNo').value;
 
@@ -1302,38 +1301,75 @@ export class ServiceRequestComponent implements OnInit {
       this.servicereport.prevMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.PRMN1)).length > 0;
       this.servicereport.rework = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.REWK)).length > 0;
       this.servicereport.corrMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.CRMA)).length > 0;
-      if (this.customerId != null) {
-        this.customerService.getById(this.customerId)
+      
+      // Fetch site data to get town and country
+      if (this.siteId != null) {
+        this.customerSiteService.getById(this.siteId)
           .pipe(first())
           .subscribe({
-            next: (data: any) => {
-              this.custcityname = data.data.city;
-              this.servicereport.town = this.custcityname;
-              this.servicereport.customer = data.data.custName;
+            next: (siteData: any) => {
+              this.servicereport.town = siteData.data.city;
+              this.servicereport.country = siteData.data.countryName;
 
-              this.servicereportService.save(this.servicereport)
-                .pipe(first())
-                .subscribe({
-                  next: (data: any) => {
-                    if (data.isSuccessful) {
-                      this.notificationService.showSuccess(data.messages[0], "Success");
+              // Fetch customer data for customer name
+              if (this.customerId != null) {
+                this.customerService.getById(this.customerId)
+                  .pipe(first())
+                  .subscribe({
+                    next: (data: any) => {
+                      this.servicereport.customer = data.data.custName;
 
-                      this.srAssignedHistory = new ticketsAssignedHistory;
-                      this.srAssignedHistory.engineerId = this.engineerid;
-                      this.srAssignedHistory.serviceRequestId = this.serviceRequestId;
-                      this.srAssignedHistory.ticketStatus = "INPRG";
-                      this.srAssignedHistory.assignedDate = new Date()
+                      this.servicereportService.save(this.servicereport)
+                        .pipe(first())
+                        .subscribe({
+                          next: (data: any) => {
+                            if (data.isSuccessful) {
+                              this.notificationService.showSuccess(data.messages[0], "Success");
 
-                      this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
+                              this.srAssignedHistory = new ticketsAssignedHistory;
+                              this.srAssignedHistory.engineerId = this.engineerid;
+                              this.srAssignedHistory.serviceRequestId = this.serviceRequestId;
+                              this.srAssignedHistory.ticketStatus = "INPRG";
+                              this.srAssignedHistory.assignedDate = new Date()
 
-                      this.router.navigate(["servicereport", data.data], {
-                        //relativeTo: this.activeRoute,
-                        queryParams: { isNSNav: true },
-                        //queryParamsHandling: 'merge'
-                      });
+                              this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
+
+                              this.router.navigate(["servicereport", data.data], {
+                                //relativeTo: this.activeRoute,
+                                queryParams: { isNSNav: true },
+                                //queryParamsHandling: 'merge'
+                              });
+                            }
+                          }
+                        });
                     }
-                  }
-                });
+                  });
+              }
+              else {
+                this.servicereportService.save(this.servicereport)
+                  .pipe(first())
+                  .subscribe({
+                    next: (data: any) => {
+                      if (data.isSuccessful) {
+                        this.notificationService.showSuccess(data.messages[0], "Success");
+
+                        this.srAssignedHistory = new ticketsAssignedHistory;
+                        this.srAssignedHistory.engineerId = this.engineerid;
+                        this.srAssignedHistory.serviceRequestId = this.serviceRequestId;
+                        this.srAssignedHistory.ticketStatus = "INPRG";
+                        this.srAssignedHistory.assignedDate = new Date();
+
+                        this.srAssignedHistoryService.save(this.srAssignedHistory).pipe(first()).subscribe();
+
+                        this.router.navigate(["servicereport", data.data], {
+                          //relativeTo: this.activeRoute,
+                          queryParams: { isNSNav: true },
+                          //queryParamsHandling: 'merge'
+                        });
+                      }
+                    }
+                  });
+              }
             }
           });
       }
