@@ -12,9 +12,9 @@ declare function CustomMenu(): any;
   standalone: false
 })
 export class NavSideMenuComponent implements OnInit {
-  user: UserDetails;
-  userLogin: UserLoginResponse;
-  profile: ProfileReadOnly;
+  user!: UserDetails;
+  userLogin!: UserLoginResponse;
+  profile!: ProfileReadOnly;
   hasDistributor: boolean = false;
   hasCustomer: boolean = false;
   hasInstrument: boolean = false;
@@ -45,9 +45,9 @@ export class NavSideMenuComponent implements OnInit {
   hasCustomerSparePartsInventory: boolean = false;
   hasTravelExpenses: boolean = false;
 
-  roles: ListTypeItem[];
-  userrole: ListTypeItem[];
-  settings: string
+  roles!: ListTypeItem[];
+  userrole!: ListTypeItem[];
+  settings!: string
   hasDistributorSettings: boolean = false;
   hasCustomerSettings: boolean = false
   hascustomerdashboard: boolean = false;
@@ -64,16 +64,16 @@ export class NavSideMenuComponent implements OnInit {
   hasTransactions: boolean = false;
   hasTravelInvoice: boolean = false;
   hasAdvanceRequest: boolean = false;
-  serviceRequestReport: boolean;
-  hasServiceCompletionReport: boolean;
-  pendingQuoteRequestReport: boolean;
+  serviceRequestReport: boolean = false;
+  hasServiceCompletionReport: boolean = false;
+  pendingQuoteRequestReport: boolean = false;
   hasCustomerInstrument: boolean = true;
   hasManufacturer: boolean = false;
-  isAdmin: boolean;
-  isSuperAdmin: boolean;
+  isAdmin: boolean = false;
+  isSuperAdmin: boolean = false;
   isManfSubs: boolean = false;
   isCustomer: boolean = false;
-  isRoot: boolean = true;
+  isRoot: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -94,15 +94,13 @@ export class NavSideMenuComponent implements OnInit {
     if (this.userLogin && this.userLogin.token) {
       this.isRoot = this.userLogin.token.isRoot;
     }
-    if (!this.isRoot)
-      this.user = this.accountService.userValue;
+    this.user = this.accountService.userValue;
 
-    debugger;
     if (this.user != null) {
       this.isManfSubs = this.user.isManfSubscribed;
       //[KG]
       //this.profileService.getUserProfile(this.user.userProfileId);
-      this.profile = JSON.parse(sessionStorage.getItem('userprofile'));
+      this.profile = JSON.parse(sessionStorage.getItem('userprofile') ?? 'null');
 
       this.isAdmin = this.user.isAdmin;
       //this.isSuperAdmin = this.user.isSuperAdmin;
@@ -440,7 +438,7 @@ export class NavSideMenuComponent implements OnInit {
     CustomMenu()
   }
 
-  navigate(url) {
+  navigate(url: string) {
     this.router.navigate([url]);
   }
 }
