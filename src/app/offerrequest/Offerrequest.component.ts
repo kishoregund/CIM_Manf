@@ -36,6 +36,7 @@ import { CustomerInstrumentService } from '../_services/customerinstrument.servi
 @Component({
     selector: 'app-Offerrequest',
     templateUrl: './Offerrequest.component.html',
+    styleUrls: ['./offerrequest.component.css'],
     standalone: false
 })
 export class OfferrequestComponent implements OnInit {
