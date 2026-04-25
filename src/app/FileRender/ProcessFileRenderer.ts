@@ -22,27 +22,35 @@ export class ProcessFileRenderer implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['parameters'] && this.parameters) {
+        if (changes['parameters']) {
             this.loadFileList();
         }
     }
 
     private loadFileList(): void {
-        debugger;
-        if (this.parameters && this.parameters.id) {
-            this.FileShareService.list(this.parameters.id)
-                .pipe(first())
-                .subscribe(
-                    (data: any) => { 
-                        debugger;
-                        this.list = data.data || [];
-                    },
-                    (error: any) => {
-                        console.error('Error loading files:', error);
-                        this.list = [];
-                    }
-                );
+        if (!this.parameters) {
+            this.list = [];
+            return;
         }
+
+        const id = this.parameters.id || this.parameters.stageId;
+        if (!id) {
+            console.warn('ProcessFileRenderer: No valid ID found for file loading', this.parameters);
+            this.list = [];
+            return;
+        }
+
+        this.FileShareService.list(id)
+            .pipe(first())
+            .subscribe(
+                (data: any) => {
+                    this.list = (data && data.data) ? data.data : [];
+                },
+                (error: any) => {
+                    console.error('Error loading files for ID:', id, error);
+                    this.list = [];
+                }
+            );
     }
 
     download(params: any, name: any) {

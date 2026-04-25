@@ -135,62 +135,65 @@ export class OfferrequestComponent implements OnInit {
     private custInstrumentService: CustomerInstrumentService,
     private environment: EnvService,
   ) {
-    // this.notificationService.listen().subscribe((m: any) => {
-    //   if (this.id != null) {
-    //     // this.spareQuoteDetService.getAll(this.id).pipe(first())
-    //     //   .subscribe({
-    //     //     next: (data: any) => {
-    //     //       this.SpareQuotationDetailsList = data.data;
-    //     //       this.SpareQuotationDetailsList.forEach(value => {
-    //     //         value.zohoPORaisedDate = this.datepipie.transform(GetParsedDate(value.zohoPORaisedDate), "dd/MM/YYYY");
-    //     //         value.deliveredOn = this.datepipie.transform(GetParsedDate(value.deliveredOn), "dd/MM/YYYY");
-    //     //         value.custResponseDate = this.datepipie.transform(GetParsedDate(value.custResponseDate), "dd/MM/YYYY");
-    //     //         value.raisedDate = this.datepipie.transform(GetParsedDate(value.raisedDate), "dd/MM/YYYY");
-    //     //       })
-    //     //     },
-    //     //   });
-    //     // this.spareQuoteDetService.getPrev(this.id)
-    //     //   .pipe(first())
-    //     //   .subscribe({
-    //     //     next: (data: any) => {
-    //     //       this.listTypeService.getById("SQDTS")
-    //     //         .pipe(first())
-    //     //         .subscribe({
-    //     //           next: (stat: any) => {
-    //     //             this.statusList = stat.data;
-    //     //             let compStatus = this.statusList.filter(x => x.listTypeItemId == data.data.status)[0]?.itemCode;
-    //     //             if (compStatus != null) {
-    //     //               this.prevNotCompleted = compStatus != this.CompletedId && compStatus != null;
-    //     //             } else {
-    //     //               this.prevNotCompleted = false
-    //     //             }
-    //     //           }
-    //     //         });
-    //     //     }
-    //     //   })
+    this.notificationService.listen().subscribe((m: any) => {
+      if (this.id != null) {
+        // this.spareQuoteDetService.getAll(this.id).pipe(first())
+        //   .subscribe({
+        //     next: (data: any) => {
+        //       this.SpareQuotationDetailsList = data.data;
+        //       this.SpareQuotationDetailsList.forEach(value => {
+        //         value.zohoPORaisedDate = this.datepipie.transform(GetParsedDate(value.zohoPORaisedDate), "dd/MM/YYYY");
+        //         value.deliveredOn = this.datepipie.transform(GetParsedDate(value.deliveredOn), "dd/MM/YYYY");
+        //         value.custResponseDate = this.datepipie.transform(GetParsedDate(value.custResponseDate), "dd/MM/YYYY");
+        //         value.raisedDate = this.datepipie.transform(GetParsedDate(value.raisedDate), "dd/MM/YYYY");
+        //       })
+        //     },
+        //   });
+        // this.spareQuoteDetService.getPrev(this.id)
+        //   .pipe(first())
+        //   .subscribe({
+        //     next: (data: any) => {
+        //       this.listTypeService.getById("SQDTS")
+        //         .pipe(first())
+        //         .subscribe({
+        //           next: (stat: any) => {
+        //             this.statusList = stat.data;
+        //             let compStatus = this.statusList.filter(x => x.listTypeItemId == data.data.status)[0]?.itemCode;
+        //             if (compStatus != null) {
+        //               this.prevNotCompleted = compStatus != this.CompletedId && compStatus != null;
+        //             } else {
+        //               this.prevNotCompleted = false
+        //             }
+        //           }
+        //         });
+        //     }
+        //   })
 
-    //     this.offerRequestProcess.getAll(this.id).pipe(first())
-    //       .subscribe((stageData: any) => {
-    //         if (stageData.data != null) {
-    //           stageData.data.forEach(element => {
-    //             element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
-    //           });
-    //           this.rowData = stageData.data;
-    //           this.rowData?.sort((a, b) => a.stageIndex - b.stageIndex);
-    //           this.totalStages = this.rowData?.length | 0;
-    //           this.form.get('stageName').reset()
-    //           this.form.get('stageComments').reset()
-    //           this.form.get('payTerms').reset()
-    //           this.form.get('payAmt').setValue(0)
-    //           this.stageFiles.nativeElement.value = "";
-    //           var selectedfiles = document.getElementById("stageFilesList");
-    //           selectedfiles.innerHTML = '';
-    //           this.isPaymentAmt = false;
-    //         }
-    //       });
+        this.offerRequestProcess.getAll(this.id).pipe(first())
+          .subscribe((stageData: any) => {
+            if (stageData.data != null) {
+              stageData.data.forEach(element => {
+                element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY');
+                if (!element.id) {
+                  element.id = element.stageId || `${this.id}_${element.stageIndex}`;
+                }
+              });
+              this.rowData = stageData.data;
+              this.rowData?.sort((a, b) => a.stageIndex - b.stageIndex);
+              this.totalStages = this.rowData?.length | 0;
+              this.form.get('stageName').reset()
+              this.form.get('stageComments').reset()
+              this.form.get('payTerms').reset()
+              this.form.get('payAmt').setValue(0)
+              this.stageFiles.nativeElement.value = "";
+              var selectedfiles = document.getElementById("stageFilesList");
+              selectedfiles.innerHTML = '';
+              this.isPaymentAmt = false;
+            }
+          });
 
-    //   }
-    // });
+      }
+    });
 
   }
 
@@ -369,6 +372,9 @@ export class OfferrequestComponent implements OnInit {
               if (stageData.data != null) {
                 stageData.data.forEach(element => {
                   element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY');
+                  if (!element.id) {
+                    element.id = element.stageId || `${this.id}_${element.stageIndex}`;
+                  }
                 });
               }
               this.formData = data.data;
@@ -722,14 +728,17 @@ debugger;
           this.uploadFile(this.processFile, data.data); // data.extraObject);
 
         this.processFile = null;
-        this.notificationService.filter("itemadded");
-        // if (data.data != null) {
-        //   data.data.forEach(element => {
-        //     element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
-        //   });
-        // }
-        
-        this.rowData = data.data
+
+        if (data.data != null) {
+          data.data.forEach((element: any) => {
+            element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY');
+            if (!element.id) {
+              element.id = element.stageId || `${this.id}_${element.stageIndex}`;
+            }
+          });
+        }
+
+        this.rowData = data.data;
         this.totalStages = this.rowData?.length | 0;
 
         if (Attachment && hasNoAttachment) {
@@ -770,10 +779,13 @@ debugger;
     this.offerRequestProcess.delete(id).pipe(first())
       .subscribe((data: any) => {
         data.data.forEach(element => {
-          element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
+          element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY');
+          if (!element.id) {
+            element.id = element.stageId || `${this.id}_${element.stageIndex}`;
+          }
         });
 
-        this.rowData = data.data
+        this.rowData = data.data;
       })
   }
 

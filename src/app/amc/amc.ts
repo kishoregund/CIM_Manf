@@ -195,7 +195,10 @@ export class AmcComponent implements OnInit {
         this.amcStagesService.getAll(this.id).pipe(first())
           .subscribe((stageData: any) => {
             stageData.data.forEach(element => {
-              element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
+              element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY');
+              if (!element.id) {
+                element.id = element.stageId || `${this.id}_${element.stageIndex}`;
+              }
             });
 
             this.rowData = stageData.data;
@@ -461,7 +464,10 @@ export class AmcComponent implements OnInit {
             .subscribe((stageData: any) => {
 
               stageData.data?.forEach(element => {
-                element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
+                element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY');
+                if (!element.id) {
+                  element.id = element.stageId || `${this.id}_${element.stageIndex}`;
+                }
               });
 
               stageData.data?.sort((a, b) => a.stageIndex - b.stageIndex);
@@ -672,15 +678,17 @@ export class AmcComponent implements OnInit {
           this.uploadFile(this.processFile, data.data);
 
         this.processFile = null;
-        this.notificationService.filter("itemadded");
 
         if (data.data != null) {
-          data.data.forEach(element => {
-            element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
+          data.data.forEach((element: any) => {
+            element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY');
+            if (!element.id) {
+              element.id = element.stageId || `${this.id}_${element.stageIndex}`;
+            }
           });
         }
 
-        this.rowData = data.data
+        this.rowData = data.data;
         this.totalStages = this.rowData?.length | 0;
         this.form.get("stageName").reset()
         this.form.get("stageComments").reset()
@@ -742,10 +750,13 @@ export class AmcComponent implements OnInit {
     this.amcStagesService.delete(id).pipe(first())
       .subscribe((data: any) => {
         data.data.forEach(element => {
-          element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY')
+          element.createdOn = this.datepipe.transform(GetParsedDate(element.createdOn), 'dd/MM/YYYY');
+          if (!element.id) {
+            element.id = element.stageId || `${this.id}_${element.stageIndex}`;
+          }
         });
 
-        this.rowData = data.data
+        this.rowData = data.data;
       })
   }
 
@@ -805,14 +816,11 @@ export class AmcComponent implements OnInit {
     this.FileShareService.upload(formData, id, code).subscribe((event) => {
       if (event.type === HttpEventType.UploadProgress) {
         this.progress = Math.round((100 * event.loaded) / event.total);
-        if (this.progress == 100)
-          this.notificationService.filter("itemadded");
       }
       else if (event.type === HttpEventType.Response) {
         this.message = "Upload success.";
         this.onUploadFinished.emit(event.body);
       }
-      this.notificationService.filter("itemadded");
     });
   }
 
