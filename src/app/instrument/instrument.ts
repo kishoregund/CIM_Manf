@@ -113,7 +113,7 @@ export class InstrumentComponent implements OnInit {
   brandList: any[];
   isAccessories: any;
   bsActionModalRef: BsModalRef;
-  accessoriesData: any;
+  accessoriesData: any = [];
   formData: any;
   role: any;
   manfList: any;
@@ -151,7 +151,15 @@ export class InstrumentComponent implements OnInit {
   ) {
     notificationService.listen().subscribe((data) => {
       this.instrumentAccessoryService.GetByInsId(this.id)
-        .subscribe((data: any) => this.accessoriesData = data.data)
+        .subscribe({
+          next: (data: any) => {
+            this.accessoriesData = data?.data && Array.isArray(data.data) ? data.data : [];
+          },
+          error: (err) => {
+            console.error('Error loading accessories:', err);
+            this.accessoriesData = [];
+          }
+        })
     })
 
 
@@ -256,8 +264,14 @@ export class InstrumentComponent implements OnInit {
 
     if (this.id != null) {
 
-      this.instrumentAccessoryService.GetByInsId(this.id).subscribe((data: any) => {
-        this.accessoriesData = data.data;
+      this.instrumentAccessoryService.GetByInsId(this.id).subscribe({
+        next: (data: any) => {
+          this.accessoriesData = data?.data && Array.isArray(data.data) ? data.data : [];
+        },
+        error: (err) => {
+          console.error('Error loading accessories:', err);
+          this.accessoriesData = [];
+        }
       });
 
       this.instrumentService.getById(this.id)
@@ -784,7 +798,7 @@ export class InstrumentComponent implements OnInit {
         lockPosition: "left",
         cellRenderer: (params) => {
           if (this.hasDeleteAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fa-solid fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" title="Delete" data-action-type="remove" title="Delete"></span></button>`
           }
         }
       },
@@ -878,7 +892,7 @@ export class InstrumentComponent implements OnInit {
         lockPosition: "left",
         cellRenderer: (params) => {
           if (this.hasDeleteAccess) {
-            return `<button class="btn btn-link" type="button" (click)="delete(params)"><i class="fa-solid fa-trash-alt" data-action-type="remove" title="Delete"></i></button>`
+            return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" title="Delete" data-action-type="remove" title="Delete"></span></button>`
           }
         }
       },

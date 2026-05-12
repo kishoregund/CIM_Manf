@@ -70,6 +70,7 @@ export class actionList {
   engineerId: string;
   engineerName: string;
   actionTaken: string;
+  actiontakenName: string;
   comments: string;
   actionDate: string;
   teamviewRecording: string;

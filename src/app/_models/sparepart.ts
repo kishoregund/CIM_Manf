@@ -4,6 +4,7 @@ export class SparePart {
   configTypeId: string;
   configTypeName: string;
   partNo: string;
+  partNoDesc: string;
   itemDesc: string;
   qty: number;
   partType: string;

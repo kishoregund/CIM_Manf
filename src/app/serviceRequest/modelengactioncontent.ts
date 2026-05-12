@@ -14,9 +14,9 @@ import { EngActionService } from '../_services/engaction.service';
 import { UserDetails } from '../_newmodels/UserDetails';
 
 @Component({
-    selector: 'app-modelcomponent',
-    templateUrl: './modelengactioncontent.html',
-    standalone: false
+  selector: 'app-modelcomponent',
+  templateUrl: './modelengactioncontent.html',
+  standalone: false
 })
 export class ModelEngActionContentComponent implements OnInit {
   user: UserDetails;
@@ -31,7 +31,7 @@ export class ModelEngActionContentComponent implements OnInit {
   @Input() engineerlist;
   @Input() engineerid;
   hasRemote: boolean = false;
-  loading:boolean=false;
+  loading: boolean = false;
 
   file: any;
   fileList: [] = [];
@@ -139,7 +139,7 @@ export class ModelEngActionContentComponent implements OnInit {
 
   onValueSubmit() {
     this.actionForm.markAllAsTouched();
-    if (this.hasRemote && this.file == null) return this.notificationService.showInfo("Upload Recording", "Info")
+    //if (this.hasRemote && this.file == null) return this.notificationService.showInfo("Upload Recording", "Info")
     if (this.actionForm.invalid) return
 
     if (this.f.actionDate.value < GetParsedDate(this.item.serReqDate))
@@ -154,8 +154,10 @@ export class ModelEngActionContentComponent implements OnInit {
       this.actionService.save(this.action)
         .subscribe((data: any) => {
           if (data.isSuccessful) {
-            if (this.file != null) this.uploadFile(this.file, data.data.id);
-            this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode,aId:data.data.id, isNSNav: true } });
+            if (this.file != null) this.uploadFile(this.file, data.data);
+            setTimeout(() => {
+              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode, aId: data.data, isNSNav: true } });
+            }, 500);
             this.notificationService.showSuccess(data.messages[0], "Success");
           }
 
@@ -171,7 +173,7 @@ export class ModelEngActionContentComponent implements OnInit {
       this.actionService.update(this.id, this.action)
         .subscribe((data: any) => {
           if (data.isSuccessful) {
-            this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode,aId:this.id, isNSNav: true } });
+            this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode, aId: this.id, isNSNav: true } });
             this.notificationService.showSuccess(data.messages[0], "Success");
           }
           this.close();

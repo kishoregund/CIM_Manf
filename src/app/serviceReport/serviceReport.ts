@@ -140,7 +140,7 @@ export class ServiceReportComponent implements OnInit {
   private hastransaction: boolean;
   @Output() public onUploadFinished = new EventEmitter();
   private fileUploadProgress: number;
-  sparepartrecmmlist: any;
+  sparepartrecmmlist: any = [];
 
   datepipe = new DatePipe('en-US');
   checkedImg = 'data:image/png;base64,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';
@@ -241,12 +241,16 @@ export class ServiceReportComponent implements OnInit {
   formatterinstu = (x: Instrument) => x.serialNos;
 
 
-  searchpart: OperatorFunction<string, readonly SparePart[]> = (text$: Observable<string>) =>
+  searchpart: OperatorFunction<string, readonly any[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      map(term => term === '' ? []
-        : this.sparepartrecmmlist.filter(v => v.partNoDesc.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+      map(term => {
+        if (term === '' || !this.sparepartrecmmlist || this.sparepartrecmmlist.length === 0) {
+          return [];
+        }
+        return this.sparepartrecmmlist.filter((s: any) => s.partNoDesc?.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
+      })
     )
 
   formatterpart = (x: any) => x.partNoDesc;
@@ -295,6 +299,8 @@ export class ServiceReportComponent implements OnInit {
       this.notificationService.RestrictAdmin()
       return;
     }
+
+    this.loadSparePartData();
 
     this.ServiceReportform = this.formBuilder.group({
       customer: [''],
@@ -364,19 +370,6 @@ export class ServiceReportComponent implements OnInit {
     this.brandService.GetAll()
       .subscribe((data: any) => this.brandlist = data.data)
 
-    this.sparePartService.getAll()
-      .pipe(first())
-      .subscribe((data: any) =>
-        this.sparepartrecmmlist = data.data
-      );
-
-
-    //this.CustSPInventoryService.GetSPInvenrotyForServiceReport(this.ServiceReportId)
-    this.serviceReportService.getCustSPInventoryForServiceReport(this.ServiceReportId)
-      .pipe(first())
-      .subscribe((data: any) =>
-        this.sparepartlist = data.data
-      );
 
     this.distributorService.getAll()
       .pipe(first())
@@ -434,8 +427,18 @@ export class ServiceReportComponent implements OnInit {
             this.engsign = data.data.engSignature;
             this.ServiceRequestId = data.data.serviceRequestId;
 
-            this.serviceReportService.getSparePartRecomm(this.ServiceRequestId)
-              .pipe(first()).subscribe((data: any) => setTimeout(() => this.sparepartrecmmlist = data.data, 500));
+            // this.serviceReportService.getSparePartRecomm(this.ServiceRequestId)
+            //   .pipe(first())
+            //   .subscribe({
+            //     next: (data: any) => {
+            //       if (data && data.data) {
+            //         this.sparepartrecmmlist = data.data;
+            //       }
+            //     },
+            //     error: (err) => {
+            //       console.error('Error loading recommended spare parts:', err);
+            //     }
+            //   });
 
             this.serviceRequestService.getById(data.data.serviceRequestId)
               .pipe(first())
@@ -484,6 +487,30 @@ export class ServiceReportComponent implements OnInit {
       this.FormControlDisable()
       this.isNewMode = true
     }
+  }
+
+  private loadSparePartData(): void {
+
+    this.serviceReportService.getCustSPInventoryForServiceReport(this.ServiceReportId)
+      .pipe(first())
+      .subscribe((data: any) =>
+        this.sparepartlist = data.data
+      );
+
+
+    this.sparePartService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          if (data && data.data) {
+            this.sparepartrecmmlist = data.data;
+          }
+        },
+        error: (err) => {
+          console.error('Error loading spare parts:', err);
+          this.sparepartrecmmlist = [];
+        }
+      });
   }
 
   // convenience getter for easy access to form fields
@@ -1240,7 +1267,7 @@ export class ServiceReportComponent implements OnInit {
       this.srConsumedModel = new sparePartsConsumed();
       this.srConsumedModel.partNo = v.partNo;
       this.srConsumedModel.hscCode = v.hscCode;
-      this.srConsumedModel.itemDesc = v.itemDesc;
+      this.srConsumedModel.itemDesc = v.sparePart.itemDesc;
       this.srConsumedModel.qtyConsumed = "0";
       this.srConsumedModel.serviceReportId = this.ServiceReportId;
       this.srConsumedModel.qtyAvailable = v.qtyAvailable?.toString();
@@ -1280,9 +1307,9 @@ export class ServiceReportComponent implements OnInit {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" data-action-type="remove" title="Delete"></span></button>`;
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" data-action-type="remove" title="Delete"></span></button>
-          <button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-edit" data-action-type="edit" title="Edit Value"></span></button>`;
+          <button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-save" data-action-type="edit" title="Save Value"></span></button>`;
           } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-edit" data-action-type="edit" title="Edit Value"></span></button>`;
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-save" data-action-type="edit" title="Save Value"></span></button>`;
           }
         }
       },
@@ -1390,9 +1417,9 @@ export class ServiceReportComponent implements OnInit {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" data-action-type="remove" title="Delete"></span></button>`;
           } else if (this.hasDeleteAccess && this.hasUpdateAccess) {
             return `<button class="btn btn-link" type="button" (click)="delete(params)"><span class="icon-btn icon-delete" data-action-type="remove" title="Delete"></span></button>
-          <button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-edit" data-action-type="edit" title="Edit Value"></span></button>`;
+          <button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-save" data-action-type="edit" title="Save Value"></span></button>`;
           } else if (!this.hasDeleteAccess && this.hasUpdateAccess) {
-            return `<button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-edit" data-action-type="edit" title="Edit Value"></span></button>`;
+            return `<button type="button" class="btn btn-link" data-action-type="edit" ><span class="icon-btn icon-save" data-action-type="edit" title="Save Value"></span></button>`;
           }
         }
       },

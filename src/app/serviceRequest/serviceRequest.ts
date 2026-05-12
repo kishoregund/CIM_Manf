@@ -1267,9 +1267,38 @@ export class ServiceRequestComponent implements OnInit {
 
   }
 
+  private validateActionWithZipFile(): boolean {
+    const requiredActionId = 'Remote Desktop' // '87b4b699-134f-11ed-ba7d-0a91af0598e6';
+    const hasRequiredAction = this.actionList?.some(action => action.actiontakenName === requiredActionId);
+
+    if (hasRequiredAction) {
+      //const hasZipFile = this.PdffileData?.some(file => file.fileName?.toLowerCase().endsWith('.zip'));
+      const hasZipFile = this.actionList?.some(action => action.teamviewRecording?.toLowerCase().endsWith('.zip'));
+      if (!hasZipFile) {
+        this.notificationService.showError("A .zip file must be attached for this action type. Please upload the required .zip file before generating the report.", "Error");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  isGenerateReportDisabled(): boolean {
+    const requiredActionId = '87b4b699-134f-11ed-ba7d-0a91af0598e6';
+    const hasRequiredAction = this.actionList?.some(action => action.actionTaken === requiredActionId);
+    if (hasRequiredAction) {
+      const hasZipFile = this.PdffileData?.some(file => file.fileName?.toLowerCase().endsWith('.zip'));
+      return !hasZipFile;
+    }
+    return false;
+  }
+
   generatereport() {
     debugger;
     if (this.isGenerateReport == false) {
+      if (!this.validateActionWithZipFile()) {
+        return;
+      }
+
       this.onSubmit();
       let scheduleCalls = this.scheduleData.filter(x => x.serReqId == this.serviceRequestId)
       if (this.scheduleData == null || this.scheduleData.length <= 0 || scheduleCalls.length <= 0) {
