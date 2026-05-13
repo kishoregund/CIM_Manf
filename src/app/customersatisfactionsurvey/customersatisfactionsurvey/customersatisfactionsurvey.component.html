@@ -39,7 +39,8 @@
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
-            <div class="col-md-4 col-sm-4 mb-3">
+            <!-- Row 1: Distributor, Service Request, Customer, Site -->
+            <div class="col-md-3 col-sm-3 mb-3">
               <label>Distributor</label>
               <select #distributorid (input)="getengineers($event.target.value)"
                 [ngClass]="{'is-invalid':submitted && f.distId.errors }" class="form-select" formControlName="distId">
@@ -52,6 +53,29 @@
 
             </div>
 
+            <div class="col-md-3 col-sm-3 mb-3">
+              <label for="name">Service Request No</label>
+              <select name="" placeholder="Service Request Id" formControlName="serviceRequestId" id=""
+                (change)="onServiceRequestChange()" class="form-select"
+                [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
+                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serReqNo}}</option>
+              </select>
+              <div *ngIf="submitted && f.serviceRequestId.errors" class="invalid-feedback">
+                <div *ngIf="f.serviceRequestId.errors.required">Service Request Id is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-3 mb-3">
+              <label>Customer</label>
+              <input type="text" disabled class="form-control" formControlName="customerName">
+            </div>
+
+            <div class="col-md-3 col-sm-3 mb-3">
+              <label>Site</label>
+              <input type="text" disabled class="form-control" formControlName="siteName">
+            </div>
+
+            <!-- Row 2: Engineer Name, Name, Email -->
             <div class="col-md-4 col-sm-4 mb-3">
               <label>Engineer Name</label>
 
@@ -67,26 +91,12 @@
 
             </div>
 
-
             <div class="col-md-4 col-sm-4 mb-3">
-              <label for="name">Service Request No</label>
-              <select name="" placeholder="Service Request Id" formControlName="serviceRequestId" id=""
-                (change)="onServiceRequestChange()" class="form-select"
-                [ngClass]="{'is-invalid':submitted && f.serviceRequestId.errors }">
-                <option *ngFor="let i of servicerequest" value="{{i.id}}">{{i.serReqNo}}</option>
-              </select>
-              <div *ngIf="submitted && f.serviceRequestId.errors" class="invalid-feedback">
-                <div *ngIf="f.serviceRequestId.errors.required">Service Request Id is required</div>
-              </div>
-            </div>
-
-
-            <div class="col-md-12 col-sm-12 mb-3">
               <label>Name</label>
               <input type="text" disabled class="form-control" formControlName="name" id="">
             </div>
 
-            <div class="col-md-12 col-sm-12 mb-3">
+            <div class="col-md-4 col-sm-4 mb-3">
               <label>Email</label>
               <input type="text" disabled class="form-control" formControlName="email" id="">
             </div>

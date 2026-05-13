@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { first } from "rxjs/operators";
 import { EnvService } from "src/app/_services/env/env.service";
 import {
   Customersatisfactionsurvey,
@@ -25,6 +24,9 @@ import { ServiceRequestService } from "src/app/_services/serviceRequest.service"
 import { ServiceReportService } from "src/app/_services/serviceReport.service";
 import { CustomersatisfactionsurveyService } from 'src/app/_services/customersatisfactionsurvey.service';
 import { BUBrandModel } from "src/app/_newmodels/BUBrandModel";
+import { CustomerService } from "src/app/_services/customer.service";
+import { CustomerSiteService } from "src/app/_services/customersite.service";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-customersatisfactionsurvey",
@@ -57,6 +59,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   valid: boolean;
   DistributorList: any;
+  customerList: any[] = [];
+  siteList: any[] = [];
   eng: boolean = false;
   isEng: boolean = false;
   isDist: boolean = false;
@@ -83,6 +87,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     private listTypeService: ListTypeService,
     private environment: EnvService,
     private serviceReportService: ServiceReportService,
+    private customerSiteService: CustomerSiteService,
+    private customerService: CustomerService
 
   ) {
   }
@@ -128,7 +134,8 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       engineerId: [""],
       distId: [""],
       serviceRequestId: ["", [Validators.required]],
-
+      customerName: [""],
+      siteName: [""],
       name: ["", [Validators.required]],
       email: ["", [Validators.required]],
       onTime: ["", Validators.required],
@@ -165,8 +172,9 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       setTimeout(() => {
         this.formData = data.data;
         this.form.patchValue(this.formData);
-        this.form.get("serviceRequestId").setValue(data.data.serviceRequestId)
+        this.form.get("serviceRequestId")?.setValue(data.data.serviceRequestId)
         this.serviceRequestId = data.data.serviceRequestId;
+        this.onServiceRequestChange();
       }, 100);
 
 
@@ -184,23 +192,23 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
       var serreqdata: any = await this.servicerequestservice.GetServiceRequestBySRPId(this.servicereportid).toPromise();
       this.servicerequest = serreqdata.data;//.data.filter(x => x.assignedTo == this.user.contactId && !x.isReportGenerated);
 
-
       let data: any = await this.serviceReportService.getById(this.servicereportid).toPromise();
       let serreq = data.data.serviceRequest
       if (!this.isEng) await this.getengineers(serreq.distId)
       await this.getservicerequest(serreq.distId, serreq.assignedTo)
       setTimeout(() => {
         this.distId = serreq.distId;
-        this.form.get("distId").setValue(serreq.distId)
-        this.form.get("engineerId").setValue(serreq.assignedTo)
+        this.form.get("distId")?.setValue(serreq.distId)
+        this.form.get("engineerId")?.setValue(serreq.assignedTo)
         this.engId = serreq.assignedTo;
-        this.form.get("serviceRequestId").setValue(serreq.id)
+        this.form.get("serviceRequestId")?.setValue(serreq.id)
         this.serviceRequestId = serreq.id;
         this.form.get('name').setValue(serreq.contactPerson)
         this.form.get('email').setValue(serreq.email)
       }, 200);
     }
 
+    this.setupServiceRequestValueChangeListener();
   }
 
   async GetDistAndEng() {
@@ -227,12 +235,13 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
     else if (this.role == this.environment.distRoleCode) {
       this.form.get('distId').disable()
     }
-
     if (this.servicereportid) {
       this.form.get('serviceRequestId').disable()
       this.form.get('distId').disable()
       this.form.get('engineerId').disable()
     }
+    this.form.get('customerName').disable()
+    this.form.get('siteName').disable()
   }
 
   EditMode() {
@@ -287,17 +296,55 @@ export class CustomersatisfactionsurveyComponent implements OnInit {
 
   async getservicerequest(id: string, engId = null) {
     var data: any = await this.servicerequestservice.GetServiceRequestByDist(id).toPromise();
-    debugger;
     this.servicerequest = data.data.filter(x => x.assignedTo == engId);
   }
 
   onServiceRequestChange() {
-    var sreq = this.form.get('serviceRequestId').value
-    var serviceRequest = this.servicerequest.find(x => x.id == sreq)
+    const serviceRequestId = this.form.get('serviceRequestId')?.value;
+    if (!serviceRequestId) return;
 
-    this.form.get('name').setValue(serviceRequest.contactPerson)
-    this.form.get('email').setValue(serviceRequest.email)
+    const serviceRequest: any = this.servicerequest.find(x => x.id == serviceRequestId);
+    if (!serviceRequest) return;
 
+    this.form.get('name')?.setValue(serviceRequest.contactPerson);
+    this.form.get('email')?.setValue(serviceRequest.email);
+
+    // Populate customer and site information
+    if (serviceRequest.customerName) {
+      this.form.get('customerName')?.setValue(serviceRequest.customerName);
+    }
+    if (serviceRequest.siteName) {
+      this.form.get('siteName')?.setValue(serviceRequest.siteName);
+    }
+  }
+
+  populateSiteDropdown(serviceRequest: any) {
+    this.siteList = [];
+    this.customerSiteService.getAll(serviceRequest.custId).pipe(first())
+      .subscribe((data: any) => {
+        this.siteList = data.data;
+        this.form.get('siteId')?.setValue(serviceRequest.siteId);
+      });
+  }
+
+  populateCustomerDropdown(serviceRequest: any) {
+    this.customerList = [];
+    this.customerService.getAll().pipe(first())
+      .subscribe((data: any) => {
+        this.customerList = data.data;
+        this.form.get('customerId')?.setValue(serviceRequest.custId);
+      });
+  }
+
+  setupServiceRequestValueChangeListener() {
+    const serviceRequestControl = this.form.get('serviceRequestId');
+    if (serviceRequestControl) {
+      serviceRequestControl.valueChanges.subscribe((serviceRequestId) => {
+        if (serviceRequestId) {
+          this.onServiceRequestChange();
+        }
+      });
+    }
   }
 
   async getengineers(id: string) {
