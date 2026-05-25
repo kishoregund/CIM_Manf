@@ -154,6 +154,7 @@ import { CustomerInstrumentComponent } from './customerinstrument/customerinstru
 import { ProcessFileRenderer } from './FileRender/ProcessFileRenderer';
 import { EngineerSchedulerComponent } from './engineerscheduler/engineerscheduler.component';
 import { EngschedulerComponent } from './engscheduler/engineerscheduler.component';
+import { FullcalendarSchedulerComponent } from './fullcalendar-scheduler/fullcalendar-scheduler.component';
 import { CustSPInventoryComponent } from './custspinventory/custspinventory';
 import { CustspinventorylistComponent } from './custspinventory/Custspinventorylist.component';
 import { OfferrequestComponent, OfferRequestCountryComponent, OfferrequestCurrencyComponent } from './offerrequest/Offerrequest.component';
@@ -178,6 +179,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
 import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 
 
@@ -302,6 +304,7 @@ import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
         EngdashboardComponent,
         CustomAmountPipe,
         EngschedulerComponent,
+        FullcalendarSchedulerComponent,
         CIMComponent,
         //ImportOfferRequestComponent,
         OfferrequestCurrencyComponent,
@@ -345,6 +348,7 @@ import { DynamicQueryComponent } from './reportbuilder/reportbuilder';
         NgMultiSelectDropDownModule.forRoot(),
         AgGridModule,//.withComponents([]),
         ScheduleModule, RecurrenceEditorModule,
+        FullCalendarModule,
         MatSelectModule, MatFormFieldModule, MatInputModule,
         MatButtonModule, MatLabel,
         MatIconModule, MatTableModule, MatDividerModule], providers: [EnvServiceProvider, provideClientHydration(), DecimalPipe, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

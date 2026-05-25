@@ -95,6 +95,7 @@ import { ManufacturerSalesRegionComponent } from './manufacturersalesregion/manf
 import { CustomerInstrumentComponent } from './customerinstrument/customerinstrument';
 import { CustomerInstrumentListComponent } from './customerinstrument/customerinstrumentlist';
 import { EngineerSchedulerComponent } from './engineerscheduler/engineerscheduler.component';
+import { FullcalendarSchedulerComponent } from './fullcalendar-scheduler/fullcalendar-scheduler.component';
 import { CustspinventorylistComponent } from './custspinventory/Custspinventorylist.component';
 import { CustSPInventoryComponent } from './custspinventory/custspinventory';
 import { SparepartsrecommendedComponent } from './sparepartsrecommended/sparepartsrecommended.component';
@@ -609,6 +610,11 @@ const routes: Routes = [
   {
     path: "schedule",
     component: EngineerSchedulerComponent,
+    canActivate: [AuthGuard, TextValidator],
+  },
+  {
+    path: "fullcalendar-schedule",
+    component: FullcalendarSchedulerComponent,
     canActivate: [AuthGuard, TextValidator],
   },
   {

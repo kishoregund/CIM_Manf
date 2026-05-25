@@ -1,0 +1,173 @@
+<div class="calendar-wrapper-main">
+  <!-- Help Text -->
+  <div class="alert alert-info mx-3 mt-3 mb-0" role="alert">
+    <small>
+      <strong>💡 Tip:</strong> To schedule a new meeting, switch to <strong>Week</strong> or <strong>Day</strong> view and click on any time slot.
+      Click on existing events to view details.
+    </small>
+  </div>
+
+  <!-- Engineer View -->
+  <full-calendar *ngIf="isEng" #calendar [options]="calendarOptions" class="fullcalendar-container"></full-calendar>
+
+  <!-- Admin View -->
+  <full-calendar *ngIf="isAdmin" #calendar [options]="calendarOptions" class="fullcalendar-container"></full-calendar>
+
+  <!-- Distributor View -->
+  <full-calendar *ngIf="isDistSupp" #calendar [options]="calendarOptions" class="fullcalendar-container"></full-calendar>
+</div>
+
+<!-- Event Details Modal (Read-only) -->
+<div class="modal" [class.show]="showEventModal" [style.display]="showEventModal ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #5ba146; color: white;">
+        <h5 class="modal-title">Event Details</h5>
+        <button type="button" class="btn-close" (click)="showEventModal = false"
+          style="filter: brightness(0) invert(1);"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedEvent">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Title</label>
+          <p class="text-muted">{{ eventTitle }}</p>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Description</label>
+          <p class="text-muted">{{ eventDescription || 'N/A' }}</p>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Location</label>
+          <p class="text-muted">{{ eventLocation || 'N/A' }}</p>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Start Date & Time</label>
+            <p class="text-muted">{{ eventStartDate }}</p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">End Date & Time</label>
+            <p class="text-muted">{{ eventEndDate }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="showEventModal = false">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Event Modal -->
+<div class="modal" [class.show]="showCreateEventModal" [style.display]="showCreateEventModal ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #5ba146; color: white;">
+        <h5 class="modal-title">Schedule New Meeting</h5>
+        <button type="button" class="btn-close" (click)="closeCreateEventModal()"
+          style="filter: brightness(0) invert(1);"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Service Request ID (Read-only) -->
+        <div class="form-group mb-3">
+          <label for="serReqId" class="form-label">Service Request No.</label>
+          <input type="text"
+            class="form-control"
+            id="serReqId"
+            [value]="id || 'N/A'"
+            disabled>
+        </div>
+
+        <!-- Event Title -->
+        <div class="form-group mb-3">
+          <label for="newEventTitle" class="form-label">Meeting Title <span class="text-danger">*</span></label>
+          <input type="text"
+            class="form-control"
+            id="newEventTitle"
+            [(ngModel)]="eventTitle"
+            [class.is-invalid]="newEventErrors['title']"
+            placeholder="Enter meeting title">
+          <div class="invalid-feedback" *ngIf="newEventErrors['title']">
+            {{ newEventErrors['title'] }}
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group mb-3">
+          <label for="newEventLocation" class="form-label">Location</label>
+          <input type="text"
+            class="form-control"
+            id="newEventLocation"
+            [(ngModel)]="eventLocation"
+            placeholder="Enter location (e.g., Conference Room A, Online)">
+        </div>
+
+        <!-- Description -->
+        <div class="form-group mb-3">
+          <label for="newEventDescription" class="form-label">Description / Notes</label>
+          <textarea class="form-control"
+            id="newEventDescription"
+            [(ngModel)]="eventDescription"
+            rows="3"
+            placeholder="Enter meeting description or notes (optional)"></textarea>
+        </div>
+
+        <!-- Date and Time -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="newEventStartDate" class="form-label">Start Date & Time <span class="text-danger">*</span></label>
+            <input type="datetime-local"
+              class="form-control"
+              id="newEventStartDate"
+              [(ngModel)]="eventStartDate"
+              [class.is-invalid]="newEventErrors['startDate']">
+            <div class="invalid-feedback" *ngIf="newEventErrors['startDate']">
+              {{ newEventErrors['startDate'] }}
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="newEventEndDate" class="form-label">End Date & Time <span class="text-danger">*</span></label>
+            <input type="datetime-local"
+              class="form-control"
+              id="newEventEndDate"
+              [(ngModel)]="eventEndDate"
+              [class.is-invalid]="newEventErrors['endDate']">
+            <div class="invalid-feedback" *ngIf="newEventErrors['endDate']">
+              {{ newEventErrors['endDate'] }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Summary -->
+        <div class="alert alert-danger" *ngIf="Object.keys(newEventErrors).length > 0" role="alert">
+          <strong>Please fix the following errors:</strong>
+          <ul class="mb-0">
+            <li *ngFor="let error of Object.values(newEventErrors)">{{ error }}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeCreateEventModal()" [disabled]="loading">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="saveNewEvent()" [disabled]="loading">
+          <ng-container *ngIf="!loading">Schedule Meeting</ng-container>
+          <ng-container *ngIf="loading">
+            Scheduling...
+          </ng-container>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrops -->
+<div class="modal-backdrop fade" [class.show]="showEventModal"
+  [style.display]="showEventModal ? 'block' : 'none'" (click)="showEventModal = false"></div>
+
+<div class="modal-backdrop fade" [class.show]="showCreateEventModal"
+  [style.display]="showCreateEventModal ? 'block' : 'none'" (click)="closeCreateEventModal()"></div>
+
+<!-- Loading Indicator -->
+<div class="loading-spinner" *ngIf="loading">
+  <div class="spinner-border text-success" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
