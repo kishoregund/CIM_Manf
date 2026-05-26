@@ -76,6 +76,11 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
     },
     height: 'auto',
     contentHeight: 'auto',
+    slotLabelFormat: {
+      meridiem: 'short',
+      hour: 'numeric',
+      minute: '2-digit'
+    },
     editable: false,
     selectable: true,
     selectConstraint: 'businessHours',
@@ -86,8 +91,11 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
     eventTextColor: '#ffffff',
     slotLabelInterval: '00:30',
     slotDuration: '00:30',
+    slotMinTime: '00:00',
+    slotMaxTime: '24:00',
     allDaySlot: true,
     nowIndicator: true,
+    scrollTime: '09:00',
     businessHours: {
       daysOfWeek: [1, 2, 3, 4, 5],
       startTime: '08:00',
