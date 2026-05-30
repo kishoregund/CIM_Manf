@@ -1,6 +1,6 @@
 <div class="calendar-wrapper-main">
   <!-- Help Text -->
-  <div class="alert alert-info mx-3 mt-3 mb-0" role="alert">
+  <div class="alert alert-info mx-3 mt-3 mb-0" role="alert" *ngIf="hasQueryParams">
     <small>
       <strong>💡 Tip:</strong> To schedule a new meeting, switch to <strong>Week</strong> or <strong>Day</strong> view and click on any time slot.
       Click on existing events to view details.
@@ -13,8 +13,49 @@
   <!-- Admin View -->
   <full-calendar *ngIf="isAdmin" #calendar [options]="calendarOptions" class="fullcalendar-container"></full-calendar>
 
-  <!-- Distributor View -->
-  <full-calendar *ngIf="isDistSupp" #calendar [options]="calendarOptions" class="fullcalendar-container"></full-calendar>
+  <!-- Distributor View - Multi-Engineer Calendar View -->
+  <div *ngIf="isDistSupp && showMultiEngineerView" class="multi-engineer-calendars">
+    <div class="calendars-header">
+      <div class="calendar-nav-controls">
+        <button class="btn btn-sm btn-secondary" (click)="previousMonth()">← Prev</button>
+        <span class="current-month">{{ currentMonthYear }}</span>
+        <button class="btn btn-sm btn-secondary" (click)="nextMonth()">Next →</button>
+      </div>
+    </div>
+
+    <div class="engineer-calendars-container">
+      <div *ngFor="let engineer of engineers" class="engineer-calendar-column">
+        <div class="engineer-calendar-header">{{ engineer.name }}</div>
+
+        <div class="engineer-mini-calendar">
+          <div class="calendar-header-row">
+            <div class="day-header" *ngFor="let day of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']">
+              {{ day }}
+            </div>
+          </div>
+
+          <div class="calendar-days-grid">
+            <div *ngFor="let dayNum of getCalendarDays()"
+                 class="calendar-day"
+                 [class.other-month]="!dayNum"
+                 [class.has-event]="hasEventOnDay(engineer.id, dayNum)"
+                 (click)="onDateClick(dayNum)">
+              <span class="day-number">{{ dayNum || '' }}</span>
+              <div *ngIf="hasEventOnDay(engineer.id, dayNum)" class="event-indicator">
+                <div *ngFor="let event of getEventsForDay(engineer.id, dayNum)"
+                     class="event-dot"
+                     [title]="event.displayName || event.subject">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Distributor View - Calendar -->
+  <full-calendar *ngIf="isDistSupp && !showMultiEngineerView" #calendar [options]="calendarOptions" class="fullcalendar-container"></full-calendar>
 </div>
 
 <!-- Event Details Modal (Read-only) -->
@@ -73,7 +114,7 @@
           <input type="text"
             class="form-control"
             id="serReqId"
-            [value]="id || 'N/A'"
+            [value]="serReqNo || 'N/A'"
             disabled>
         </div>
 
@@ -158,12 +199,57 @@
   </div>
 </div>
 
+<!-- Day Meetings Modal -->
+<div class="modal" [class.show]="showDayMeetingsModal" [style.display]="showDayMeetingsModal ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #5ba146; color: white;">
+        <h5 class="modal-title">Scheduled Meetings - {{ selectedDayDate | date:'MMMM d, yyyy' }}</h5>
+        <button type="button" class="btn-close" (click)="closeDayMeetingsModal()"
+          style="filter: brightness(0) invert(1);"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="dayMeetings.length === 0" class="alert alert-info" role="alert">
+          <small>No meetings scheduled for this day.</small>
+        </div>
+
+        <div *ngFor="let meeting of dayMeetings" class="day-meeting-card">
+          <div class="meeting-header">
+            <h6 class="meeting-title">{{ meeting.displayName || meeting.subject }}</h6>
+            <span class="engineer-badge">{{ meeting.engineerName }}</span>
+          </div>
+          <div class="meeting-details">
+            <div class="detail-row">
+              <span class="detail-label">Time:</span>
+              <span class="detail-value">{{ meeting.startTime | date:'short' }} - {{ meeting.endTime | date:'short' }}</span>
+            </div>
+            <div class="detail-row" *ngIf="meeting.location">
+              <span class="detail-label">Location:</span>
+              <span class="detail-value">{{ meeting.location }}</span>
+            </div>
+            <div class="detail-row" *ngIf="meeting.description">
+              <span class="detail-label">Description:</span>
+              <span class="detail-value">{{ meeting.description }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeDayMeetingsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal Backdrops -->
 <div class="modal-backdrop fade" [class.show]="showEventModal"
   [style.display]="showEventModal ? 'block' : 'none'" (click)="showEventModal = false"></div>
 
 <div class="modal-backdrop fade" [class.show]="showCreateEventModal"
   [style.display]="showCreateEventModal ? 'block' : 'none'" (click)="closeCreateEventModal()"></div>
+
+<div class="modal-backdrop fade" [class.show]="showDayMeetingsModal"
+  [style.display]="showDayMeetingsModal ? 'block' : 'none'" (click)="closeDayMeetingsModal()"></div>
 
 <!-- Loading Indicator -->
 <div class="loading-spinner" *ngIf="loading">

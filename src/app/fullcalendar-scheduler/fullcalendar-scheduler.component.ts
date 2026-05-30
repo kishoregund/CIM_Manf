@@ -38,6 +38,16 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
   distData: any[] = [];
   dataSrc: any[] = [];
 
+  // Multi-engineer view for distributors
+  engineers: any[] = [];
+  engineerEvents: Map<string, any[]> = new Map();
+  showMultiEngineerView = false;
+  currentMonthYear = '';
+  currentDate = new Date();
+  selectedDayDate: Date | null = null;
+  dayMeetings: any[] = [];
+  showDayMeetingsModal = false;
+
   selectedEvent: any = null;
   showEventModal = false;
   showCreateEventModal = false;
@@ -57,17 +67,21 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
   hasAddAccess = false;
 
   id: string | null = null;
+  serReqNo: string = '';
   link: string = '';
   isRemoteDesktop = false;
   actionId: any;
+  hasQueryParams = false;
   dateFormat = 'dd/MM/yyyy';
 
   public ownerDataSource: any[] = [];
   public setView = 'Month';
   public views: Array<string> = ['Week', 'Month'];
 
+  initialViewType: string = 'dayGridMonth';
+
   calendarOptions: CalendarOptions = {
-    initialView: 'timeGridWeek',
+    initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     headerToolbar: {
       left: 'prev,next today',
@@ -82,7 +96,7 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
       minute: '2-digit'
     },
     editable: false,
-    selectable: true,
+    selectable: false,
     selectConstraint: 'businessHours',
     eventClick: this.handleEventClick.bind(this),
     select: this.handleDateSelect.bind(this),
@@ -121,6 +135,38 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
     this.isRemoteDesktop = this.route.snapshot.queryParams?.action === 'RMD';
     this.actionId = this.route.snapshot.queryParams?.aId;
     this.link = `/servicerequest/${this.id}`;
+
+    // Fetch service request number if id exists
+    if (this.id) {
+      this.serviceRequestService.getById(this.id)
+        .pipe(first())
+        .subscribe({
+          next: (response: any) => {
+            if (response && response.data) {
+              this.serReqNo = response.data.serReqNo || this.id;
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching service request:', err);
+            this.serReqNo = this.id || '';
+          }
+        });
+    }
+
+    // Set initial view and scheduling capability based on query parameters
+    const queryParams = this.route.snapshot.queryParams;
+    // Only enable scheduling if there's an actionId or service request context
+    this.hasQueryParams = !!queryParams['aId'] || !!this.id;
+
+    if (this.hasQueryParams) {
+      this.initialViewType = 'timeGridWeek';
+      this.calendarOptions.initialView = 'timeGridWeek';
+      this.calendarOptions.selectable = true;
+    } else {
+      this.initialViewType = 'dayGridMonth';
+      this.calendarOptions.initialView = 'dayGridMonth';
+      this.calendarOptions.selectable = false;
+    }
 
     this.user = this.accountService.userValue;
     this.profilePermission = this.profileService.userProfileValue;
@@ -198,6 +244,9 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
 
   loadDistributorEvents(): void {
     this.loading = true;
+    this.engineerEvents.clear();
+    this.engineers = [];
+
     // Display empty calendar immediately
     this.mapEventsFromSchedules();
 
@@ -212,14 +261,17 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
               .subscribe({
                 next: (contacts: any) => {
                   console.log('Distributor contacts response:', contacts);
-                  console.log('isSuccessful:', contacts.isSuccessful);
-                  console.log('data:', contacts.data);
-                  console.log('data type:', typeof contacts.data);
-                  console.log('data is array:', Array.isArray(contacts.data));
-                  console.log('data length:', contacts.data ? contacts.data.length : 'null');
 
                   if (contacts.data != null && Array.isArray(contacts.data) && contacts.data.length > 0) {
                     console.log('Loading schedules for contacts');
+                    // Store engineers for multi-view
+                    contacts.data.forEach((engineer: any) => {
+                      this.engineers.push({
+                        id: engineer.id,
+                        name: engineer.firstName + ' ' + engineer.lastName,
+                        events: []
+                      });
+                    });
                     this.loadSchedulesForDistributorContacts(contacts.data);
                   } else {
                     console.log('No contacts data or empty array');
@@ -262,6 +314,9 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
           next: (data: any) => {
             console.log('Schedule data for contact ' + contact.id + ':', data);
             if (data && data.data && Array.isArray(data.data) && data.data.length > 0) {
+              // Store events by engineer ID
+              this.engineerEvents.set(contact.id, data.data);
+
               data.data.forEach((schedule: any) => {
                 this.distData.push(schedule);
               });
@@ -273,6 +328,8 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
             console.log('Completed requests: ' + completedRequests + ' / ' + contacts.length);
             if (completedRequests === contacts.length) {
               console.log('All contacts loaded. Total schedules:', this.distData.length);
+              this.updateMonthYear();
+              this.showMultiEngineerView = true;
               this.loading = false;
             }
           },
@@ -281,6 +338,8 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
             completedRequests++;
             if (completedRequests === contacts.length) {
               console.log('All contacts processed (with errors). Total schedules:', this.distData.length);
+              this.updateMonthYear();
+              this.showMultiEngineerView = true;
               this.loading = false;
             }
           }
@@ -397,9 +456,12 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
 
     this.loading = true;
 
+    const formattedSubject = this.serReqNo ? `${this.serReqNo} : ${this.eventTitle}` : this.eventTitle;
+
     const eventData = {
       Id: Math.random().toString(36).substring(2, 11),
-      Subject: this.eventTitle,
+      Subject: formattedSubject,
+      SerReqNo: this.serReqNo,
       Description: this.eventDescription,
       Location: this.eventLocation,
       StartTime: new Date(this.eventStartDate).toISOString(),
@@ -500,5 +562,108 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
     this.router.navigate([this.link], {
       queryParams: { isNSNav: true }
     });
+  }
+
+  // Multi-Engineer Calendar View Methods
+  updateMonthYear(): void {
+    const options: any = { year: 'numeric', month: 'long' };
+    this.currentMonthYear = this.currentDate.toLocaleDateString('en-US', options);
+  }
+
+  getCalendarDays(): (number | null)[] {
+    const year = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const days: (number | null)[] = [];
+
+    // Add days from previous month
+    for (let i = firstDay - 1; i >= 0; i--) {
+      days.push(null);
+    }
+
+    // Add current month days
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(i);
+    }
+
+    // Add days from next month to fill grid
+    const remainingDays = 42 - days.length;
+    for (let i = 1; i <= remainingDays; i++) {
+      days.push(null);
+    }
+
+    return days;
+  }
+
+  previousMonth(): void {
+    this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+    this.currentDate = new Date(this.currentDate);
+    this.updateMonthYear();
+  }
+
+  nextMonth(): void {
+    this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+    this.currentDate = new Date(this.currentDate);
+    this.updateMonthYear();
+  }
+
+  hasEventOnDay(engineerId: string, dayNum: number | null): boolean {
+    if (!dayNum) return false;
+    const events = this.engineerEvents.get(engineerId) || [];
+    const year = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth();
+
+    return events.some((event: any) => {
+      const eventDate = new Date(event.startTime);
+      return eventDate.getDate() === dayNum &&
+             eventDate.getMonth() === month &&
+             eventDate.getFullYear() === year;
+    });
+  }
+
+  getEventsForDay(engineerId: string, dayNum: number | null): any[] {
+    if (!dayNum) return [];
+    const events = this.engineerEvents.get(engineerId) || [];
+    const year = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth();
+
+    return events.filter((event: any) => {
+      const eventDate = new Date(event.startTime);
+      return eventDate.getDate() === dayNum &&
+             eventDate.getMonth() === month &&
+             eventDate.getFullYear() === year;
+    });
+  }
+
+  onDateClick(dayNum: number | null): void {
+    if (!dayNum) return;
+
+    const year = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth();
+    this.selectedDayDate = new Date(year, month, dayNum);
+
+    // Gather all meetings for this day from all engineers
+    this.dayMeetings = [];
+    this.engineers.forEach((engineer: any) => {
+      const events = this.getEventsForDay(engineer.id, dayNum);
+      events.forEach((event: any) => {
+        this.dayMeetings.push({
+          ...event,
+          engineerName: engineer.name,
+          engineerId: engineer.id
+        });
+      });
+    });
+
+    this.showDayMeetingsModal = true;
+  }
+
+  closeDayMeetingsModal(): void {
+    this.showDayMeetingsModal = false;
+    this.dayMeetings = [];
+    this.selectedDayDate = null;
   }
 }

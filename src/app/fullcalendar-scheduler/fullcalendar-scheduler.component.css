@@ -9,7 +9,7 @@
 
 .calendar-wrapper-main {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #f8f9fa;
@@ -17,16 +17,16 @@
 }
 
 .fullcalendar-container {
-  width: calc(100% - 30px);
+  width: 100%;
   height: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
   background-color: white;
-  margin: 15px;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  overflow: auto;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
 }
 
 .calendar-header {
@@ -151,8 +151,8 @@
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
   font-weight: 500;
   text-transform: capitalize;
-  padding: 6px 12px;
-  font-size: 14px;
+  padding: 4px 8px;
+  font-size: 12px;
 }
 
 :deep(.fc-button-primary:hover) {
@@ -198,13 +198,13 @@
 }
 
 :deep(.fc-daygrid-day-frame) {
-  min-height: 80px;
+  min-height: 50px;
   height: 100%;
 }
 
 :deep(.fc-daygrid-day) {
   border: 1px solid #dee2e6;
-  min-height: 80px;
+  min-height: 50px;
   height: 100%;
 }
 
@@ -276,7 +276,7 @@
 
 /* Title and Toolbar */
 :deep(.fc-toolbar-title) {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   color: #212529;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
@@ -284,7 +284,7 @@
 }
 
 :deep(.fc-toolbar) {
-  padding: 15px 20px;
+  padding: 8px 10px;
   background-color: white;
   border-bottom: 1px solid #dee2e6;
 }
@@ -647,4 +647,213 @@ textarea.form-control {
   :deep(.fc-daygrid-day-frame) {
     min-height: 50px;
   }
+}
+
+/* Multi-Engineer Calendar View for Distributors */
+.multi-engineer-calendars {
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  background-color: #f8f9fa;
+  overflow: auto;
+}
+
+.calendars-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.calendar-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.current-month {
+  font-weight: 600;
+  font-size: 16px;
+  color: #212529;
+  min-width: 150px;
+  text-align: center;
+}
+
+.engineer-calendars-container {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.engineer-calendar-column {
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  min-width: 180px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.engineer-calendar-header {
+  background-color: #5ba146;
+  color: white;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  border-bottom: 2px solid #449235;
+}
+
+.engineer-mini-calendar {
+  padding: 10px;
+}
+
+.calendar-header-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 5px;
+}
+
+.day-header {
+  text-align: center;
+  font-weight: 600;
+  color: #5ba146;
+  font-size: 12px;
+  padding: 5px 0;
+}
+
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  border: 1px solid #dee2e6;
+  padding: 3px;
+  font-size: 11px;
+  text-align: center;
+  position: relative;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+  background-color: #f0f0f0;
+}
+
+.calendar-day.other-month {
+  background-color: #fafafa;
+  color: #999;
+}
+
+.calendar-day.has-event {
+  background-color: #e8f5e9;
+  border-color: #5ba146;
+}
+
+.day-number {
+  display: block;
+  font-weight: 500;
+  color: #212529;
+}
+
+.calendar-day.other-month .day-number {
+  color: #ccc;
+}
+
+.event-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.event-dot {
+  width: 4px;
+  height: 4px;
+  background-color: #5ba146;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.event-dot:hover {
+  width: 6px;
+  height: 6px;
+  background-color: #449235;
+}
+
+/* Day Meetings Card */
+.day-meeting-card {
+  background-color: #f8f9fa;
+  border-left: 4px solid #5ba146;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.day-meeting-card:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.meeting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.meeting-title {
+  margin: 0;
+  color: #212529;
+  font-weight: 600;
+  font-size: 14px;
+  flex: 1;
+}
+
+.engineer-badge {
+  background-color: #5ba146;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-left: 10px;
+}
+
+.meeting-details {
+  font-size: 13px;
+}
+
+.detail-row {
+  display: flex;
+  margin-bottom: 6px;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #495057;
+  min-width: 80px;
+}
+
+.detail-value {
+  color: #212529;
+  flex: 1;
 }
