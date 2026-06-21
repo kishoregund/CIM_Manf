@@ -17,6 +17,10 @@ export class UsernotificationService {
     return this.http.get(`${this.environment.apiUrl}/Notifications/all`);
   }
 
+  getUnreadCount() {
+    return this.http.get<any>(`${this.environment.apiUrl}/Notifications/unread-count`);
+  }
+
   delete(id) {
     return this.http.delete(`${this.environment.apiUrl}/Notifications/delete/${id}`);
   }
