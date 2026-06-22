@@ -58,13 +58,13 @@
             </svg>
             {{ formatDate(notification.createdOn) }}
           </small>
-          <small class="notification-from" *ngIf="notification.raisedBy">
+          <!-- <small class="notification-from" *ngIf="notification.raisedBy">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-small">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
             by {{ notification.raisedBy }}
-          </small>
+          </small> -->
         </div>
         <button class="delete-notification-btn"
                 (click)="deleteNotification(notification.id)"
