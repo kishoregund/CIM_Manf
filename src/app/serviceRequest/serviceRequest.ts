@@ -132,7 +132,7 @@ export class ServiceRequestComponent implements OnInit {
   instrumentStatus: ListTypeItem[];
   stagelist: ListTypeItem[];
   statuslist: ListTypeItem[];
-  scheduleData: any;
+  //scheduleData: any;
   scheduleDefs: any[];
   hasCallScheduled: boolean;
   isGenerateReport: boolean = false;
@@ -265,7 +265,7 @@ export class ServiceRequestComponent implements OnInit {
       statusId: this.emptyGuid,
       stageId: this.emptyGuid,
       siteId: this.emptyGuid,
-      assignedTo: [""],
+      assignedTo: [''],
       serReqDate: ['', Validators.required],
       visitType: ['', Validators.required],
       companyName: [''],
@@ -607,25 +607,26 @@ export class ServiceRequestComponent implements OnInit {
                 }
               });
 
-            this.scheduleData = []
-            if (!this.IsCustomerView) {
-              setTimeout(() => {
-                if (data.data.assignedTo != null && data.data.assignedTo != "") {
-                  this.EngschedulerService.getByEngId(data.data.assignedTo)
-                    .pipe(first()).subscribe((sch: any) => {
-                      this.scheduleData = sch.data.filter(x => x.serReqId == this.serviceRequestId);
-                      if (this.scheduleData.length > 0) this.hasCallScheduled = true;
+              //engineer cant schedule calls or meetings
+            //this.scheduleData = []
+            // if (!this.IsCustomerView) {
+            //   setTimeout(() => {
+            //     if (data.data.assignedTo != null && data.data.assignedTo != "") {
+            //       this.EngschedulerService.getByEngId(data.data.assignedTo)
+            //         .pipe(first()).subscribe((sch: any) => {
+            //           this.scheduleData = sch.data.filter(x => x.serReqId == this.serviceRequestId);
+            //           if (this.scheduleData.length > 0) this.hasCallScheduled = true;
 
-                      this.scheduleData.forEach(element => {
-                        element.endTime = this.datepipe.transform(GetParsedDate(element.endTime), "short")
-                        element.startTime = this.datepipe.transform(GetParsedDate(element.startTime), "short")
-                        element.Time = element.location + " : " + element.startTime + " - " + element.endTime
-                      });
+            //           this.scheduleData.forEach(element => {
+            //             element.endTime = this.datepipe.transform(GetParsedDate(element.endTime), "short")
+            //             element.startTime = this.datepipe.transform(GetParsedDate(element.startTime), "short")
+            //             element.Time = element.location + " : " + element.startTime + " - " + element.endTime
+            //           });
 
-                    })
-                }
-              }, 2000);
-            }
+            //         })
+            //     }
+            //   }, 2000);
+            // }
 
             //setTimeout(() => {                
             // this.serviceRequestform.patchValue({ "sdate": data.data.sdate });
@@ -1086,8 +1087,6 @@ export class ServiceRequestComponent implements OnInit {
 
     }
 
-
-
     if (this.serviceRequestId == null) {
 
       this.serviceRequest = this.serviceRequestform.getRawValue();
@@ -1150,10 +1149,12 @@ export class ServiceRequestComponent implements OnInit {
       if (this.serviceRequest.breakoccurDetailsId == null) {
         this.serviceRequest.breakoccurDetailsId = this.emptyGuid;
       }
-
-      if (this.serviceRequest.assignedTo == "" || this.serviceRequest.assignedTo == null) {
-        this.serviceRequest.assignedTo = this.emptyGuid;
+      
+      if (this.serviceRequestform.get('assignedTo').value.length > 0) {
+        var selectarray = this.serviceRequestform.get('assignedTo').value;
+        this.serviceRequest.assignedTo = selectarray.map(x => x.id).join(',');
       }
+
 
       if (this.IsEngineerView && this.serviceRequest.isCritical) this.serviceRequest.isCritical = false;
       if (this.serviceRequestform.get('subRequestTypeId').value.length > 0) {
@@ -1169,6 +1170,7 @@ export class ServiceRequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.isSuccessful) {
+              this.createEngSchedulerRecords(this.serviceRequestId, this.serviceRequestform.get('serReqNo').value);
               this.saveFileShare(this.serviceRequestId);
               if (this.file != null) {
                 this.uploadPdfFile(this.file, this.serviceRequestId)
@@ -1342,10 +1344,10 @@ export class ServiceRequestComponent implements OnInit {
       }
 
       this.onSubmit();
-      let scheduleCalls = this.scheduleData.filter(x => x.serReqId == this.serviceRequestId)
-      if (this.scheduleData == null || this.scheduleData.length <= 0 || scheduleCalls.length <= 0) {
-        return this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
-      }
+      // let scheduleCalls = this.scheduleData.filter(x => x.serReqId == this.serviceRequestId)
+      // if (this.scheduleData == null || this.scheduleData.length <= 0 || scheduleCalls.length <= 0) {
+      //   return this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
+      // }
 
       this.servicereport = new ServiceReport();
 
@@ -2021,6 +2023,61 @@ export class ServiceRequestComponent implements OnInit {
       }
     }
   }
+
+  createEngSchedulerRecords(serviceRequestId: string, serReqNo: string) {
+    let sDate = this.serviceRequestform.get('sDate').value;
+    let eDate = this.serviceRequestform.get('eDate').value;
+    let assignedToFormValue = this.serviceRequestform.get('assignedTo').value;
+    let siteName = this.serviceRequestform.get('siteName').value;
+
+    if (sDate && eDate && Array.isArray(assignedToFormValue) && assignedToFormValue.length > 0) {
+      const startDate = GetParsedDate(sDate);
+      const endDate = GetParsedDate(eDate);
+
+      assignedToFormValue.forEach((engineer: any) => {
+        if (!engineer || !engineer.id) return;
+        const engScheduler = {
+          subject: `Service Request ${serReqNo}`,
+          startTime: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0).toString(),
+          endTime: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 23, 59, 59).toString(),
+          isAllDay: true,
+          serReqId: serviceRequestId,
+          engId: engineer.id,
+          location: siteName || '',
+          desc: `Scheduled for Service Request ${serReqNo}`,
+          isBlock: false,
+          isReadOnly: false,
+          roomId: this.emptyGuid,
+          resourceId: this.emptyGuid,
+          actionId: this.emptyGuid,
+          startTimezone: null,
+          endTimezone: null,
+          recurrenceRule: null,
+          recurrenceException: null,
+          isActive: true,
+          isDeleted: false
+        };
+
+        this.EngschedulerService.save(engScheduler)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.isSuccessful) {
+                console.log(`Schedule created for engineer ${engineer.firstName} ${engineer.lastName}`);
+              }
+            },
+            error: (error: any) => {
+              console.error('Error creating schedule:', error);
+            }
+          });
+      });
+    }
+  }
+
+
+
+
+
 
 
   downloadTeamViewerRecording(params: any) {

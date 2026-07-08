@@ -504,10 +504,10 @@
                 <a data-bs-target="#contact" [ngClass]="{ 'active': !IsEngineerView && !IsDistributorView }"
                   aria-selected="false" class="nav-link" data-bs-toggle="tab" id="contact-tab" role="tab">Action</a>
               </li>
-              <li class="nav-item" *ngIf="IsCustomerView==false">
+              <!-- <li class="nav-item" *ngIf="IsCustomerView==false">
                 <a data-bs-target="#schedule" aria-selected="false" class="nav-link" data-bs-toggle="tab"
                   id="contact-tab" role="tab">Scheduled Calls</a>
-              </li>
+              </li> -->
             </ul>
           </div>
 
@@ -562,13 +562,13 @@
                   style="width: 100%; height: 250px;"></ag-grid-angular>
               </div>
             </div>
-            <div *ngIf="IsCustomerView==false" aria-labelledby="contact-tab" class="tab-pane fade" id="schedule" role="tabpanel">
+            <!-- <div *ngIf="IsCustomerView==false" aria-labelledby="contact-tab" class="tab-pane fade" id="schedule" role="tabpanel">
               <div class="col-md-12 col-sm-12" style="margin-top: 15px;margin-left: -10px;">
                 <ag-grid-angular (cellValueChanged)="onCellValueChanged($event)" (gridReady)="onGridReady($event)"
                   [columnDefs]="scheduleDefs" [rowData]="scheduleData" class="ag-theme-alpine custom-ag-grid" pagination="true"
                   paginationPageSize=10 rowSelection="single" style="width: 100%; height: 250px;"></ag-grid-angular>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="row" style="margin:15px;">
             <div class="col-md-3">

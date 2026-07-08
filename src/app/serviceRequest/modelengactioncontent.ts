@@ -155,9 +155,9 @@ export class ModelEngActionContentComponent implements OnInit {
         .subscribe((data: any) => {
           if (data.isSuccessful) {
             if (this.file != null) this.uploadFile(this.file, data.data);
-            setTimeout(() => {
-              this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode, aId: data.data, isNSNav: true } });
-            }, 500);
+            // setTimeout(() => {
+            //   this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode, aId: data.data, isNSNav: true } });
+            // }, 500);
             this.notificationService.showSuccess(data.messages[0], "Success");
           }
 
@@ -173,7 +173,7 @@ export class ModelEngActionContentComponent implements OnInit {
       this.actionService.update(this.id, this.action)
         .subscribe((data: any) => {
           if (data.isSuccessful) {
-            this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode, aId: this.id, isNSNav: true } });
+            //this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode, aId: this.id, isNSNav: true } });
             this.notificationService.showSuccess(data.messages[0], "Success");
           }
           this.close();
