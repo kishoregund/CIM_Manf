@@ -610,6 +610,48 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
     this.updateMonthYear();
   }
 
+  private parseEventDate(value: any): Date | null {
+    if (!value) return null;
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  private getEventStart(event: any): Date | null {
+    return this.parseEventDate(event?.startTime ?? event?.StartTime ?? event?.start ?? event?.Start);
+  }
+
+  private getEventEnd(event: any): Date | null {
+    return this.parseEventDate(event?.endTime ?? event?.EndTime ?? event?.end ?? event?.End);
+  }
+
+  private getIsAllDay(event: any): boolean {
+    const raw = event?.isAllDay ?? event?.IsAllDay ?? event?.allDay;
+    if (typeof raw === 'string') {
+      return raw.toLowerCase() === 'true';
+    }
+    return !!raw;
+  }
+
+  private isEventOnCalendarDay(event: any, year: number, month: number, dayNum: number): boolean {
+    const dayStart = new Date(year, month, dayNum, 0, 0, 0, 0);
+    const dayEnd = new Date(year, month, dayNum + 1, 0, 0, 0, 0);
+
+    const eventStart = this.getEventStart(event);
+    if (!eventStart) return false;
+
+    const parsedEventEnd = this.getEventEnd(event);
+    const eventEnd = parsedEventEnd && parsedEventEnd > eventStart ? parsedEventEnd : new Date(eventStart);
+    const isAllDay = this.getIsAllDay(event);
+
+    if (isAllDay) {
+      const allDayStart = new Date(eventStart.getFullYear(), eventStart.getMonth(), eventStart.getDate());
+      const allDayEnd = new Date(eventEnd.getFullYear(), eventEnd.getMonth(), eventEnd.getDate());
+      return dayStart >= allDayStart && dayStart <= allDayEnd;
+    }
+
+    return eventStart < dayEnd && eventEnd > dayStart;
+  }
+
   hasEventOnDay(engineerId: string, dayNum: number | null): boolean {
     if (!dayNum) return false;
     const events = this.engineerEvents.get(engineerId) || [];
@@ -617,10 +659,7 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
     const month = this.currentDate.getMonth();
 
     return events.some((event: any) => {
-      const eventDate = new Date(event.startTime);
-      return eventDate.getDate() === dayNum &&
-             eventDate.getMonth() === month &&
-             eventDate.getFullYear() === year;
+      return this.isEventOnCalendarDay(event, year, month, dayNum);
     });
   }
 
@@ -631,10 +670,7 @@ export class FullcalendarSchedulerComponent implements OnInit, AfterViewInit {
     const month = this.currentDate.getMonth();
 
     return events.filter((event: any) => {
-      const eventDate = new Date(event.startTime);
-      return eventDate.getDate() === dayNum &&
-             eventDate.getMonth() === month &&
-             eventDate.getFullYear() === year;
+      return this.isEventOnCalendarDay(event, year, month, dayNum);
     });
   }
 

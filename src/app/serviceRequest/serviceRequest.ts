@@ -2036,19 +2036,22 @@ export class ServiceRequestComponent implements OnInit {
 
       assignedToFormValue.forEach((engineer: any) => {
         if (!engineer || !engineer.id) return;
+        const blockStart = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0);
+        // For all-day ranges, Syncfusion treats EndTime as exclusive. Add one day to include the selected end date.
+        const blockEndExclusive = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1, 0, 0, 0);
         const engScheduler = {
           subject: `Service Request ${serReqNo}`,
-          startTime: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0).toString(),
-          endTime: new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 23, 59, 59).toString(),
+          startTime: blockStart.toString(),
+          endTime: blockEndExclusive.toString(),
           isAllDay: true,
           serReqId: serviceRequestId,
           engId: engineer.id,
           location: siteName || '',
           desc: `Scheduled for Service Request ${serReqNo}`,
-          isBlock: false,
+          isBlock: true,
           isReadOnly: false,
-          roomId: this.emptyGuid,
-          resourceId: this.emptyGuid,
+          roomId: engineer.id,
+          resourceId: engineer.id,
           actionId: this.emptyGuid,
           startTimezone: null,
           endTimezone: null,
