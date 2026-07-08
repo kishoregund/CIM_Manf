@@ -101,13 +101,17 @@
 
             <div class="col-md-3 col-sm-3" *ngIf="IsCustomerView==false && serviceRequestId!=null">
               <label for="assignedTo">Assigned To<span class="text-danger">*</span></label>
-              <select [ngClass]="{ 'is-invalid': f.assignedTo.touched && f.assignedTo.errors }"
-                (change)="onStatusChange()" class="form-select" formControlName="assignedTo">
-                <!--<option value="0">--All--</option>-->
+              <!-- <select [ngClass]="{ 'is-invalid': f.assignedTo.touched && f.assignedTo.errors }"
+                (change)="onStatusChange()" class="form-select" formControlName="assignedTo">                
                 <option *ngFor="let c of appendList" value={{c.id}}>
                   {{c.firstName}} {{c.lastName}}
                 </option>
-              </select>
+              </select> -->
+
+              <ng-multiselect-dropdown [settings]="dropdownATSettings" [(ngModel)]="assignedTo" style="white-space: nowrap;"
+                 [data]="appendList"
+                formControlName="assignedTo" (onSelect)="onStatusChange()" (onDeSelect)="onStatusChange()">
+              </ng-multiselect-dropdown>
               <div *ngIf="f.assignedTo.touched && f.assignedTo.errors" class="invalid-feedback">
                 <div *ngIf="f.assignedTo.errors.required">Assigned To is required</div>
               </div>
@@ -254,19 +258,19 @@
             </div>
 
 
-            <div class="col-md-3 col-sm-3" *ngIf="isAmc">
-              <label for="sDate">Start Date<span class="text-danger" *ngIf="isAmc">*</span></label>
+            <div class="col-md-3 col-sm-3" >
+              <label for="sDate">Start Date<span class="text-danger">*</span></label>
               <input id="sDate" bsDatepicker type="text" formControlName="sDate" class="form-control"
                 [ngClass]="{ 'is-invalid':f.sDate.touched && f.sDate.errors}" />
               <div style="display: block" *ngIf="f.sDate.touched &&f.sDate.errors" class="invalid-feedback">
                 <div *ngIf="f.sDate.errors.required">
                   Start Date is required
-                </div>
+                </div>`
               </div>
             </div>
 
-            <div class="col-md-3 col-sm-3" *ngIf="isAmc">
-              <label for="eDate">End Date<span class="text-danger" *ngIf="isAmc">*</span></label>
+            <div class="col-md-3 col-sm-3" >
+              <label for="eDate">End Date<span class="text-danger">*</span></label>
               <input id="eDate" bsDatepicker type="text" formControlName="eDate" class="form-control"
                 [ngClass]="{ 'is-invalid': f.eDate.touched && f.eDate.errors}" />
               <div style="display: block" *ngIf="f.eDate.touched && f.eDate.errors" class="invalid-feedback">

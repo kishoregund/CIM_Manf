@@ -59,9 +59,9 @@ import { InstrumentAllocationService } from '../_services/instrumentallocation.s
 
 
 @Component({
-    selector: 'app-customer',
-    templateUrl: './serviceRequest.html',
-    standalone: false
+  selector: 'app-customer',
+  templateUrl: './serviceRequest.html',
+  standalone: false
 })
 
 export class ServiceRequestComponent implements OnInit {
@@ -79,16 +79,16 @@ export class ServiceRequestComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
-  appendList: Contact[];
+  appendList: any[]; // Contact[];
   public columnDefs: any[];
   public ticketcolumnDefs: any[];
   public actionDefs: any[];
-  
+
   private api: GridApi;
   PdffileData: FileShare[];
   pdfBase64: string;
-  public pdfcolumnDefs: any[];  
-  private pdfapi: GridApi;  
+  public pdfcolumnDefs: any[];
+  private pdfapi: GridApi;
   private historyapi: GridApi;
   customerList: Customer[];
   engineerCommentList: EngineerCommentList[] = [];
@@ -118,6 +118,7 @@ export class ServiceRequestComponent implements OnInit {
   engineerid: string;
   servicereport: ServiceReport;
   dropdownSettings: IDropdownSettings = {};
+  dropdownATSettings: IDropdownSettings = {};
   custcityname: string;
   breakdownlist: ListTypeItem[];
   allsites: any;
@@ -264,7 +265,7 @@ export class ServiceRequestComponent implements OnInit {
       statusId: this.emptyGuid,
       stageId: this.emptyGuid,
       siteId: this.emptyGuid,
-      assignedTo: this.emptyGuid,
+      assignedTo: [""],
       serReqDate: ['', Validators.required],
       visitType: ['', Validators.required],
       companyName: [''],
@@ -350,6 +351,12 @@ export class ServiceRequestComponent implements OnInit {
       idField: 'itemCode',
       textField: 'itemName',
     };
+
+    this.dropdownATSettings = {
+      idField: 'id',
+      textField: 'displayName',
+    };
+
 
     this.listTypeService.getById('SRT').pipe(first())
       .subscribe((data: any) => this.subreqtypelist = data.data);
@@ -537,7 +544,6 @@ export class ServiceRequestComponent implements OnInit {
                 }
                 items.push(t);
               }
-
               this.serviceRequestform.patchValue({ "subRequestTypeId": items });
               this.fileshareService.list(this.serviceRequestId).pipe(first())
                 .subscribe({
@@ -557,8 +563,9 @@ export class ServiceRequestComponent implements OnInit {
 
             this.distributorService.getDistributorRegionContacts(data.data.distId, "Engineer")
               .subscribe({
-                next: (engData: any) => {
+                next: (engData: any) => {                  
                   this.appendList = engData.data;
+                  console.log('appendList:', this.appendList);
                   this.accepted = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId == data.data.statusId;
                   this.customerId = data.data.custId;
                   this.siteId = data.data.siteId;
@@ -570,6 +577,33 @@ export class ServiceRequestComponent implements OnInit {
                   this.engineerid = data.data.assignedTo;
                   this.ticketHistoryList = data.data.assignedHistory;
                   this.ticketHistoryList.forEach((value) => value.assignedDate = datepipe.transform(GetParsedDate(value.assignedDate), "dd/MM/YYYY"))
+
+                  if (data.data.assignedTo != null && data.data.assignedTo != "") {
+                    var assignTo = data.data.assignedTo.split(',');
+                    let atitems: Contact[] = [];
+                    if (assignTo.length > 0) {
+                      for (var i = 0; i < assignTo.length; i++) {
+                        let t = new Contact();
+                        if (this.appendList != null && this.appendList != undefined && this.appendList.length > 0) {
+                          console.log('appendList id:', this.appendList[0].id);
+                          console.log('assignTo[0] :', assignTo[i]);
+                          const matchedContact = this.appendList.find(x => String(x.id).toLowerCase() == String(assignTo[i]).toLowerCase());
+                          if (matchedContact) {
+                            // Use exact ID value from dropdown source so selected checkbox state is resolved correctly.
+                            t.id = String(matchedContact.id).toLowerCase();
+                            t.displayName = matchedContact.displayName;
+                          } else {
+                            t.id = String(assignTo[i]).toLowerCase();
+                          }
+                        } else {
+                          t.id = String(assignTo[i]).toLowerCase();
+                        }
+                        atitems.push(t);
+                      }
+                      this.serviceRequestform.patchValue({ "assignedTo": atitems });
+                    }
+                  }
+
                 }
               });
 
@@ -638,7 +672,12 @@ export class ServiceRequestComponent implements OnInit {
 
 
             this.formData = data.data;
-            this.serviceRequestform.patchValue(this.formData);
+            const { assignedTo, subRequestTypeId, ...safeFormData } = this.formData;
+            this.serviceRequestform.patchValue(safeFormData);
+            this.serviceRequestform.patchValue({
+              visitType: data.data.visitType,
+              requestTime: data.data.requestTime
+            });
 
             if (data.data.isReportGenerated) {
               this.serviceRequestform.disable()
@@ -755,7 +794,10 @@ export class ServiceRequestComponent implements OnInit {
     this.isNewMode = false;
     this.notificationService.SetNavParam();
 
-    if (this.serviceRequestId != null) this.serviceRequestform.patchValue(this.formData);
+    if (this.serviceRequestId != null) {
+      const { assignedTo, subRequestTypeId, ...safeFormData } = this.formData;
+      this.serviceRequestform.patchValue(safeFormData);
+    }
     else {
       this.serviceRequestform.reset();
       this.ngOnInit(true);
@@ -1108,7 +1150,7 @@ export class ServiceRequestComponent implements OnInit {
       if (this.serviceRequest.breakoccurDetailsId == null) {
         this.serviceRequest.breakoccurDetailsId = this.emptyGuid;
       }
-      
+
       if (this.serviceRequest.assignedTo == "" || this.serviceRequest.assignedTo == null) {
         this.serviceRequest.assignedTo = this.emptyGuid;
       }
@@ -1330,7 +1372,7 @@ export class ServiceRequestComponent implements OnInit {
       this.servicereport.prevMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.PRMN1)).length > 0;
       this.servicereport.rework = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.REWK)).length > 0;
       this.servicereport.corrMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.CRMA)).length > 0;
-      
+
       // Fetch site data to get town and country
       if (this.siteId != null) {
         this.customerSiteService.getById(this.siteId)
@@ -1605,7 +1647,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   pdfonGridReady(params): void {
-    this.pdfapi = params.api;    
+    this.pdfapi = params.api;
     this.pdfapi.sizeColumnsToFit();
   }
 
@@ -1888,7 +1930,7 @@ export class ServiceRequestComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    
+
     this.api.sizeColumnsToFit();
   }
 
