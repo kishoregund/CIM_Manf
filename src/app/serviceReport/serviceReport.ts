@@ -646,7 +646,7 @@ export class ServiceReportComponent implements OnInit {
         this.ServiceReport.custSignature = this.signaturePad?.toDataURL();
         this.custsign = this.signaturePad?.toDataURL();
         setTimeout(() => {
-          if (this.isCust)
+          if (this.isCust && this.ServiceReport.workCompleted && this.ServiceReport.workFinished)
             this.router.navigate(["customersatisfactionsurvey"], { queryParams: { servicereportid: this.ServiceReportId, isNSNav: true } })
         }, 500);
       }

@@ -198,7 +198,7 @@ export class ServiceRequestComponent implements OnInit {
               this.actionList.forEach((value, index) => {
                 value.actionDate = this.datepipe.transform(GetParsedDate(value.actionDate), "dd/MM/YYYY")
               })
-              //this.api.refreshCells()
+              //this.recalculateGenerateReportLock(data.data);
             }
           });
         // this.EngschedulerService.getByEngId(this.user.contactId).pipe(first())
@@ -628,38 +628,6 @@ export class ServiceRequestComponent implements OnInit {
             //   }, 2000);
             // }
 
-            //setTimeout(() => {                
-            // this.serviceRequestform.patchValue({ "sdate": data.data.sdate });
-            // this.serviceRequestform.patchValue({ "edate": data.data.edate });
-            // this.serviceRequestform.patchValue({ "serreqno": data.data.serreqno });                
-            // this.serviceRequestform.patchValue({ "distid": data.data.distid });
-            // this.serviceRequestform.patchValue({ "custId": data.data.custId });
-            // this.serviceRequestform.patchValue({ "visittype": data.data.visittype });
-            // this.serviceRequestform.patchValue({ "companyname": data.data.companyname });
-            // this.serviceRequestform.patchValue({ "requesttime": data.data.requesttime });
-            // this.serviceRequestform.patchValue({ "siteName": data.data.sitename });
-            // this.serviceRequestform.patchValue({ "country": data.data.country });
-            // this.serviceRequestform.patchValue({ "contactperson": data.data.contactperson });
-            // this.serviceRequestform.patchValue({ "email": data.data.email });
-            // this.serviceRequestform.patchValue({ "operatorname": data.data.operatorname });
-            // this.serviceRequestform.patchValue({ "operatornumber": data.data.operatornumber });
-            // this.serviceRequestform.patchValue({ "operatoremail": data.data.operatoremail });
-            // this.serviceRequestform.patchValue({ "siteId": data.data.siteId });                                
-            // this.serviceRequestform.patchValue({ "machengineer": data.data.machengineer });
-            // this.serviceRequestform.patchValue({ "xraygenerator": data.data.xraygenerator });
-            // this.serviceRequestform.patchValue({ "breakdownType": data.data.breakdownType });
-            // this.serviceRequestform.patchValue({ "isRecurring": data.data.isRecurring });
-            // this.serviceRequestform.patchValue({ "recurringcomments": data.data.recurringcomments });
-            // this.serviceRequestform.patchValue({ "breakoccurDetailsId": data.data.breakoccurDetailsId });
-            // this.serviceRequestform.patchValue({ "alarmDetails": data.data.alarmDetails });
-            // this.serviceRequestform.patchValue({ "resolveaction": data.data.resolveaction });
-            // this.serviceRequestform.patchValue({ "currentinstrustatus": data.data.currentinstrustatus });                 
-            // this.serviceRequestform.patchValue({ "escalation": data.data.escalation });
-            // this.serviceRequestform.patchValue({ "requesttypeid": data.data.requesttypeid });
-            // this.serviceRequestform.patchValue({ "remarks": data.data.remarks });                
-            // this.serviceRequestform.patchValue({ "delayedReasons": data.data.delayedReasons });
-            // this.serviceRequestform.get("assignedTo").setValue(data.data.assignedTo);
-            ////below neeeded
             this.serviceRequestform.patchValue({ "serReqDate": this.datepipe.transform(GetParsedDate(data.data.serReqDate), 'dd/MM/YYYY') });
             this.serviceRequestform.patchValue({ 'serResolutionDate': GetParsedDate(data.data.serResolutionDate) });
             this.serviceRequestform.patchValue({ "machModelName": data.data.machmodelNameText });
@@ -680,11 +648,7 @@ export class ServiceRequestComponent implements OnInit {
               requestTime: data.data.requestTime
             });
 
-            if (data.data.isReportGenerated) {
-              this.serviceRequestform.disable()
-              this.isGenerateReport = true;
-            }
-            //}, 100);
+            //this.recalculateGenerateReportLock(data.data);
           },
 
         });
@@ -1336,6 +1300,41 @@ export class ServiceRequestComponent implements OnInit {
     return false;
   }
 
+  private toBoolean(value: any): boolean {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') return value.toLowerCase() === 'true';
+    return !!value;
+  }
+
+  private isClosedReport(report: any): boolean {
+    return this.toBoolean(report?.workCompleted) && this.toBoolean(report?.workFinished);
+  }
+
+  private recalculateGenerateReportLock(srData: any): void {
+    const actions = srData?.engAction || [];
+
+    if (!actions.length) {
+      this.isGenerateReport = false;
+      return;
+    }
+
+    this.servicereportService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (reportResponse: any) => {
+          const allReports = reportResponse?.data || reportResponse || [];
+          const requestReports = allReports.filter((report: any) => report?.serviceRequestId === this.serviceRequestId);
+          const closedReportsCount = requestReports.filter((report: any) => this.isClosedReport(report)).length;
+
+          // Lock generation only when every defined action has a closed report.
+          this.isGenerateReport = closedReportsCount >= actions.length;
+        },
+        error: () => {
+          this.isGenerateReport = false;
+        }
+      });
+  }
+
   generatereport() {
     debugger;
     if (this.isGenerateReport == false) {
@@ -1369,11 +1368,11 @@ export class ServiceRequestComponent implements OnInit {
 
       if (this.isAmc) this.servicereport.problem = 'AMC';
 
-      this.servicereport.installation = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.INS)).length > 0;
-      this.servicereport.analyticalAssit = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.ANAS)).length > 0;
-      this.servicereport.prevMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.PRMN1)).length > 0;
-      this.servicereport.rework = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.REWK)).length > 0;
-      this.servicereport.corrMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.CRMA)).length > 0;
+      this.servicereport.installation = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.INS)).length > 0;
+      this.servicereport.analyticalAssit = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.ANAS)).length > 0;
+      this.servicereport.prevMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.PRMN1)).length > 0;
+      this.servicereport.rework = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.REWK)).length > 0;
+      this.servicereport.corrMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.CRMA)).length > 0;
 
       // Fetch site data to get town and country
       if (this.siteId != null) {

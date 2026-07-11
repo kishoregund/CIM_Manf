@@ -56,6 +56,7 @@ export class ModelEngActionContentComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.accountService.userValue;
+    this.loading = false;
     console.log(this.item);
 
     this.actionForm = this.formBuilder.group({
@@ -97,6 +98,7 @@ export class ModelEngActionContentComponent implements OnInit {
 
   close() {
     //alert('test cholde');
+    this.loading = false;
     this.activeModal.hide();
     this.notificationService.filter("itemadded");
   }
@@ -145,10 +147,11 @@ export class ModelEngActionContentComponent implements OnInit {
     if (this.f.actionDate.value < GetParsedDate(this.item.serReqDate))
       return this.notificationService.showError("The Action Date should be after Service Request Date", "Invalid Date")
 
+    this.loading = true;
     this.action = this.actionForm.value;
     this.action.serviceRequestId = this.itemId;
     this.action.engineerId = this.engineerid;
-    this.action.teamviewRecording = null;
+    this.action.teamviewRecording = 'blank';
 
     if (this.id == null) {
       this.actionService.save(this.action)
@@ -160,6 +163,8 @@ export class ModelEngActionContentComponent implements OnInit {
             // }, 500);
             this.notificationService.showSuccess(data.messages[0], "Success");
           }
+
+          this.loading = false;
 
           this.close();
         });
@@ -176,6 +181,7 @@ export class ModelEngActionContentComponent implements OnInit {
             //this.router.navigate([`/schedule/${this.itemId}`], { queryParams: { action: this.actiontakenlist.find(x => x.listTypeItemId == this.action.actionTaken)?.itemCode, aId: this.id, isNSNav: true } });
             this.notificationService.showSuccess(data.messages[0], "Success");
           }
+          this.loading = false;
           this.close();
         });
     }
