@@ -411,7 +411,7 @@
                 <div *ngIf="f.signCustName.errors.required">Customer Name is required</div>
               </div>
             </div>
-            <div class="col-sm-3" *ngIf="!this.isCompleted && isEditMode && !this.isEng && !custsign && finished">
+            <div class="col-sm-3" *ngIf="!this.isCompleted && isEditMode && !this.isEng && !custsign">
               <label for="customerSing">Customer Signature Pad</label>
               <div style="border:medium">
                 <signature-pad #sigpad1 [options]="signaturePadOptions" style="border: none; border-bottom:dashed;background-color: transparent;"
@@ -431,7 +431,7 @@
                 <div *ngIf="f.signEngName.errors.required">Engineer Name is required</div>
               </div>
             </div>
-            <div class="col-sm-3" *ngIf="!this.isCompleted && isEditMode && !this.isCust && !engsign && finished">
+            <div class="col-sm-3" *ngIf="!this.isCompleted && isEditMode && !this.isCust && !engsign">
               <label for="engineerSing">Engineer Signature Pad</label>
               <div style="border:medium">
                 <signature-pad #sigpad2 [options]="signaturePadOptions" style=" border: none; border-bottom:dashed; background-color: transparent; "

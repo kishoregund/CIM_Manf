@@ -392,7 +392,7 @@ export class DashboardComponent implements OnInit {
     this.listTypeItemService.getById("TRRQT").pipe(first())
       .subscribe((data: any) => {
         this.reqtypelist = data.data;
-        this.serviceRequestform.get('requestTypeId').setValue(data.find(x => x.itemCode == 'CUSTR')?.listTypeItemId);
+        this.serviceRequestform.get('requestTypeId').setValue(data.data.find((x: any) => x.itemCode == 'CUSTR')?.listTypeItemId);
       });
     this.serviceRequestform.get('requestTime').setValue(this.datepipe.transform(Date.now(), "H:mm"))
     this.serviceRequestform.get('serReqDate').setValue(this.datepipe.transform(Date.now(), "dd/MM/YYYY"))
@@ -448,8 +448,8 @@ export class DashboardComponent implements OnInit {
         this.siteId = data.data[0].custSiteId;
         this.serviceRequestform.patchValue({ "machmodelName": instument.insTypeName });
         this.serviceRequestform.patchValue({ "operatorName": instument.operatorEng.firstName + '' + instument.operatorEng.lastName });
-        this.serviceRequestform.patchValue({ "operatorNumber": instument.operatorEng.pContactNo });
-        this.serviceRequestform.patchValue({ "operatorEmail": instument.operatorEng.pEmail });
+        this.serviceRequestform.patchValue({ "operatorNumber": instument.operatorEng.primaryContactNo });
+        this.serviceRequestform.patchValue({ "operatorEmail": instument.operatorEng.primaryEmail });
         this.serviceRequestform.patchValue({ "machEngineer": instument.machineEng.firstName + ' ' + instument.machineEng.lastName });
         this.serviceRequestform.patchValue({ "xrayGenerator": instument.insVersion });
         this.serviceRequestform.patchValue({ "siteId": data.data[0].custSiteId });

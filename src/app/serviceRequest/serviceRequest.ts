@@ -59,9 +59,9 @@ import { InstrumentAllocationService } from '../_services/instrumentallocation.s
 
 
 @Component({
-    selector: 'app-customer',
-    templateUrl: './serviceRequest.html',
-    standalone: false
+  selector: 'app-customer',
+  templateUrl: './serviceRequest.html',
+  standalone: false
 })
 
 export class ServiceRequestComponent implements OnInit {
@@ -79,16 +79,16 @@ export class ServiceRequestComponent implements OnInit {
   hasUpdateAccess: boolean = false;
   hasDeleteAccess: boolean = false;
   hasAddAccess: boolean = false;
-  appendList: Contact[];
+  appendList: any[]; // Contact[];
   public columnDefs: any[];
   public ticketcolumnDefs: any[];
   public actionDefs: any[];
-  
+
   private api: GridApi;
   PdffileData: FileShare[];
   pdfBase64: string;
-  public pdfcolumnDefs: any[];  
-  private pdfapi: GridApi;  
+  public pdfcolumnDefs: any[];
+  private pdfapi: GridApi;
   private historyapi: GridApi;
   customerList: Customer[];
   engineerCommentList: EngineerCommentList[] = [];
@@ -118,6 +118,7 @@ export class ServiceRequestComponent implements OnInit {
   engineerid: string;
   servicereport: ServiceReport;
   dropdownSettings: IDropdownSettings = {};
+  dropdownATSettings: IDropdownSettings = {};
   custcityname: string;
   breakdownlist: ListTypeItem[];
   allsites: any;
@@ -131,7 +132,7 @@ export class ServiceRequestComponent implements OnInit {
   instrumentStatus: ListTypeItem[];
   stagelist: ListTypeItem[];
   statuslist: ListTypeItem[];
-  scheduleData: any;
+  //scheduleData: any;
   scheduleDefs: any[];
   hasCallScheduled: boolean;
   isGenerateReport: boolean = false;
@@ -197,7 +198,7 @@ export class ServiceRequestComponent implements OnInit {
               this.actionList.forEach((value, index) => {
                 value.actionDate = this.datepipe.transform(GetParsedDate(value.actionDate), "dd/MM/YYYY")
               })
-              //this.api.refreshCells()
+              //this.recalculateGenerateReportLock(data.data);
             }
           });
         // this.EngschedulerService.getByEngId(this.user.contactId).pipe(first())
@@ -264,7 +265,7 @@ export class ServiceRequestComponent implements OnInit {
       statusId: this.emptyGuid,
       stageId: this.emptyGuid,
       siteId: this.emptyGuid,
-      assignedTo: this.emptyGuid,
+      assignedTo: [''],
       serReqDate: ['', Validators.required],
       visitType: ['', Validators.required],
       companyName: [''],
@@ -350,6 +351,12 @@ export class ServiceRequestComponent implements OnInit {
       idField: 'itemCode',
       textField: 'itemName',
     };
+
+    this.dropdownATSettings = {
+      idField: 'id',
+      textField: 'displayName',
+    };
+
 
     this.listTypeService.getById('SRT').pipe(first())
       .subscribe((data: any) => this.subreqtypelist = data.data);
@@ -537,7 +544,6 @@ export class ServiceRequestComponent implements OnInit {
                 }
                 items.push(t);
               }
-
               this.serviceRequestform.patchValue({ "subRequestTypeId": items });
               this.fileshareService.list(this.serviceRequestId).pipe(first())
                 .subscribe({
@@ -557,8 +563,9 @@ export class ServiceRequestComponent implements OnInit {
 
             this.distributorService.getDistributorRegionContacts(data.data.distId, "Engineer")
               .subscribe({
-                next: (engData: any) => {
+                next: (engData: any) => {                  
                   this.appendList = engData.data;
+                  console.log('appendList:', this.appendList);
                   this.accepted = this.statuslist.find(x => x.itemCode == "ACPTD")?.listTypeItemId == data.data.statusId;
                   this.customerId = data.data.custId;
                   this.siteId = data.data.siteId;
@@ -570,61 +577,57 @@ export class ServiceRequestComponent implements OnInit {
                   this.engineerid = data.data.assignedTo;
                   this.ticketHistoryList = data.data.assignedHistory;
                   this.ticketHistoryList.forEach((value) => value.assignedDate = datepipe.transform(GetParsedDate(value.assignedDate), "dd/MM/YYYY"))
+
+                  if (data.data.assignedTo != null && data.data.assignedTo != "") {
+                    var assignTo = data.data.assignedTo.split(',');
+                    let atitems: Contact[] = [];
+                    if (assignTo.length > 0) {
+                      for (var i = 0; i < assignTo.length; i++) {
+                        let t = new Contact();
+                        if (this.appendList != null && this.appendList != undefined && this.appendList.length > 0) {
+                          console.log('appendList id:', this.appendList[0].id);
+                          console.log('assignTo[0] :', assignTo[i]);
+                          const matchedContact = this.appendList.find(x => String(x.id).toLowerCase() == String(assignTo[i]).toLowerCase());
+                          if (matchedContact) {
+                            // Use exact ID value from dropdown source so selected checkbox state is resolved correctly.
+                            t.id = String(matchedContact.id).toLowerCase();
+                            t.displayName = matchedContact.displayName;
+                          } else {
+                            t.id = String(assignTo[i]).toLowerCase();
+                          }
+                        } else {
+                          t.id = String(assignTo[i]).toLowerCase();
+                        }
+                        atitems.push(t);
+                      }
+                      this.serviceRequestform.patchValue({ "assignedTo": atitems });
+                    }
+                  }
+
                 }
               });
 
-            this.scheduleData = []
-            if (!this.IsCustomerView) {
-              setTimeout(() => {
-                if (data.data.assignedTo != null && data.data.assignedTo != "") {
-                  this.EngschedulerService.getByEngId(data.data.assignedTo)
-                    .pipe(first()).subscribe((sch: any) => {
-                      this.scheduleData = sch.data.filter(x => x.serReqId == this.serviceRequestId);
-                      if (this.scheduleData.length > 0) this.hasCallScheduled = true;
+              //engineer cant schedule calls or meetings
+            //this.scheduleData = []
+            // if (!this.IsCustomerView) {
+            //   setTimeout(() => {
+            //     if (data.data.assignedTo != null && data.data.assignedTo != "") {
+            //       this.EngschedulerService.getByEngId(data.data.assignedTo)
+            //         .pipe(first()).subscribe((sch: any) => {
+            //           this.scheduleData = sch.data.filter(x => x.serReqId == this.serviceRequestId);
+            //           if (this.scheduleData.length > 0) this.hasCallScheduled = true;
 
-                      this.scheduleData.forEach(element => {
-                        element.endTime = this.datepipe.transform(GetParsedDate(element.endTime), "short")
-                        element.startTime = this.datepipe.transform(GetParsedDate(element.startTime), "short")
-                        element.Time = element.location + " : " + element.startTime + " - " + element.endTime
-                      });
+            //           this.scheduleData.forEach(element => {
+            //             element.endTime = this.datepipe.transform(GetParsedDate(element.endTime), "short")
+            //             element.startTime = this.datepipe.transform(GetParsedDate(element.startTime), "short")
+            //             element.Time = element.location + " : " + element.startTime + " - " + element.endTime
+            //           });
 
-                    })
-                }
-              }, 2000);
-            }
+            //         })
+            //     }
+            //   }, 2000);
+            // }
 
-            //setTimeout(() => {                
-            // this.serviceRequestform.patchValue({ "sdate": data.data.sdate });
-            // this.serviceRequestform.patchValue({ "edate": data.data.edate });
-            // this.serviceRequestform.patchValue({ "serreqno": data.data.serreqno });                
-            // this.serviceRequestform.patchValue({ "distid": data.data.distid });
-            // this.serviceRequestform.patchValue({ "custId": data.data.custId });
-            // this.serviceRequestform.patchValue({ "visittype": data.data.visittype });
-            // this.serviceRequestform.patchValue({ "companyname": data.data.companyname });
-            // this.serviceRequestform.patchValue({ "requesttime": data.data.requesttime });
-            // this.serviceRequestform.patchValue({ "siteName": data.data.sitename });
-            // this.serviceRequestform.patchValue({ "country": data.data.country });
-            // this.serviceRequestform.patchValue({ "contactperson": data.data.contactperson });
-            // this.serviceRequestform.patchValue({ "email": data.data.email });
-            // this.serviceRequestform.patchValue({ "operatorname": data.data.operatorname });
-            // this.serviceRequestform.patchValue({ "operatornumber": data.data.operatornumber });
-            // this.serviceRequestform.patchValue({ "operatoremail": data.data.operatoremail });
-            // this.serviceRequestform.patchValue({ "siteId": data.data.siteId });                                
-            // this.serviceRequestform.patchValue({ "machengineer": data.data.machengineer });
-            // this.serviceRequestform.patchValue({ "xraygenerator": data.data.xraygenerator });
-            // this.serviceRequestform.patchValue({ "breakdownType": data.data.breakdownType });
-            // this.serviceRequestform.patchValue({ "isRecurring": data.data.isRecurring });
-            // this.serviceRequestform.patchValue({ "recurringcomments": data.data.recurringcomments });
-            // this.serviceRequestform.patchValue({ "breakoccurDetailsId": data.data.breakoccurDetailsId });
-            // this.serviceRequestform.patchValue({ "alarmDetails": data.data.alarmDetails });
-            // this.serviceRequestform.patchValue({ "resolveaction": data.data.resolveaction });
-            // this.serviceRequestform.patchValue({ "currentinstrustatus": data.data.currentinstrustatus });                 
-            // this.serviceRequestform.patchValue({ "escalation": data.data.escalation });
-            // this.serviceRequestform.patchValue({ "requesttypeid": data.data.requesttypeid });
-            // this.serviceRequestform.patchValue({ "remarks": data.data.remarks });                
-            // this.serviceRequestform.patchValue({ "delayedReasons": data.data.delayedReasons });
-            // this.serviceRequestform.get("assignedTo").setValue(data.data.assignedTo);
-            ////below neeeded
             this.serviceRequestform.patchValue({ "serReqDate": this.datepipe.transform(GetParsedDate(data.data.serReqDate), 'dd/MM/YYYY') });
             this.serviceRequestform.patchValue({ 'serResolutionDate': GetParsedDate(data.data.serResolutionDate) });
             this.serviceRequestform.patchValue({ "machModelName": data.data.machmodelNameText });
@@ -638,13 +641,14 @@ export class ServiceRequestComponent implements OnInit {
 
 
             this.formData = data.data;
-            this.serviceRequestform.patchValue(this.formData);
+            const { assignedTo, subRequestTypeId, ...safeFormData } = this.formData;
+            this.serviceRequestform.patchValue(safeFormData);
+            this.serviceRequestform.patchValue({
+              visitType: data.data.visitType,
+              requestTime: data.data.requestTime
+            });
 
-            if (data.data.isReportGenerated) {
-              this.serviceRequestform.disable()
-              this.isGenerateReport = true;
-            }
-            //}, 100);
+            //this.recalculateGenerateReportLock(data.data);
           },
 
         });
@@ -755,7 +759,10 @@ export class ServiceRequestComponent implements OnInit {
     this.isNewMode = false;
     this.notificationService.SetNavParam();
 
-    if (this.serviceRequestId != null) this.serviceRequestform.patchValue(this.formData);
+    if (this.serviceRequestId != null) {
+      const { assignedTo, subRequestTypeId, ...safeFormData } = this.formData;
+      this.serviceRequestform.patchValue(safeFormData);
+    }
     else {
       this.serviceRequestform.reset();
       this.ngOnInit(true);
@@ -1044,8 +1051,6 @@ export class ServiceRequestComponent implements OnInit {
 
     }
 
-
-
     if (this.serviceRequestId == null) {
 
       this.serviceRequest = this.serviceRequestform.getRawValue();
@@ -1109,9 +1114,11 @@ export class ServiceRequestComponent implements OnInit {
         this.serviceRequest.breakoccurDetailsId = this.emptyGuid;
       }
       
-      if (this.serviceRequest.assignedTo == "" || this.serviceRequest.assignedTo == null) {
-        this.serviceRequest.assignedTo = this.emptyGuid;
+      if (this.serviceRequestform.get('assignedTo').value.length > 0) {
+        var selectarray = this.serviceRequestform.get('assignedTo').value;
+        this.serviceRequest.assignedTo = selectarray.map(x => x.id).join(',');
       }
+
 
       if (this.IsEngineerView && this.serviceRequest.isCritical) this.serviceRequest.isCritical = false;
       if (this.serviceRequestform.get('subRequestTypeId').value.length > 0) {
@@ -1127,6 +1134,7 @@ export class ServiceRequestComponent implements OnInit {
         .subscribe({
           next: (data: any) => {
             if (data.isSuccessful) {
+              this.createEngSchedulerRecords(this.serviceRequestId, this.serviceRequestform.get('serReqNo').value);
               this.saveFileShare(this.serviceRequestId);
               if (this.file != null) {
                 this.uploadPdfFile(this.file, this.serviceRequestId)
@@ -1292,6 +1300,41 @@ export class ServiceRequestComponent implements OnInit {
     return false;
   }
 
+  private toBoolean(value: any): boolean {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') return value.toLowerCase() === 'true';
+    return !!value;
+  }
+
+  private isClosedReport(report: any): boolean {
+    return this.toBoolean(report?.workCompleted) && this.toBoolean(report?.workFinished);
+  }
+
+  private recalculateGenerateReportLock(srData: any): void {
+    const actions = srData?.engAction || [];
+
+    if (!actions.length) {
+      this.isGenerateReport = false;
+      return;
+    }
+
+    this.servicereportService.getAll()
+      .pipe(first())
+      .subscribe({
+        next: (reportResponse: any) => {
+          const allReports = reportResponse?.data || reportResponse || [];
+          const requestReports = allReports.filter((report: any) => report?.serviceRequestId === this.serviceRequestId);
+          const closedReportsCount = requestReports.filter((report: any) => this.isClosedReport(report)).length;
+
+          // Lock generation only when every defined action has a closed report.
+          this.isGenerateReport = closedReportsCount >= actions.length;
+        },
+        error: () => {
+          this.isGenerateReport = false;
+        }
+      });
+  }
+
   generatereport() {
     debugger;
     if (this.isGenerateReport == false) {
@@ -1300,10 +1343,10 @@ export class ServiceRequestComponent implements OnInit {
       }
 
       this.onSubmit();
-      let scheduleCalls = this.scheduleData.filter(x => x.serReqId == this.serviceRequestId)
-      if (this.scheduleData == null || this.scheduleData.length <= 0 || scheduleCalls.length <= 0) {
-        return this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
-      }
+      // let scheduleCalls = this.scheduleData.filter(x => x.serReqId == this.serviceRequestId)
+      // if (this.scheduleData == null || this.scheduleData.length <= 0 || scheduleCalls.length <= 0) {
+      //   return this.notificationService.showError("Cannot Generate Report. No Calls Had been Scheduled in the Scheduler", "Error")
+      // }
 
       this.servicereport = new ServiceReport();
 
@@ -1325,12 +1368,12 @@ export class ServiceRequestComponent implements OnInit {
 
       if (this.isAmc) this.servicereport.problem = 'AMC';
 
-      this.servicereport.installation = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.INS)).length > 0;
-      this.servicereport.analyticalAssit = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.ANAS)).length > 0;
-      this.servicereport.prevMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.PRMN1)).length > 0;
-      this.servicereport.rework = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.REWK)).length > 0;
-      this.servicereport.corrMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.split(",").filter(x => x == this.environment.CRMA)).length > 0;
-      
+      this.servicereport.installation = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.INS)).length > 0;
+      this.servicereport.analyticalAssit = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.ANAS)).length > 0;
+      this.servicereport.prevMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.PRMN1)).length > 0;
+      this.servicereport.rework = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.REWK)).length > 0;
+      this.servicereport.corrMaintenance = (this.serviceRequestform.get('subRequestTypeId').value?.filter(x => x == this.environment.CRMA)).length > 0;
+
       // Fetch site data to get town and country
       if (this.siteId != null) {
         this.customerSiteService.getById(this.siteId)
@@ -1605,7 +1648,7 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   pdfonGridReady(params): void {
-    this.pdfapi = params.api;    
+    this.pdfapi = params.api;
     this.pdfapi.sizeColumnsToFit();
   }
 
@@ -1888,7 +1931,7 @@ export class ServiceRequestComponent implements OnInit {
 
   onGridReady(params): void {
     this.api = params.api;
-    
+
     this.api.sizeColumnsToFit();
   }
 
@@ -1979,6 +2022,64 @@ export class ServiceRequestComponent implements OnInit {
       }
     }
   }
+
+  createEngSchedulerRecords(serviceRequestId: string, serReqNo: string) {
+    let sDate = this.serviceRequestform.get('sDate').value;
+    let eDate = this.serviceRequestform.get('eDate').value;
+    let assignedToFormValue = this.serviceRequestform.get('assignedTo').value;
+    let siteName = this.serviceRequestform.get('siteName').value;
+
+    if (sDate && eDate && Array.isArray(assignedToFormValue) && assignedToFormValue.length > 0) {
+      const startDate = GetParsedDate(sDate);
+      const endDate = GetParsedDate(eDate);
+
+      assignedToFormValue.forEach((engineer: any) => {
+        if (!engineer || !engineer.id) return;
+        const blockStart = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0);
+        // For all-day ranges, Syncfusion treats EndTime as exclusive. Add one day to include the selected end date.
+        const blockEndExclusive = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1, 0, 0, 0);
+        const engScheduler = {
+          subject: `Service Request ${serReqNo}`,
+          startTime: blockStart.toString(),
+          endTime: blockEndExclusive.toString(),
+          isAllDay: true,
+          serReqId: serviceRequestId,
+          engId: engineer.id,
+          location: siteName || '',
+          desc: `Scheduled for Service Request ${serReqNo}`,
+          isBlock: true,
+          isReadOnly: false,
+          roomId: engineer.id,
+          resourceId: engineer.id,
+          actionId: this.emptyGuid,
+          startTimezone: null,
+          endTimezone: null,
+          recurrenceRule: null,
+          recurrenceException: null,
+          isActive: true,
+          isDeleted: false
+        };
+
+        this.EngschedulerService.save(engScheduler)
+          .pipe(first())
+          .subscribe({
+            next: (data: any) => {
+              if (data.isSuccessful) {
+                console.log(`Schedule created for engineer ${engineer.firstName} ${engineer.lastName}`);
+              }
+            },
+            error: (error: any) => {
+              console.error('Error creating schedule:', error);
+            }
+          });
+      });
+    }
+  }
+
+
+
+
+
 
 
   downloadTeamViewerRecording(params: any) {

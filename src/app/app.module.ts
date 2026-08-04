@@ -170,6 +170,7 @@ import { TenantComponent } from './tenant/tenant.component';
 import { TenantListComponent } from './tenant/tenantlist.component';
 import { InstrumentAllocationComponent } from './instrumentallocation/instrumentallocation';
 import { InstrumentAllocationListComponent } from './instrumentallocation/instrumentallocationlist';
+import { NotificationIconComponent } from './notification-icon/notification-icon.component';
 
 import { MatLabel, MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -327,7 +328,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
         //CompanyListComponent,
         SetUp,
         ChangeCIM,
-        ExistingCIM
+        ExistingCIM,
+        NotificationIconComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule, ReactiveFormsModule ,
         CommonModule,

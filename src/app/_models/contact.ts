@@ -4,6 +4,7 @@ export class Contact {
   firstName: string;
   lastName: string;
   middleName: string;
+  displayName: string;
   primaryContactNo: string;
   primaryEmail: string;
   secondaryContactNo: string;
